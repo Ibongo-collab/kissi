@@ -1,0 +1,447 @@
+/*=============== FONTS ===============*/
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap");
+
+@font-face {
+  font-family: 'BasisGrotesque';
+  src: url("../../src/assets/fonts/BasisGrotesquePro-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: 'Regular';
+  src: url("../../src/assets/fonts/BasisGrotesquePro-Regular.ttf") format("truetype");
+}
+
+/*=============== VARIABLES CSS ===============*/
+
+:root {
+  --header-height: 3rem;
+
+  /*========== Colors ==========*/
+  --hue: 174;
+  --sat: 63%;
+  --first-color: hsl(var(--hue), var(--sat), 40%);
+  --first-color-alt: hsl(var(--hue), var(--sat), 36%);
+  --title-color: hsl(var(--hue), 12%, 15%);
+  --text-color: hsl(var(--hue), 8%, 35%);
+  --body-color: hsl(var(--hue), 100%, 99%);
+  --content-color: #FFF;
+
+  /*========== Font and typography ==========*/
+  --h1-font-size: 1.5rem;
+  --normal-font-size: .938rem;
+  --tiny-font-size: .625rem;
+
+  /*========== z index ==========*/
+  --z-tooltip: 10;
+  --z-fixed: 100;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'BasisGrotesque', sans-serif;
+}
+
+p {
+  font-family: 'BasisGrotesque', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #343343;
+}
+
+.description {
+  font-family: 'BasisGrotesque', sans-serif;
+  font-size: 16px;
+  font-weight: 550;
+  line-height: 24px;
+  color: #343343;
+}
+
+
+@media screen and (min-width: 968px) {
+  :root {
+    --h1-font-size: 2.25rem;
+    --normal-font-size: 1rem;
+  }
+}
+
+/*=============== BASE ===============*/
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: var(--header-height) 0 0 0;
+  font-family: var(--body-font);
+  /* font-size: var(--normal-font-size); */
+  /* background-color: var(--body-color); */
+  background-color: white;
+  color: rgb(31, 31, 31);
+  font-family: 'BasisGrotesque', sans-serif;
+}
+
+.contact__input {
+  padding: 0.8rem 1.5rem;
+  outline: none;
+  width: 100%;
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 15px;
+  font-family: 'BasisGrotesque', sans-serif;
+}
+
+.commander {
+  background-color: black;
+  color: #fff;
+  padding: 0.80rem 1.5rem;
+  border: 1px solid black;
+  margin-bottom: 5px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 15px;
+  width: 100%;
+}
+
+.commander:hover {
+  transition: .5s;
+  background-color: #202122;
+  color: #fff;
+}
+
+.lien-formulaire {
+  font-size: 15px;
+  font-weight: bold;
+  /* color: hsl(167, 100%, 95%); */
+  color: #202122;
+}
+
+.titre-commande {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.label {
+  font-size: 13px;
+}
+
+.fermer {
+  background-color: rgb(109, 105, 105);
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  border: 1px solid rgb(109, 105, 105);
+  margin-bottom: 5px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 15px;
+  width: 100%;
+}
+
+/*=============== REUSABLE CSS CLASSES ===============*/
+.section {
+  padding: 4.5rem 0 2rem;
+}
+
+.section__title {
+  /* font-size: var(--h1-font-size); */
+  color: var(--title-color);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.section__height {
+  height: 100vh;
+}
+
+/*=============== LAYOUT ===============*/
+.content {
+  max-width: 968px;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+/*=============== HEADER ===============*/
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--content-color);
+  z-index: var(--z-fixed);
+  transition: .4s;
+}
+
+/*=============== NAV ===============*/
+.nav {
+  height: var(--header-height);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav__img,
+.logo {
+  width: 32px;
+  border-radius: 50%;
+}
+
+.nav__logo {
+  color: var(--title-color);
+  font-weight: 600;
+}
+
+.text-bloc {
+  margin-top: 100px;
+}
+
+.banner {
+  background-color: #EFEFEF;
+}
+
+.sous-titre {
+  font-family: 'BasisGrotesque', sans-serif;
+  font-size: 25px;
+  font-weight: 600;
+  line-height: 28px;
+  color: #343343;
+  margin-bottom: 25px;
+}
+
+.titre {
+  font-family: 'BasisGrotesque', sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 24px;
+  color: #343343;
+  margin-bottom: 25px;
+}
+
+.grand-titre {
+  font-family: 'BasisGrotesque', sans-serif;
+  font-size: 60px;
+  font-weight: 900;
+  line-height: 70px;
+  color: #343343;
+}
+
+@media screen and (max-width: 767px) {
+
+  .nav__menu {
+    /* position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: var(--content-color);
+    box-shadow: 0 -1px 12px hsla(var(--hue), var(--sat), 15%, 0.15);
+    width: 100%;
+    height: 4rem;
+    padding: 0 1rem;
+    display: grid;
+    align-content: center;
+    border-radius: 1.25rem 1.25rem 0 0;
+    transition: .4s; */
+    display: none;
+  }
+
+  .partenaires {
+    margin-bottom: 50px;
+  }
+
+  .text-bloc {
+    margin-top: 10px;
+  }
+
+  .bloc-login {
+    margin-bottom: 50px;
+  }
+}
+
+.nav__list,
+.nav__link {
+  display: flex;
+}
+
+.nav__link {
+  flex-direction: column;
+  align-items: center;
+  row-gap: 4px;
+  color: var(--title-color);
+  font-weight: 600;
+}
+
+.nav__list {
+  justify-content: space-around;
+}
+
+.nav__name {
+  /* font-size: var(--tiny-font-size); */
+  font-size: 13px;
+  /* display: none;*/
+  /* Minimalist design, hidden labels */
+}
+
+.nav__icon {
+  font-size: 1.5rem;
+}
+
+/*Active link*/
+.active-link {
+  position: relative;
+  /* color: var(--first-color); */
+  transition: .3s;
+}
+
+/* Minimalist design, active link */
+/* .active-link::before{
+  content: '';
+  position: absolute;
+  bottom: -.5rem;
+  width: 4px;
+  height: 4px;
+  background-color: var(--first-color);
+  border-radius: 50%;
+} */
+
+/* Change background header */
+.scroll-header {
+  box-shadow: 0 1px 12px hsla(var(--hue), var(--sat), 15%, 0.15);
+}
+
+.default__disable__btn {
+  background-color: rgb(72, 72, 72);
+  color: #fff;
+  padding: 0.8rem 1rem;
+  border: 1px solid rgb(72, 72, 72);
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 15px;
+  width: 100%;
+  outline: none;
+}
+
+.default__btn {
+  gap: 16px;
+  transition: all 0.1s ease 0s;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  text-align: center;
+  background-color: #4f74da;
+  color: rgb(255, 255, 255);
+  fill: rgb(255, 255, 255);
+  padding-left: 24px;
+  padding-right: 24px;
+  font-family: 'BasisGrotesque', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 700;
+  height: 54px;
+  min-width: 54px;
+  border-radius: 10px;
+  border: 1px solid #4f74da;
+  width: 100%;
+}
+
+.default__btn:hover {
+  transition: 0.3s;
+  background-color: rgb(15, 65, 204);
+}
+
+.content__btn {
+  width: 200px;
+}
+
+/*=============== MEDIA QUERIES ===============*/
+/* For small devices */
+/* Remove if you choose, the minimalist design */
+@media screen and (max-width: 320px) {}
+
+/* For medium devices */
+@media screen and (min-width: 576px) {
+  .nav__list {
+    justify-content: center;
+    column-gap: 3rem;
+  }
+}
+
+@media screen and (min-width: 767px) {
+  body {
+    margin: 0;
+  }
+
+  .section {
+    padding: 7rem 0 2rem;
+  }
+
+  .nav {
+    height: calc(var(--header-height) + 1.5rem);
+    /* 4.5rem */
+  }
+
+  .nav__img {
+    display: none;
+  }
+
+  .nav__icon {
+    display: none;
+  }
+
+  .nav__name {
+    /* font-size: var(--normal-font-size); */
+    font-size: 15px;
+    /* display: block; */
+    /* Minimalist design, visible labels */
+  }
+
+  .nav__link:hover {
+    color: rgb(19, 73, 223);
+  }
+
+  .nav__logo:hover {
+    color: black;
+  }
+
+  /* First design, remove if you choose the minimalist design */
+  .active-link::before {
+    content: '';
+    position: absolute;
+    bottom: -.75rem;
+    width: 4px;
+    height: 4px;
+    background-color: var(--first-color);
+    border-radius: 50%;
+  }
+
+  /* Minimalist design */
+  /* .active-link::before{
+      bottom: -.75rem;
+  } */
+}
+
+/* For large devices */
+@media screen and (min-width: 1024px) {
+  .content {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
