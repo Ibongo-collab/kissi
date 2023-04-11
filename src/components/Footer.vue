@@ -14,6 +14,7 @@
         <p class="text-white"><b>Divers</b></p>
         <router-link to="" class="footer__link">Equipe médicale</router-link> <br>
         <router-link to="" class="footer__link">A propos de Kissi</router-link> <br>
+        <router-link to="" class="footer__link">Indice de masse corporelle</router-link> <br>
         <router-link to="" class="footer__link">Carrières</router-link> <br>
       </div>
 
