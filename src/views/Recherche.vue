@@ -4,6 +4,7 @@
 
     <div class="banner">
       <div class="content section">
+        <!-- Disponibilités sur Brazzaville et Pointe-noire -->
         <div class="info-banner">
           <h2 class="titre" style="line-height: 45px;">Disponibilités sur <span style="color: #4f74da">Brazzaville et
               Pointe-noire</span></h2>
@@ -43,21 +44,112 @@
                 </select>
               </div>
               <div class="col-4 bouton-pc-tb">
-                <button class="default__btn" style="" :disabled="isDisabled" @click="rechercher()">
+                <button class="default__btn" :disabled="isDisabled" @click="rechercher()">
                   Rechercher
                 </button>
               </div>
               <div class="col-8 bouton-mobile">
-                <button class="boutton-rechercher-banner rounded text-decoration-none" :disabled="isDisabled"
-                  @click="rechercher()">
+                <button class="default__btn" :disabled="isDisabled" @click="rechercher()">
                   Rechercher
                 </button>
               </div>
             </div>
           </form>
         </div>
+        <!-- Praticiens -->
+        <!--========== SPINNER ==========-->
+        <loading :active.sync="isLoading" :can-cancel="false" :is-full-page="fullPage"></loading>
         <div class="info-banner">
+          <div class="row">
+            <!-- premier bloc -->
+            <div class="col-3 bloc-medecin bloc-medecin-1">
+              <div class="content-photo">
+                <div v-if="nom">
+                  <label class="label rounded-circle">
+                    <p class="char">{{nom}}</p>
+                  </label>
+                </div>
+                <img src="../assets/images/user.png" class="rounded-circle border" alt="image medecin" width="50px"
+                  height="50px" v-else>
+              </div>
+              <div class="content-praticien-info">
+                <p class="nom-praticien">Dr {{nom}}</p>
+                <p class="specialite-praticien">Médecin Généraliste</p>
+              </div>
+            </div>
+            <!-- second bloc -->
+            <div class="col-2 bloc-medecin bloc-medecin-2 border" style="padding-top: 50px;">
+              <div class="content-praticien-info">
+                <p class="titre-tarif-praticien">Tarif</p>
+                <p class="tarif-praticien">10.000 Fcfa</p>
+                <p class="titre-ville-praticien">Ville</p>
+                <p class="ville-praticien">Pointe-noire</p>
+              </div>
+            </div>
+            <!-- troisième bloc -->
+            <div class="col-6 bloc-medecin bloc-medecin-3 border">
+              <div id="content-date" class="">
+                <!-- <div class="arrow-horaire">
+                  <i class='bx bx-left-arrow-alt'></i>
+                </div> -->
+                <div class="bloc-horaire">
+                  <div id="content-horaire">
+                    <div class="element">
+                      <p class="titre-date-praticien">Lundi</p>
+                      <span class="date-praticien">10/04</span>
+                    </div>
+                    <div class="element">
+                      <button class="horaire__btn">09:00</button>
+                    </div>
+                    <div class="element">
+                      <button class="horaire__btn">09:30</button>
+                    </div>
+                    <div class="element">
+                      <button class="horaire__btn">10:00</button>
+                    </div>
+                    <div class="element">
+                      <button class="horaire__btn">10:30</button>
+                    </div>
+                    <div class="element">
+                      <button class="horaire__btn">11:00</button>
+                    </div>
+                  </div>
+                </div>
 
+                <div class="bloc-horaire">
+                  <div id="content-horaire">
+                    <div class="element">
+                      <p class="titre-date-praticien">Mardi</p>
+                      <span class="date-praticien">11/04</span>
+                    </div>
+                    <div class="element">
+                      <button class="horaire__btn">09:00</button>
+                    </div>
+                    <div class="element">
+                      <button class="horaire__btn">09:30</button>
+                    </div>
+                    <div class="element">
+                      <button class="horaire__btn">10:00</button>
+                    </div>
+                    <div class="element">
+                      <button class="horaire__btn">10:30</button>
+                    </div>
+                    <div class="element">
+                      <button class="horaire__btn">11:00</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="bloc-horaire">
+                  <button class="default__vide__btn">Voir le profil</button>
+                </div>
+
+                <!-- <div class="arrow-horaire">
+                  <i class='bx bx-right-arrow-alt'></i>
+                </div> -->
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
     </div>
@@ -70,12 +162,14 @@
 <script>
   import Navbar from '@/components/Navbar.vue'
   import Footer from '@/components/Footer.vue'
-
+  import Loading from "vue-loading-overlay";
+  import "vue-loading-overlay/dist/vue-loading.css";
   export default {
     name: "Recherche",
     components: {
       Navbar,
       Footer,
+      Loading
     },
     data() {
       return {
@@ -93,7 +187,8 @@
           },
         ],
         specialite:"",
-        selected:""
+        selected:"",
+        nom: "Dervan TATI",
 
       };
     },
@@ -254,15 +349,148 @@
         });
       }
     }
-  } 
+  }
   </script>
 
 <style scoped>
 
+/* bloc praticien */
+
+#content-date {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+#content-horaire {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.bloc-horaire {
+  width: 100%;
+  height: 50px;
+  padding: 2%;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.bloc-medecin {
+ border-radius: 10px;
+}
+
+.bloc-medecin-1 {
+  margin-right: 40px;
+}
+
+.bloc-medecin-2 {
+  margin-right: 35px;
+}
+
+.bloc-medecin-2,
+.bloc-medecin-3 {
+  padding: 1%
+}
+
+.nom-praticien {
+  font-family: "BasisGrotesque", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 900;
+  color: rgb(52, 52, 67);
+  padding: 0px;
+  margin-bottom: 4px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tarif-praticien,
+.ville-praticien,
+.date-praticien {
+  font-family: "BasisGrotesque", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 900;
+  color: rgb(52, 52, 67);
+}
+
+.specialite-praticien, 
+.titre-tarif-praticien, 
+.titre-ville-praticien,
+.titre-date-praticien {
+  font-family: "BasisGrotesque", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 600;
+  color: rgb(88, 88, 91);
+  padding: 0px;
+  margin-bottom: 0px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.char {
+  font-weight: 600;
+  font-family: monospace;
+  width: 2ch;
+  overflow: hidden;
+  white-space: nowrap;
+  text-transform : uppercase;
+}
+
+.label {
+  height: 50px;
+  width: 50px;
+  padding-top: 7%;
+  padding-left: 8%;
+  border-radius: 15px;
+  background-color: #0F056B;
+}
+
+.label p {
+  font-weight: bold;
+  color: #ffffff;
+}
 
 .info-banner {
   margin-bottom: 30px;
 }
+
+.horaire__btn {
+  background-color: #c4d3ff;
+  color: rgb(7, 11, 27);
+  font-family: "BasisGrotesque", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 900;
+  padding: 8px 12px;
+  border-radius: 5px;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  min-width: 66px;
+  height: fit-content;
+  outline: none;
+  border: none;
+}
+
+.horaire__btn:hover {
+  background-color: #bbccfd;
+}
+
 
 /* Recherche specialité */
 
@@ -290,25 +518,22 @@
 }
 
 .active, .specialite__btn:hover {
-  transition: all 0.1s ease 0s;
+  transition: all 0.2s ease 0s;
   background-color: #c4d3ff;
-  color: black;
+  color:  #4f74da;
   border-radius: 10px;
   border: none;
 }
 
 .active {
+  font-family: 'BasisGrotesque', sans-serif;
   background-color: #bbccfd;
   color: #4f74da;
   padding-left: 24px;
   padding-right: 24px;
-  font-family: 'BasisGrotesque', sans-serif;
   font-size: 14px;
   border-radius: 10px;
-  border: 1px solid #4f74da;
 }
-
-
 
 /*the container must be positioned relative:*/
 .autocomplete {

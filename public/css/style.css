@@ -329,9 +329,40 @@ img {
   border: 1px solid rgb(72, 72, 72);
   margin-bottom: 5px;
   font-weight: bold;
-  font-size: 15px;
+  font-size: 16px;
   width: 100%;
   outline: none;
+}
+
+.default__vide__btn {
+  transition: all 0.1s ease 0s;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  text-align: center;
+  background-color: #fff;
+  color: #4f74da;
+  padding-left: 24px;
+  padding-right: 24px;
+  font-family: 'BasisGrotesque', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 700;
+  height: 47px;
+  min-width: 54px;
+  border-radius: 10px;
+  border: 1px solid #4f74da;
+  width: 100%;
+}
+
+.default__vide__btn:hover {
+  transition: 0.3s;
+  background-color: #c4d3ff;
 }
 
 .default__btn {

@@ -151,10 +151,6 @@
     import Navbar from '@/components/Navbar.vue'
     import Footer from '@/components/Footer.vue'
     import Loading from "vue-loading-overlay";
-    import {
-        gsap
-    } from "gsap";
-    // import { mapGetters } from "vuex";
 export default {
     name: 'Rejoingnez-kissi',
     components: {
@@ -209,12 +205,6 @@ export default {
         // console.log(JSON.parse(localStorage.getItem("codes")));
     },
     mounted() {
-        gsap.from('.product-image', {
-            opacity: 0,
-            duration: 2,
-            delay: 1.2,
-            y: -40
-        });
     }
 } 
 </script>
