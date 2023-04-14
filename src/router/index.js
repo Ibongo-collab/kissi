@@ -13,7 +13,6 @@ const routes = [
   },
   {
     path: '/recherche',
-    // path: '/',
     name: 'Recherche',
     component: () => import(/* webpackChunkName: "Recherche" */ '../views/Recherche.vue')
   },
@@ -38,19 +37,14 @@ const routes = [
   //   component: () => import(/* webpackChunkName: "change-password" */ '../views/Change-password.vue')
   // },
   {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: () => import(/* webpackChunkName: "profil" */ '../views/Dashboard.vue')
+    path: '/praticien/:id',
+    name: 'Praticien',
+    component: () => import(/* webpackChunkName: "praticien" */ '../views/Praticien.vue')
   },
   // {
   //   path: '/checkout',
   //   name: 'Checkout',
   //   component: () => import(/* webpackChunkName: "checkout" */ '../views/Checkout.vue')
-  // },
-  // {
-  //   path: '/faq',
-  //   name: 'Faq',
-  //   component: () => import(/* webpackChunkName: "faq" */ '../views/Faq.vue')
   // },
   {
     path: '/rejoignez-kissi',

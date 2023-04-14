@@ -15,7 +15,7 @@
           </p>
           <div id="content-specialite" class="">
             <div class="element">
-              <button class="specialite__btn active" @click="rechercher()"> Médecin généraliste</button>
+              <button class="specialite__btn active"> Médecin généraliste</button>
             </div>
             <div class="element">
               <button class="specialite__btn">Pédiatre</button>
@@ -56,9 +56,11 @@
             </div>
           </form>
         </div>
+
         <!-- Praticiens -->
         <!--========== SPINNER ==========-->
         <loading :active.sync="isLoading" :can-cancel="false" :is-full-page="fullPage"></loading>
+
         <div class="info-banner">
           <div class="row">
             <!-- premier bloc -->
@@ -84,6 +86,99 @@
                 <p class="tarif-praticien">10.000 Fcfa</p>
                 <p class="titre-ville-praticien">Ville</p>
                 <p class="ville-praticien">Pointe-noire</p>
+              </div>
+            </div>
+            <!-- troisième bloc -->
+            <div class="col-6 bloc-medecin bloc-medecin-3 border">
+              <div id="content-date" class="">
+                <!-- <div class="arrow-horaire">
+                  <i class='bx bx-left-arrow-alt'></i>
+                </div> -->
+                <div class="bloc-horaire">
+                  <div id="content-horaire">
+                    <div class="element">
+                      <p class="titre-date-praticien">Lundi</p>
+                      <span class="date-praticien">10/04</span>
+                    </div>
+                    <div class="element">
+                      <button class="horaire__btn">09:00</button>
+                    </div>
+                    <div class="element">
+                      <button class="horaire__btn">09:30</button>
+                    </div>
+                    <div class="element">
+                      <button class="horaire__btn">10:00</button>
+                    </div>
+                    <div class="element">
+                      <button class="horaire__btn">10:30</button>
+                    </div>
+                    <div class="element">
+                      <button class="horaire__btn">11:00</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bloc-horaire">
+                  <div id="content-horaire">
+                    <div class="element">
+                      <p class="titre-date-praticien">Mardi</p>
+                      <span class="date-praticien">11/04</span>
+                    </div>
+                    <div class="element">
+                      <button class="horaire__btn">09:00</button>
+                    </div>
+                    <div class="element">
+                      <button class="horaire__btn">09:30</button>
+                    </div>
+                    <div class="element">
+                      <button class="horaire__btn">10:00</button>
+                    </div>
+                    <div class="element">
+                      <button class="horaire__btn">10:30</button>
+                    </div>
+                    <div class="element">
+                      <button class="horaire__btn">11:00</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="bloc-horaire">
+                  <router-link class="default__vide__btn" to="/praticien/1">Voir le profil</router-link>
+                </div>
+
+                <!-- <div class="arrow-horaire">
+                  <i class='bx bx-right-arrow-alt'></i>
+                </div> -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="info-banner">
+          <div class="row">
+            <!-- premier bloc -->
+            <div class="col-3 bloc-medecin bloc-medecin-1">
+              <div class="content-photo">
+                <!-- <div v-if="nom">
+                  <label class="label rounded-circle">
+                    <p class="char">{{nom}}</p>
+                  </label>
+                </div> -->
+                <img src="../assets/images/benit.png" class="rounded-circle border" alt="image medecin" width="50px"
+                  height="50px">
+              </div>
+              <div class="content-praticien-info">
+                <p class="nom-praticien">Dr Okiessi Bénit IBONGO</p>
+                <p class="specialite-praticien">Médecin Généraliste</p>
+              </div>
+            </div>
+            <!-- second bloc -->
+            <div class="col-2 bloc-medecin bloc-medecin-2 border" style="padding-top: 50px;">
+              <div class="content-praticien-info">
+                <p class="titre-tarif-praticien">Tarif</p>
+                <p class="tarif-praticien">10.000 Fcfa</p>
+                <p class="titre-ville-praticien">Ville</p>
+                <p class="ville-praticien">Brazzaville</p>
               </div>
             </div>
             <!-- troisième bloc -->
@@ -439,29 +534,6 @@
   overflow: hidden;
 }
 
-.char {
-  font-weight: 600;
-  font-family: monospace;
-  width: 2ch;
-  overflow: hidden;
-  white-space: nowrap;
-  text-transform : uppercase;
-}
-
-.label {
-  height: 50px;
-  width: 50px;
-  padding-top: 7%;
-  padding-left: 8%;
-  border-radius: 15px;
-  background-color: #0F056B;
-}
-
-.label p {
-  font-weight: bold;
-  color: #ffffff;
-}
-
 .info-banner {
   margin-bottom: 30px;
 }
@@ -497,7 +569,7 @@
 #content-specialite {
   display: flex;
   flex-wrap: wrap;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: flex-start;
   margin-bottom: 25px;
 }

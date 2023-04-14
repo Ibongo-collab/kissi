@@ -322,6 +322,31 @@ img {
   box-shadow: 0 1px 12px hsla(var(--hue), var(--sat), 15%, 0.15);
 }
 
+.char {
+  font-weight: 600;
+  font-family: monospace;
+  width: 2ch;
+  overflow: hidden;
+  white-space: nowrap;
+  text-transform : uppercase;
+}
+
+.label {
+  height: 50px;
+  width: 50px;
+  padding-top: 6.5%;
+  padding-left: 7.5%;
+  border-radius: 15px;
+  background-color: #fff;
+  border: 1px solid #343343;
+}
+
+.label p {
+  font-size: 18px;
+  font-weight: bold;
+  color: #343343;
+}
+
 .default__disable__btn {
   background-color: rgb(72, 72, 72);
   color: #fff;
