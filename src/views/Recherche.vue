@@ -90,7 +90,7 @@
             </div>
             <!-- troisième bloc -->
             <div class="col-6 bloc-medecin bloc-medecin-3 border">
-              <div id="content-date" class="">
+              <div id="content-date">
                 <!-- <div class="arrow-horaire">
                   <i class='bx bx-left-arrow-alt'></i>
                 </div> -->
@@ -141,8 +141,9 @@
                     </div>
                   </div>
                 </div>
+
                 <div class="bloc-horaire">
-                  <router-link class="default__vide__btn" to="/praticien/1">Voir le profil</router-link>
+                  <button class="default__vide__btn" @click="goToPraticien(1)">Voir le profil</button>
                 </div>
 
                 <!-- <div class="arrow-horaire">
@@ -150,7 +151,6 @@
                 </div> -->
               </div>
             </div>
-
           </div>
         </div>
 
@@ -243,7 +243,6 @@
                 </div> -->
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -259,6 +258,10 @@
   import Footer from '@/components/Footer.vue'
   import Loading from "vue-loading-overlay";
   import "vue-loading-overlay/dist/vue-loading.css";
+  // import CryptoJS from 'crypto-js'
+  // import AES from 'crypto-js/aes'
+  // import constant from "../../constant";
+  // import constant from "../../constant";
   export default {
     name: "Recherche",
     components: {
@@ -284,8 +287,16 @@
         specialite:"",
         selected:"",
         nom: "Dervan TATI",
-
       };
+    },
+    methods: {
+
+      goToPraticien(id) {
+        console.log(id)
+        // let encryptedData = AES.encrypt(id, constant.secretKey).toString()
+        // console.log(encryptedData);
+        this.$router.push("/praticien/"+ id);
+      }
     },
     mounted() {
       function autocomplete(inp, arr) {
@@ -451,19 +462,6 @@
 
 /* bloc praticien */
 
-#content-date {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-#content-horaire {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
-}
 
 .bloc-horaire {
   width: 100%;
@@ -490,77 +488,9 @@
   padding: 1%
 }
 
-.nom-praticien {
-  font-family: "BasisGrotesque", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  font-size: 18px;
-  line-height: 24px;
-  font-weight: 900;
-  color: rgb(52, 52, 67);
-  padding: 0px;
-  margin-bottom: 4px;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.tarif-praticien,
-.ville-praticien,
-.date-praticien {
-  font-family: "BasisGrotesque", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  font-size: 14px;
-  line-height: 24px;
-  font-weight: 900;
-  color: rgb(52, 52, 67);
-}
-
-.specialite-praticien, 
-.titre-tarif-praticien, 
-.titre-ville-praticien,
-.titre-date-praticien {
-  font-family: "BasisGrotesque", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  font-size: 14px;
-  line-height: 18px;
-  font-weight: 600;
-  color: rgb(88, 88, 91);
-  padding: 0px;
-  margin-bottom: 0px;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
 
 .info-banner {
   margin-bottom: 30px;
-}
-
-.horaire__btn {
-  background-color: #c4d3ff;
-  color: rgb(7, 11, 27);
-  font-family: "BasisGrotesque", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  font-size: 13px;
-  line-height: 20px;
-  font-weight: 900;
-  padding: 8px 12px;
-  border-radius: 5px;
-  display: flex;
-  -webkit-box-pack: center;
-  justify-content: center;
-  -webkit-box-align: center;
-  align-items: center;
-  min-width: 66px;
-  height: fit-content;
-  outline: none;
-  border: none;
-}
-
-.horaire__btn:hover {
-  background-color: #bbccfd;
 }
 
 

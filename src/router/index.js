@@ -60,7 +60,11 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes,
+  scrollBehavior () {
+    // Retourne le haut de la page lors d'un changement de route
+    return { x: 0, y: 0 }
+  }
 })
 
 export default router

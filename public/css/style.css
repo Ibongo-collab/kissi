@@ -141,6 +141,86 @@ img {
   font-size: 13px;
 }
 
+#content-horaire, #content-date {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 100%;
+  width: auto;
+}
+
+.horaire__btn {
+  background-color: #c4d3ff;
+  color: rgb(7, 11, 27);
+  font-family: "BasisGrotesque", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 900;
+  padding: 8px 12px;
+  border-radius: 5px;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  min-width: 66px;
+  height: fit-content;
+  outline: none;
+  border: none;
+}
+
+.horaire__btn:hover {
+  background-color: #bbccfd;
+}
+
+.tarif-praticien,
+.ville-praticien,
+.description-indication,
+.date-praticien {
+  font-family: "BasisGrotesque", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 900;
+  color: rgb(52, 52, 67);
+}
+
+.specialite-praticien, 
+.titre-tarif-praticien, 
+.titre-ville-praticien,
+.titre-indication,
+.titre-date-praticien {
+  font-family: "BasisGrotesque", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 600;
+  color: rgb(88, 88, 91);
+  padding: 0px;
+  margin-bottom: 0px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.nom-praticien {
+  font-family: "BasisGrotesque", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 900;
+  color: rgb(52, 52, 67);
+  padding: 0px;
+  margin-bottom: 4px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .fermer {
   background-color: rgb(109, 105, 105);
   color: #fff;
