@@ -635,25 +635,8 @@
         }
         return this.newprice * this.quantite;
       },
-      // ...mapGetters(["codelist"]),
-      // ...mapGetters(["product"]),
-      // ...mapGetters(["client"]),
     },
     created() {
-      if (localStorage.getItem("product")) {
-        this.product = JSON.parse(localStorage.getItem("product"));
-        this.idproduit = this.product.id;
-        // console.log("yes product", this.product)
-      } else {
-        this.$store.dispatch("getProduct");
-      }
-
-      if (localStorage.getItem("codes")) {
-        this.codelist = JSON.parse(localStorage.getItem("codes"));
-        // console.log("yes cooodes", this.codes)
-      } else {
-        this.$store.dispatch("getCode");
-      }
     },
     mounted() {},
   }; 

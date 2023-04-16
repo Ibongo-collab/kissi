@@ -12,104 +12,91 @@ export default new Vuex.Store({
     }),
   ],
   state: {
-    client: null,
-    product: null,
-    commandlist: [],
-    codelist: []
+    isAuthenticated: false,
+    token: null,
+    user: null
   },
   getters: {
-    client: (state) => state.client,
-    product: (state) => state.product,
-    commandlist: (state) => state.commandlist,
-    codelist: (state) => state.codelist,
+    isAuthenticated(state) {
+      return !!state.token;
+    },
+    token(state) {
+      return state.token;
+    },
+    user(state) {
+      return state.user;
+    }
   },
   actions: {
-    getUser({ commit, state }) {
-      if (localStorage.getItem("token")) {
-        const token = localStorage.getItem("token");
-        axios
-          .get(
-            constant.apiURL +
-              "client/telephone/" +
-              localStorage.getItem("userTelephone"),
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          )
-          .then((response) => {
-            if (response.status == 200) {
-              // console.log(response.data);
-              commit("SET_CLT", response.data);
-              localStorage.setItem("id", response.data.id);
-            } else {
-              // console.log(response.data);
-            }
+    // Authentification
+    login({ commit }, credentials) {
+      return new Promise((resolve, reject) => {
+        axios.post(constant.apiURL + 'login', credentials)
+          .then(response => {
+            console.log(response, "authenticated")
+            const token = response.data.accessToken;
+            const email = response.data.email;
+            localStorage.setItem('token', token);
+            localStorage.setItem('emailUser', email);
+            commit('SET_AUTHENTICATED', true);
+            commit('SET_TOKEN', token);
+            resolve(response);
           })
-          .catch((error) => {
-            console.log(error);
+          .catch(error => {
+            reject(error);
           });
-      } else {
-        return localStorage.setItem("empty", state.client);
-      }
-    },
-    getProduct({ commit }) {
-      axios.get(constant.apiURL + "products/getproduct/" + 2).then((response) => {
-        if (response.data.id !== null) {
-          // console.log(response.data)
-          localStorage.setItem("product",JSON.stringify(response.data));
-          commit("SET_PDT", response.data);
-        } else {
-          console.log("error");
-        }
-      })
-    },
-    getCommand({ commit }) {
-        axios.get(constant.apiURL + "commands/getall")
-        .then((response) => {
-          if (response.status == 200) {
-            // console.log(response.data);
-            commit("SET_CMD", response.data);
-          } else {
-            console.log(response.data);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-    },
-    getCode({ commit }) {
-      axios.get(constant.apiURL + "codes/getall")
-      .then((response) => {
-        if (response.status == 200) {
-          // console.log(response.data);
-          localStorage.setItem("codes",JSON.stringify(response.data));
-          commit("SET_CDE", response.data);
-        } else {
-          console.log(response.data);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
       });
     },
-    logOutClient({ commit }) {
-      commit("SET_CLT", null);
+    // Récupération d'un utilisateur par email
+    getUserByEmail({ commit }, email) {
+      const token = localStorage.getItem('token');
+      console.log(token, "token")
+      return new Promise(( resolve, reject) => {
+        axios.post(constant.apiURL + 'patients/email/'+ email,
+        {
+          headers: {
+            Authorization: `${token}`
+          }
+        })
+          .then(response => {
+            console.log(response, "user")
+            const user = response.data.user;
+            commit('SET_USER', user);
+            resolve(response);
+          })
+          .catch(error => {
+            reject(error);
+            console.log(error)
+          });
+      });
+    },
+    logout({ commit }) {
+      return new Promise((resolve, reject) => {
+        axios.post(constant.apiURL + 'logout')
+          .then(response => {
+            console.log(response)
+            localStorage.removeItem('token');
+            localStorage.removeItem('emailUser');
+            commit("SET_TOKEN", null);
+            commit("SET_USER", null);
+            commit("SET_AUTHENTICATED", false);
+            resolve(response);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
     },
   },
   mutations: {
-    SET_CLT(state, client) {
-      state.client = client;
+    SET_AUTHENTICATED(state, authenticated) {
+      state.isAuthenticated = authenticated;
     },
-    SET_PDT(state, product) {
-      state.product = product;
+    SET_TOKEN(state, token) {
+      state.token = token;
     },
-    SET_CMD(state, command) {
-      state.commandlist = command;
-    },
-    SET_CDE(state, code) {
-      state.codelist = code;
-    },
+    SET_USER(state, user) {
+      state.user = user;
+    }
   },
 });

@@ -88,6 +88,10 @@ body {
   font-family: 'BasisGrotesque', sans-serif;
 }
 
+input {
+  border-radius: 10px;
+}
+
 .contact__input {
   padding: 0.8rem 1.5rem;
   outline: none;
@@ -231,6 +235,19 @@ img {
   font-weight: bold;
   font-size: 15px;
   width: 100%;
+}
+
+.icon {
+  font-weight: 900;
+  font-size: 30px;
+}
+
+.arrow {
+  width: 50px;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 10px;
+  margin-bottom: 30px;
 }
 
 /*=============== REUSABLE CSS CLASSES ===============*/

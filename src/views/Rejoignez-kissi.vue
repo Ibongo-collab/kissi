@@ -195,14 +195,9 @@ export default {
         },
     },
     computed: {
-        // ...mapGetters(["codelist"]),
-        // ...mapGetters(["product"]),
     },
     created() {
-        // this.$store.dispatch("getProduct");
-        // this.$store.dispatch("getCode");
-        // console.log(JSON.parse(localStorage.getItem("product")));
-        // console.log(JSON.parse(localStorage.getItem("codes")));
+
     },
     mounted() {
     }

@@ -292,10 +292,11 @@
     methods: {
 
       goToPraticien(id) {
-        console.log(id)
+        // console.log(id)
         // let encryptedData = AES.encrypt(id, constant.secretKey).toString()
         // console.log(encryptedData);
-        this.$router.push("/praticien/"+ id);
+        // this.$router.push("/praticien/"+ id);
+        this.$router.push({ name: 'Praticien', params: { id: id } });
       }
     },
     mounted() {

@@ -128,18 +128,6 @@
 </script>
 
 <style scoped>
-    .icon {
-        font-weight: 900;
-        font-size: 30px;
-    }
-
-    .arrow {
-        width: 50px;
-        cursor: pointer;
-        text-align: center;
-        border-radius: 10px;
-        margin-bottom: 30px;
-    }
 
     .content-arrow {
         width: 100%;

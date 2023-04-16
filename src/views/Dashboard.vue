@@ -757,8 +757,7 @@
       /**
        * getCommand renvoi la liste des commandes en général
        */
-      this.$store.dispatch("getCommand");
-      this.$store.dispatch("getCode");
+
 
       /**
        * commandlist représente la liste des commandes en général

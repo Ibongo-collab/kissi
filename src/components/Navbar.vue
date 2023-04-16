@@ -12,14 +12,7 @@
           <ul class="nav__list">
 
             <li class="nav__item">
-              <a href="#faq" class="nav__link">
-                <i class='bx bx-question-mark nav__icon'></i>
-                <span class="nav__name">Faq</span>
-              </a>
-            </li>
-
-            <li class="nav__item">
-              <router-link to="/rejoignez-flc" class="nav__link">
+              <router-link to="/tableau-de-bord" class="nav__link">
                 <span class="nav__name">Mon compte</span>
               </router-link>
             </li>
@@ -31,7 +24,7 @@
             </li>
           </ul>
         </div>
-        <router-link to="/rejoignez-flc" class="nopc">Mon compte</router-link>
+        <router-link to="/tableau-de-bord" class="nopc">Mon compte</router-link>
       </nav>
     </header>
   </div>
@@ -40,7 +33,7 @@
 <script>
   import Loading from "vue-loading-overlay";
   import "vue-loading-overlay/dist/vue-loading.css";
-  import { mapGetters } from "vuex";
+  // import { mapGetters } from "vuex";
 
   export default {
     name: 'Navbar',
@@ -55,20 +48,11 @@
       }
     },
     methods: {
-      deconnexion() {
-        localStorage.clear();
-        this.$store.dispatch("logOutClient");
-      }
     },
     computed: {
-      ...mapGetters(["client"]),
+      // ...mapGetters(["client"]),
     },
     created() {
-      if(localStorage.getItem("token")) {
-        this.$store.dispatch("getUser");
-      } else {
-        this.deconnexion();
-      }
     },
     mounted(){}
   }

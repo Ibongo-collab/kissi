@@ -2,12 +2,18 @@
   <div class="login">
     <!--========== SPINNER ==========-->
     <loading :active.sync="isLoading" :can-cancel="false" :is-full-page="fullPage"></loading>
-    <Navbar />
+    <!-- <Navbar /> -->
     <main class="">
-      <section class="section content">
-        <div class="bloc-login border container">
+      <section class="content">
+        <div class="bloc-login">
+          <div class="arrow" @click="goBack">
+            <i class='bx bx-left-arrow-alt icon'></i>
+          </div>
+          <div class="logo-center text-center">
+            <img src="../assets/images/kissi.png" alt="logo kissi" width="70px">
+          </div>
           <!--  Formulaire de test sur le téléphone -->
-          <form v-on:submit.prevent="getTel" class="mx-auto col-md-5"
+          <!-- <form v-on:submit.prevent="getTel" class="mx-auto col-md-5"
             v-if="testTel == false && inscriptionDisplay == false">
             <p class="login__title mt-3">{{ titre }}</p>
             <input type="tel" id="tel" name="tel" placeholder="numéro de téléphone" class="contact__input border"
@@ -18,23 +24,28 @@
             </p>
             <input type="submit" value="Continuer" name="submit" class="default__btn d-block"
               :disabled="isDisabled" />
-          </form>
+          </form> -->
 
           <!--  Formulaire de connexion -->
-          <form v-on:submit.prevent="authentification" class="mx-auto col-md-5"
-            v-if="testTel == true && inscriptionDisplay == false">
-            <p class="login__title mt-3">{{ titre }}</p>
-            <input type="tel" id="tel" name="tel" placeholder="numéro de téléphone" class="contact__input border"
-              @change="onChangeTel($event)" @input="onChangeTel($event)"
-              pattern="^0[1456][ ]?[0-9]{3}([ ]?[0-9]{2}){2}$" required v-model="telephone" />
-            <p class="text-danger" style="font-size: 12px" v-if="!isValidTel">
-              Le numéro de téléphone est invalide
+          <form v-on:submit.prevent="authentification" class="mx-auto col-md-5 form-connexion"
+            v-if="inscriptionDisplay == false">
+            <p class="titre mt-3">{{ titre }}</p>
+            <p class="">Renseignez votre email et votre mot de passe</p>
+            <input type="email" id="email" class="contact__input border" @input="onChangeEmail($event)"
+              @change="onChangeEmail($event)" placeholder="Email" v-model="email" />
+            <p class="text-danger" style="font-size: 12px" v-if="!isEmailValid">
+              L'email est invalide
+            </p>
+            <p class="text-danger" style="font-size: 12px" v-if="error">
+              {{ error }}
             </p>
             <p class="text-danger" style="font-size: 12px">{{ error }}</p>
             <input type="password" id="password" name="password" placeholder="Mot de passe"
               class="contact__input border" v-model="password" />
-            <input type="submit" value="Continuer" name="submit" class="default__btn d-block" /><br />
-            <router-link to="password-reset" class="lien-formulaire">Mot de passe oublié ?</router-link>
+            <input type="submit" value="Continuer" name="submit" class="default__btn d-block"
+              :disabled="isDisabled" /><br />
+            <router-link to="password-reset" style="color: #4f74da">Mot de passe oublié ?</router-link>
+            
           </form>
           <!--  Formulaire de connexion -->
 
@@ -85,7 +96,7 @@
 </template>
 
 <script>
-import Navbar from "@/components/Navbar.vue";
+// import Navbar from "@/components/Navbar.vue";
 // import Footer from "@/components/Footer.vue";
 import axios from "axios";
 import constant from "../../constant";
@@ -96,7 +107,7 @@ import md5 from "js-md5";
 export default {
   name: "Login",
   components: {
-    Navbar,
+    // Navbar,
     // Footer,
     Loading,
   },
@@ -118,71 +129,103 @@ export default {
       regexEmail: /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
       regexPassword: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/,
       regexTelephone: /^0[1456][ ]?[0-9]{3}([ ]?[0-9]{2}){2}$/,
-      titre: "Inscription ou connexion",
+      titre: "Connexion",
       error: "",
       isLoading: false,
       fullPage: true,
     };
   },
   methods: {
-    getTel() {
-      // test sur l'existance du téléphone
-      if (this.telephone !== "" && this.isValidTel == true) {
-        this.isLoading = true;
-        // let newtel = "+242 " + this.telephone;
-        axios
-          .get(constant.apiURL + "client/getTel/" + this.telephone)
-          .then((response) => {
-            if (response.data == true) {
-              console.log(response.data);
-              this.testTel = true;
-              this.connexionDisplay = false;
-              this.titre = "Connexion";
-              this.isLoading = false;
-            } else {
-              // passer à l'inscription
-              this.connexionDisplay = false;
-              this.inscriptionDisplay = true;
-              this.titre = "Inscription";
-              this.isLoading = false;
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-            this.isLoading = false;
-          });
-      }
-    },
     authentification() {
       this.isLoading = true;
-      let encryptpassword = this.transformMD5(this.password);
-      setTimeout(() => {
-        axios
-          .post(constant.apiURL + "login", {
-            telephone: this.telephone,
-            password: encryptpassword,
-          })
-          .then((response) => {
-            if (response.status == 200) {
-              // console.log(response.data);
-              localStorage.setItem("token", response.data.token);
-              localStorage.setItem("userTelephone", response.data.telephone);
-              this.isLoading = false;
-              this.$router.push("/");
-            } else {
-              this.isLoading = false;
-              // console.log(response.data);
-              this.error = response.data.message;
-            }
-          })
-          .catch(() => {
-            // console.log(error);
-            this.isLoading = false;
-            this.error =
-              "oups, nous ne parvenons pas à trouver ces identifiants. Réesayez.";
-          });
-      }, 2000);
+      const credentials = {
+        email: this.email,
+        password: this.password
+      };
+      this.$store.dispatch('login', credentials)
+        .then(() => {
+          // l'utilisateur est authentifié, vérifions son email pour continuer
+          this.getUserByEmail();
+        })
+        .catch(() => {
+          // une erreur s'est produite lors de l'authentification, affichez un message d'erreur
+          this.errorMessage = 'Identifiants invalides';
+        });
     },
+    getUserByEmail() {
+      const email = localStorage.getItem("emailUser");
+      this.$store.dispatch('getUserByEmail', email)
+        .then(() => {
+          this.isLoading = false;
+          // l'email de l'utilisateur est correcte, naviguez vers la page tableau de bord
+          this.$router.push('/tableau-de-bord');
+        })
+        .catch(() => {
+          // une erreur s'est produite lors de l'authentification, affichez un message d'erreur
+          this.errorMessage = 'email invalide';
+        });
+    },
+    goBack() {
+      this.$router.go(-1); // retourne à la route précédente
+    },
+    // getTel() {
+    //   // test sur l'existance du téléphone
+    //   if (this.telephone !== "" && this.isValidTel == true) {
+    //     this.isLoading = true;
+    //     // let newtel = "+242 " + this.telephone;
+    //     axios
+    //       .get(constant.apiURL + "client/getTel/" + this.telephone)
+    //       .then((response) => {
+    //         if (response.data == true) {
+    //           console.log(response.data);
+    //           this.testTel = true;
+    //           this.connexionDisplay = false;
+    //           this.titre = "Connexion";
+    //           this.isLoading = false;
+    //         } else {
+    //           // passer à l'inscription
+    //           this.connexionDisplay = false;
+    //           this.inscriptionDisplay = true;
+    //           this.titre = "Inscription";
+    //           this.isLoading = false;
+    //         }
+    //       })
+    //       .catch((error) => {
+    //         console.log(error);
+    //         this.isLoading = false;
+    //       });
+    //   }
+    // },
+    // authentification() {
+    //   this.isLoading = true;
+    //   let encryptpassword = this.transformMD5(this.password);
+    //   setTimeout(() => {
+    //     axios
+    //       .post(constant.apiURL + "login", {
+    //         telephone: this.telephone,
+    //         password: encryptpassword,
+    //       })
+    //       .then((response) => {
+    //         if (response.status == 200) {
+    //           // console.log(response.data);
+    //           localStorage.setItem("token", response.data.token);
+    //           localStorage.setItem("userTelephone", response.data.telephone);
+    //           this.isLoading = false;
+    //           this.$router.push("/");
+    //         } else {
+    //           this.isLoading = false;
+    //           // console.log(response.data);
+    //           this.error = response.data.message;
+    //         }
+    //       })
+    //       .catch(() => {
+    //         // console.log(error);
+    //         this.isLoading = false;
+    //         this.error =
+    //           "oups, nous ne parvenons pas à trouver ces identifiants. Réesayez.";
+    //       });
+    //   }, 2000);
+    // },
     inscription() {
       if (
         this.isValidEmail === true &&
@@ -265,31 +308,35 @@ export default {
   computed: {
     isDisabled() {
       // contrôle sur l'activation du bouton
-      return !this.telephone;
+      return !this.email && !this.password;
     },
     isDisabledtwo() {
       return !this.prenom && !this.email && !this.password;
+    },
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated; // accéder à la valeur du getters
     }
   },
   mounted() {
-    if (localStorage.getItem("token")) {
-      this.$router.push("/");
+    if (this.$store.getters.isAuthenticated) {
+      this.$router.push("/"); // l'utilisateur est authentifié, continuez vers la page d'accueil
     }
   },
 };
 </script>
 
 <style>
+
 .bloc-login {
-  /* background-color: white; */
-  padding-top: 65px;
-  padding-bottom: 65px;
+  margin-top: 30px;
 }
 
-.login__title {
-  font-size: 28px;
-  font-weight: 900;
-  margin-bottom: 1.5rem;
+.form-connexion {
+  box-shadow: rgba(0, 0, 0, 0.1) 10px 10px 30px;
+  transition: box-shadow 0.2s ease 0s;
+  background-color: rgb(255, 255, 255);
+  padding: 32px;
+  border-radius: 20px;
 }
 
 </style>

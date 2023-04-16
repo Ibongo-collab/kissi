@@ -177,12 +177,7 @@
       },
     },
     mounted() {
-      if (localStorage.getItem("token") && localStorage.getItem("security")) {
-        if (localStorage.getItem("verifyEmail")) {
-          this.verifyEmail = true;
-          this.email = this.client.email;
-        }
-      }
+
     },
   };
 </script>
