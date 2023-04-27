@@ -18,7 +18,7 @@
               </div>
             </div>
             <div class="col-md-4">
-              <img src="../assets/images/kissi-device.png" alt="image saka-saka" class="product-image mb-3">
+              <img src="../assets/images/capture-tel.png" alt="image saka-saka" class="product-image mb-3">
             </div>
           </div>
         </div>
