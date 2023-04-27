@@ -182,6 +182,7 @@ img {
 .tarif-praticien,
 .ville-praticien,
 .description-indication,
+.adresse-praticien,
 .date-praticien {
   font-family: "BasisGrotesque", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -195,6 +196,7 @@ img {
 .titre-tarif-praticien, 
 .titre-ville-praticien,
 .titre-indication,
+.titre-adresse-praticien,
 .titre-date-praticien {
   font-family: "BasisGrotesque", sans-serif;
   -webkit-font-smoothing: antialiased;

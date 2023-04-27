@@ -10,9 +10,8 @@
           <h2 class="titre" style="line-height: 45px;">Disponibilités sur <span style="color: #4f74da">Brazzaville et
               Pointe-noire</span></h2>
           <p style="margin-bottom: 27px;">
-            Pour effectuer une recherche, saisissez la spécialité et choisissez une ville ou utilisez les différentes
-            spécialités proposées.
-            Vous pouvez également consulter la liste de nos praticiens immédiatement disponibles ci-dessous.
+            Pour faire une recherche, il suffit d'entrer une spécialité et de choisir une ville, ou bien d'utiliser les 
+            options de spécialités proposées. Vous pouvez également consulter la liste des praticiens immédiatement disponibles ci-dessous.
           </p>
           <div id="content-specialite" class="">
             <div class="element-specialite">
@@ -82,7 +81,7 @@
                 </div>
               </div>
               <!-- second bloc -->
-              <div class="col-2 bloc-medecin bloc-medecin-2 border" style="padding-top: 50px;">
+              <div class="col-2 bloc-medecin bloc-medecin-2 border">
                 <div class="content-praticien-info">
                   <p class="titre-tarif-praticien">Tarif</p>
                   <p class="tarif-praticien">{{medecin.tarif}} Fcfa</p>
@@ -91,70 +90,24 @@
                 </div>
               </div>
               <!-- troisième bloc -->
-              <div class="col-6 bloc-medecin bloc-medecin-3 border">
-                <div id="content-date">
-                  <!-- <div class="arrow-horaire">
-                  <i class='bx bx-left-arrow-alt'></i>
-                </div> -->
-                  <div class="bloc-horaire">
-                    <div id="content-horaire">
-                      <div class="element">
-                        <p class="titre-date-praticien">Lundi</p>
-                        <span class="date-praticien">10/04</span>
-                      </div>
-                      <div class="element">
-                        <button class="horaire__btn">09:00</button>
-                      </div>
-                      <div class="element">
-                        <button class="horaire__btn">09:30</button>
-                      </div>
-                      <div class="element">
-                        <button class="horaire__btn">10:00</button>
-                      </div>
-                      <div class="element">
-                        <button class="horaire__btn">10:30</button>
-                      </div>
-                      <div class="element">
-                        <button class="horaire__btn">11:00</button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="bloc-horaire">
-                    <div id="content-horaire">
-                      <div class="element">
-                        <p class="titre-date-praticien">Mardi</p>
-                        <span class="date-praticien">11/04</span>
-                      </div>
-                      <div class="element">
-                        <button class="horaire__btn">09:00</button>
-                      </div>
-                      <div class="element">
-                        <button class="horaire__btn">09:30</button>
-                      </div>
-                      <div class="element">
-                        <button class="horaire__btn">10:00</button>
-                      </div>
-                      <div class="element">
-                        <button class="horaire__btn">10:30</button>
-                      </div>
-                      <div class="element">
-                        <button class="horaire__btn">11:00</button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="bloc-horaire">
-                    <button class="default__vide__btn" @click="goToPraticien(1)">Voir le profil</button>
-                  </div>
-
-                  <!-- <div class="arrow-horaire">
-                  <i class='bx bx-right-arrow-alt'></i>
-                </div> -->
+              <div class="col-6 bloc-medecin bloc-medecin-3">
+                <p class="titre-adresse-praticien">Adresse</p>
+                <p class="adresse-praticien">{{medecin.hopital.adresse}}</p>
+                <div class="bloc-horaire">
+                  <button class="default__vide__btn" @click="goToPraticien(1)">Prendre rendez-vous</button>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+        <div class="info-banner" v-if="medecinList.length < 1">
+          <p class="paragraph">
+            <i class='bx bx-window-close icon'></i> 
+            <span class="text">Nous n'avons malheureusement trouvé aucun professionnel correspondant à votre recherche. 
+              Nous vous invitons à réessayer avec d'autres critères de recherche. Si vous connaissez des spécialistes 
+              qui pourraient être intéressés par notre plateforme, n'hésitez pas à leur en parler !
+            </span>
+          </p>
         </div>
       </div>
     </div>
@@ -429,13 +382,31 @@
 
 /* bloc praticien */
 
+.icon {
+  font-size: 2rem;
+  margin-right: 5px;
+}
+
+.paragraph {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.text {
+  margin-right: 10px;
+}
+
 
 .bloc-horaire {
   width: 100%;
   height: 50px;
-  padding: 2%;
   text-align: center;
   margin-bottom: 10px;
+}
+
+.col-2 {
+  padding-top: 50px;
 }
 
 .bloc-medecin {
@@ -454,7 +425,6 @@
 .bloc-medecin-3 {
   padding: 1%
 }
-
 
 .info-banner {
   margin-bottom: 30px;
@@ -618,6 +588,16 @@ input[type=submit] {
   }
 }
 
+@media (max-width: 948px) {
+  .col-2, .col-3, .col-6{
+    width: 100%;
+    margin-top: 10px;
+  }
+  .col-2 {
+  padding-top: 15px;
+  }
+}
+
 @media (max-width: 882px) {
   .col-8 {
     width: 250px;
@@ -738,11 +718,8 @@ input[type=submit] {
   }
 }
 
-
 @media (max-width: 480px) {
-  .col-6 {
-    width: 100%;
-  }
+
 }
 
 </style>
