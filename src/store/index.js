@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import axios from "axios";
 import constant from "../../constant";
 import createPersistedState from "vuex-persistedstate";
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -14,7 +15,10 @@ export default new Vuex.Store({
   state: {
     isAuthenticated: false,
     token: null,
-    user: null
+    patient: null,
+    medecin: null,
+    medecinList: []
+
   },
   getters: {
     isAuthenticated(state) {
@@ -23,8 +27,14 @@ export default new Vuex.Store({
     token(state) {
       return state.token;
     },
-    user(state) {
-      return state.user;
+    patient(state) {
+      return state.patient;
+    },
+    medecin(state) {
+      return state.medecin;
+    },
+    medecinList(state) {
+      return state.medecinList;
     }
   },
   actions: {
@@ -47,29 +57,7 @@ export default new Vuex.Store({
           });
       });
     },
-    // Récupération d'un utilisateur par email
-    getUserByEmail({ commit }, email) {
-      const token = localStorage.getItem('token');
-      console.log(token, "token")
-      return new Promise(( resolve, reject) => {
-        axios.post(constant.apiURL + 'patients/email/'+ email,
-        {
-          headers: {
-            Authorization: `${token}`
-          }
-        })
-          .then(response => {
-            console.log(response, "user")
-            const user = response.data.user;
-            commit('SET_USER', user);
-            resolve(response);
-          })
-          .catch(error => {
-            reject(error);
-            console.log(error)
-          });
-      });
-    },
+    // Déconnexion
     logout({ commit }) {
       return new Promise((resolve, reject) => {
         axios.post(constant.apiURL + 'logout')
@@ -87,6 +75,93 @@ export default new Vuex.Store({
           });
       });
     },
+    // Récupération d'un patient par email
+    getPatientByEmail({ commit }, email) {
+      const token = this.state.token;
+      return new Promise((resolve, reject) => {
+        axios.get(constant.apiURL + 'patients/email/' + email, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then(response => {
+          // traiter la réponse
+          const patient = response.data;
+          commit('SET_PATIENT', patient);
+          resolve(response.data);
+        })
+        .catch(error => {
+          // traiter l'erreur
+          reject(error);
+          console.log(error)
+        });
+      });
+    },
+    // Récupération d'un médecin par ID
+    getMedecinById({ commit }, id) {
+      const token = this.state.token;
+      return new Promise((resolve, reject) => {
+        axios.get(constant.apiURL + 'medecins/' + id, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then(response => {
+          // traiter la réponse
+          const medecin = response.data;
+          commit('SET_MEDECIN', medecin);
+          resolve(response.data);
+        })
+        .catch(error => {
+          // traiter l'erreur
+          reject(error);
+          console.log(error)
+        });
+      });
+    },
+    // Récupération des médecins généralistes
+    getMedecinGeneraliste({ commit }) {
+      axios.get(constant.apiURL + 'medecins?'+'specialite=Médecin généraliste')
+      .then(response => {
+        // traiter la réponse
+        const medecinList = response.data.content;
+        console.log(medecinList, "liste depuis store généraliste")
+        commit('SET_MEDECINLIST', medecinList);
+      })
+      .catch(error => {
+        // traiter l'erreur
+        console.log(error)
+      });
+    },
+    // Récupération des médecins par spécialité
+    getMedecinByCat({ commit }, credential) {
+      axios.get(constant.apiURL + 'medecins',  { params: credential })
+      .then(response => {
+        // traiter la réponse
+        const medecinList = response.data.content;
+        // console.log(medecinList, "liste depuis store")
+        commit('SET_MEDECINLIST', medecinList);
+      })
+      .catch(error => {
+        // traiter l'erreur
+        console.log(error)
+      });
+    },
+    // Récupération des médecins par spécialité & par ville
+    getMedecinByCatAndCity({ commit }, {specialite, ville}) {
+      console.log(specialite, ville)
+      axios.get(constant.apiURL + 'medecins?'+'specialite='+specialite+'&ville='+ville)
+      .then(response => {
+        // traiter la réponse
+        const medecinList = response.data.content;
+        console.log(medecinList, "resultat de la recherche")
+        commit('SET_MEDECINLIST', medecinList);
+      })
+      .catch(error => {
+        // traiter l'erreur
+        console.log(error)
+      });
+    },
   },
   mutations: {
     SET_AUTHENTICATED(state, authenticated) {
@@ -95,8 +170,14 @@ export default new Vuex.Store({
     SET_TOKEN(state, token) {
       state.token = token;
     },
-    SET_USER(state, user) {
-      state.user = user;
+    SET_PATIENT(state, patient) {
+      state.patient = patient;
+    },
+    SET_MEDECIN(state, medecin) {
+      state.medecin = medecin;
+    },
+    SET_MEDECINLIST(state, medecinList) {
+      state.medecinList = medecinList
     }
   },
 });

@@ -136,6 +136,7 @@ export default {
     };
   },
   methods: {
+    // Méthode d'authentification
     authentification() {
       this.isLoading = true;
       const credentials = {
@@ -145,16 +146,17 @@ export default {
       this.$store.dispatch('login', credentials)
         .then(() => {
           // l'utilisateur est authentifié, vérifions son email pour continuer
-          this.getUserByEmail();
+          this.getPatientByEmail();
         })
         .catch(() => {
           // une erreur s'est produite lors de l'authentification, affichez un message d'erreur
           this.errorMessage = 'Identifiants invalides';
         });
     },
-    getUserByEmail() {
+    // Méthode de récupération du patient
+    getPatientByEmail() {
       const email = localStorage.getItem("emailUser");
-      this.$store.dispatch('getUserByEmail', email)
+      this.$store.dispatch('getPatientByEmail', email)
         .then(() => {
           this.isLoading = false;
           // l'email de l'utilisateur est correcte, naviguez vers la page tableau de bord
@@ -165,6 +167,7 @@ export default {
           this.errorMessage = 'email invalide';
         });
     },
+    // Retour vers la page précédente
     goBack() {
       this.$router.go(-1); // retourne à la route précédente
     },
@@ -318,8 +321,8 @@ export default {
     }
   },
   mounted() {
-    if (this.$store.getters.isAuthenticated) {
-      this.$router.push("/"); // l'utilisateur est authentifié, continuez vers la page d'accueil
+    if (this.$store.getters.isAuthenticated === true) {
+      this.$router.push("/tableau-de-bord");
     }
   },
 };

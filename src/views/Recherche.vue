@@ -1,5 +1,6 @@
 <template>
   <div class="recherche">
+
     <Navbar />
 
     <div class="banner">
@@ -14,28 +15,29 @@
             Vous pouvez également consulter la liste de nos praticiens immédiatement disponibles ci-dessous.
           </p>
           <div id="content-specialite" class="">
-            <div class="element">
-              <button class="specialite__btn active"> Médecin généraliste</button>
+            <div class="element-specialite">
+              <button class="specialite__btn active" @click="getMedecinByCat('Médecin généraliste')">Médecin
+                généraliste</button>
             </div>
-            <div class="element">
-              <button class="specialite__btn">Pédiatre</button>
+            <div class="element-specialite">
+              <button class="specialite__btn" @click="getMedecinByCat('Pédiatre')">Pédiatre</button>
             </div>
-            <div class="element">
-              <button class="specialite__btn">Dermatologue</button>
+            <div class="element-specialite">
+              <button class="specialite__btn" @click="getMedecinByCat('Dermatologue')">Dermatologue</button>
             </div>
-            <div class="element">
-              <button class="specialite__btn">Gynécologue</button>
+            <div class="element-specialite">
+              <button class="specialite__btn" @click="getMedecinByCat('Gynécologue')">Gynécologue</button>
             </div>
           </div>
           <form v-on:submit.prevent="rechercher">
             <div class="row">
-              <div class="col-4">
+              <div class="col-4 content-input">
                 <div class="autocomplete">
                   <input id="myInput" type="text" name="myCountry" placeholder="Spécialité"
                     class="contact__input border" v-model="specialite">
                 </div>
               </div>
-              <div class="col-4">
+              <div class="col-4 content-input">
                 <select v-model="selected" name="ville" placeholder="Ville" class="contact__input border">
                   <option disabled value="">Choisissez une ville</option>
                   <option v-for="(item, index) in cityList" :key="index">
@@ -60,187 +62,96 @@
         <!-- Praticiens -->
         <!--========== SPINNER ==========-->
         <loading :active.sync="isLoading" :can-cancel="false" :is-full-page="fullPage"></loading>
-
-        <div class="info-banner">
-          <div class="row">
-            <!-- premier bloc -->
-            <div class="col-3 bloc-medecin bloc-medecin-1">
-              <div class="content-photo">
-                <div v-if="nom">
-                  <label class="label rounded-circle">
-                    <p class="char">{{nom}}</p>
-                  </label>
+        <div class="info-banner" v-for="medecin in medecinList" :key="medecin.id">
+          <div class="content-medecin">
+            <div class="row">
+              <!-- premier bloc -->
+              <div class="col-3 bloc-medecin bloc-medecin-1">
+                <div class="content-photo">
+                  <div v-if="nom">
+                    <label class="label rounded-circle">
+                      <p class="char">{{medecin.nom}}</p>
+                    </label>
+                  </div>
+                  <img src="../assets/images/user.png" class="rounded-circle border" alt="image medecin" width="50px"
+                    height="50px" v-else>
                 </div>
-                <img src="../assets/images/user.png" class="rounded-circle border" alt="image medecin" width="50px"
-                  height="50px" v-else>
+                <div class="content-praticien-info">
+                  <p class="nom-praticien">{{medecin.titre}} {{medecin.prenom}}</p>
+                  <p class="specialite-praticien">{{medecin.categorieMedecin.nom}}</p>
+                </div>
               </div>
-              <div class="content-praticien-info">
-                <p class="nom-praticien">Dr {{nom}}</p>
-                <p class="specialite-praticien">Médecin Généraliste</p>
+              <!-- second bloc -->
+              <div class="col-2 bloc-medecin bloc-medecin-2 border" style="padding-top: 50px;">
+                <div class="content-praticien-info">
+                  <p class="titre-tarif-praticien">Tarif</p>
+                  <p class="tarif-praticien">{{medecin.tarif}} Fcfa</p>
+                  <p class="titre-ville-praticien">Ville</p>
+                  <p class="ville-praticien">{{medecin.hopital.ville}}</p>
+                </div>
               </div>
-            </div>
-            <!-- second bloc -->
-            <div class="col-2 bloc-medecin bloc-medecin-2 border" style="padding-top: 50px;">
-              <div class="content-praticien-info">
-                <p class="titre-tarif-praticien">Tarif</p>
-                <p class="tarif-praticien">10.000 Fcfa</p>
-                <p class="titre-ville-praticien">Ville</p>
-                <p class="ville-praticien">Pointe-noire</p>
-              </div>
-            </div>
-            <!-- troisième bloc -->
-            <div class="col-6 bloc-medecin bloc-medecin-3 border">
-              <div id="content-date">
-                <!-- <div class="arrow-horaire">
+              <!-- troisième bloc -->
+              <div class="col-6 bloc-medecin bloc-medecin-3 border">
+                <div id="content-date">
+                  <!-- <div class="arrow-horaire">
                   <i class='bx bx-left-arrow-alt'></i>
                 </div> -->
-                <div class="bloc-horaire">
-                  <div id="content-horaire">
-                    <div class="element">
-                      <p class="titre-date-praticien">Lundi</p>
-                      <span class="date-praticien">10/04</span>
-                    </div>
-                    <div class="element">
-                      <button class="horaire__btn">09:00</button>
-                    </div>
-                    <div class="element">
-                      <button class="horaire__btn">09:30</button>
-                    </div>
-                    <div class="element">
-                      <button class="horaire__btn">10:00</button>
-                    </div>
-                    <div class="element">
-                      <button class="horaire__btn">10:30</button>
-                    </div>
-                    <div class="element">
-                      <button class="horaire__btn">11:00</button>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="bloc-horaire">
-                  <div id="content-horaire">
-                    <div class="element">
-                      <p class="titre-date-praticien">Mardi</p>
-                      <span class="date-praticien">11/04</span>
-                    </div>
-                    <div class="element">
-                      <button class="horaire__btn">09:00</button>
-                    </div>
-                    <div class="element">
-                      <button class="horaire__btn">09:30</button>
-                    </div>
-                    <div class="element">
-                      <button class="horaire__btn">10:00</button>
-                    </div>
-                    <div class="element">
-                      <button class="horaire__btn">10:30</button>
-                    </div>
-                    <div class="element">
-                      <button class="horaire__btn">11:00</button>
+                  <div class="bloc-horaire">
+                    <div id="content-horaire">
+                      <div class="element">
+                        <p class="titre-date-praticien">Lundi</p>
+                        <span class="date-praticien">10/04</span>
+                      </div>
+                      <div class="element">
+                        <button class="horaire__btn">09:00</button>
+                      </div>
+                      <div class="element">
+                        <button class="horaire__btn">09:30</button>
+                      </div>
+                      <div class="element">
+                        <button class="horaire__btn">10:00</button>
+                      </div>
+                      <div class="element">
+                        <button class="horaire__btn">10:30</button>
+                      </div>
+                      <div class="element">
+                        <button class="horaire__btn">11:00</button>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div class="bloc-horaire">
-                  <button class="default__vide__btn" @click="goToPraticien(1)">Voir le profil</button>
-                </div>
+                  <div class="bloc-horaire">
+                    <div id="content-horaire">
+                      <div class="element">
+                        <p class="titre-date-praticien">Mardi</p>
+                        <span class="date-praticien">11/04</span>
+                      </div>
+                      <div class="element">
+                        <button class="horaire__btn">09:00</button>
+                      </div>
+                      <div class="element">
+                        <button class="horaire__btn">09:30</button>
+                      </div>
+                      <div class="element">
+                        <button class="horaire__btn">10:00</button>
+                      </div>
+                      <div class="element">
+                        <button class="horaire__btn">10:30</button>
+                      </div>
+                      <div class="element">
+                        <button class="horaire__btn">11:00</button>
+                      </div>
+                    </div>
+                  </div>
 
-                <!-- <div class="arrow-horaire">
+                  <div class="bloc-horaire">
+                    <button class="default__vide__btn" @click="goToPraticien(1)">Voir le profil</button>
+                  </div>
+
+                  <!-- <div class="arrow-horaire">
                   <i class='bx bx-right-arrow-alt'></i>
                 </div> -->
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="info-banner">
-          <div class="row">
-            <!-- premier bloc -->
-            <div class="col-3 bloc-medecin bloc-medecin-1">
-              <div class="content-photo">
-                <!-- <div v-if="nom">
-                  <label class="label rounded-circle">
-                    <p class="char">{{nom}}</p>
-                  </label>
-                </div> -->
-                <img src="../assets/images/benit.png" class="rounded-circle border" alt="image medecin" width="50px"
-                  height="50px">
-              </div>
-              <div class="content-praticien-info">
-                <p class="nom-praticien">Dr Okiessi Bénit IBONGO</p>
-                <p class="specialite-praticien">Médecin Généraliste</p>
-              </div>
-            </div>
-            <!-- second bloc -->
-            <div class="col-2 bloc-medecin bloc-medecin-2 border" style="padding-top: 50px;">
-              <div class="content-praticien-info">
-                <p class="titre-tarif-praticien">Tarif</p>
-                <p class="tarif-praticien">10.000 Fcfa</p>
-                <p class="titre-ville-praticien">Ville</p>
-                <p class="ville-praticien">Brazzaville</p>
-              </div>
-            </div>
-            <!-- troisième bloc -->
-            <div class="col-6 bloc-medecin bloc-medecin-3 border">
-              <div id="content-date" class="">
-                <!-- <div class="arrow-horaire">
-                  <i class='bx bx-left-arrow-alt'></i>
-                </div> -->
-                <div class="bloc-horaire">
-                  <div id="content-horaire">
-                    <div class="element">
-                      <p class="titre-date-praticien">Lundi</p>
-                      <span class="date-praticien">10/04</span>
-                    </div>
-                    <div class="element">
-                      <button class="horaire__btn">09:00</button>
-                    </div>
-                    <div class="element">
-                      <button class="horaire__btn">09:30</button>
-                    </div>
-                    <div class="element">
-                      <button class="horaire__btn">10:00</button>
-                    </div>
-                    <div class="element">
-                      <button class="horaire__btn">10:30</button>
-                    </div>
-                    <div class="element">
-                      <button class="horaire__btn">11:00</button>
-                    </div>
-                  </div>
                 </div>
-
-                <div class="bloc-horaire">
-                  <div id="content-horaire">
-                    <div class="element">
-                      <p class="titre-date-praticien">Mardi</p>
-                      <span class="date-praticien">11/04</span>
-                    </div>
-                    <div class="element">
-                      <button class="horaire__btn">09:00</button>
-                    </div>
-                    <div class="element">
-                      <button class="horaire__btn">09:30</button>
-                    </div>
-                    <div class="element">
-                      <button class="horaire__btn">10:00</button>
-                    </div>
-                    <div class="element">
-                      <button class="horaire__btn">10:30</button>
-                    </div>
-                    <div class="element">
-                      <button class="horaire__btn">11:00</button>
-                    </div>
-                  </div>
-                </div>
-                <div class="bloc-horaire">
-                  <button class="default__vide__btn">Voir le profil</button>
-                </div>
-
-                <!-- <div class="arrow-horaire">
-                  <i class='bx bx-right-arrow-alt'></i>
-                </div> -->
               </div>
             </div>
           </div>
@@ -258,10 +169,7 @@
   import Footer from '@/components/Footer.vue'
   import Loading from "vue-loading-overlay";
   import "vue-loading-overlay/dist/vue-loading.css";
-  // import CryptoJS from 'crypto-js'
-  // import AES from 'crypto-js/aes'
-  // import constant from "../../constant";
-  // import constant from "../../constant";
+  import { mapGetters } from "vuex";
   export default {
     name: "Recherche",
     components: {
@@ -286,20 +194,74 @@
         ],
         specialite:"",
         selected:"",
-        nom: "Dervan TATI",
+        nom: "",
+        prenom:"",
+        titre:"",
+        isLoading: false,
+        fullPage: true,
       };
     },
     methods: {
+      rechercher() {
+        this.isLoading = true;
+        this.$store.dispatch('getMedecinByCatAndCity', {'specialite': this.specialite, 'ville': this.selected})
+          .then(() => {
+            this.isLoading = false;
+            // La liste des médecin est mise à jour
+            // console.log('Médecins par spécialité');
+          })
+          .catch(() => {
+            // une erreur s'est produite, affichez un message d'erreur
+            this.errorMessage = 'Identifiants invalides';
+        });
+      },
+      // Méthode de récupération de la liste de médecin par spécialité
+      getMedecinByCat(spe) {
+        // this.isLoading = true;
+        const credential = {
+          specialite: spe
+        };
+        this.$store.dispatch('getMedecinByCat', credential)
+          .then(() => {
+            // this.isLoading = false;
+            // La liste des médecin est mise à jour
+            // console.log('Médecins par spécialité');
+          })
+          .catch(() => {
+            // une erreur s'est produite, affichez un message d'erreur
+            this.errorMessage = 'Identifiants invalides';
+          });
+      },
 
+      // Méthode de récupération de la liste des médecins généralistes
+      getMedecinList() {
+        this.$store.dispatch('getMedecinGeneraliste')
+        .then(() => {
+          // console.log('Medecins généralistes OK');
+        })
+        .catch(error => {
+          console.log(error);
+        });
+      },
+
+      // Aller à la page du médecin choisi
       goToPraticien(id) {
-        // console.log(id)
+        console.log(id)
         // let encryptedData = AES.encrypt(id, constant.secretKey).toString()
         // console.log(encryptedData);
-        // this.$router.push("/praticien/"+ id);
-        this.$router.push({ name: 'Praticien', params: { id: id } });
+        this.$router.push("/praticien/"+ id);
       }
     },
+    computed: {
+      isDisabled() {
+        // contrôle sur l'activation du bouton
+        return !this.specialite && !this.selected;
+      },
+      ...mapGetters(["medecinList"]),
+    },
     mounted() {
+      // console.log(this.medecinList)
+
       function autocomplete(inp, arr) {
         /*the autocomplete function takes two arguments,
         the text field element and an array of possible autocompleted values:*/
@@ -403,7 +365,7 @@
       }
 
       /*An array containing all the country names in the world:*/
-      var countries = [
+      var specialite = [
         "Audioprothésiste",
         "Anatomopathologiste",
         "Anesthesiste-Réanimateur", 
@@ -425,7 +387,7 @@
         "Hépatologue",
         "Kinésithérapeute",
         "Kinésithérapeute Du Sport",
-        "Medecin Généraliste",
+        "Médecin généraliste",
         "Medecin Urgentiste",
         "Pédiatre",
         "Pédodontiste",
@@ -443,7 +405,7 @@
       ];
 
       /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-      autocomplete(document.getElementById("myInput"), countries);
+      autocomplete(document.getElementById("myInput"), specialite);
 
       // active link
       var header = document.getElementById("content-specialite");
@@ -455,6 +417,10 @@
         this.className += " active";
         });
       }
+    },
+    created() {
+      // this.$store.dispatch('getMedecinGeneraliste');  
+      this.getMedecinList();
     }
   }
   </script>
@@ -538,12 +504,17 @@
   border-radius: 10px;
 }
 
+.contact__input {
+  border-radius: 10px;
+}
+
 /*the container must be positioned relative:*/
 .autocomplete {
   position: relative;
   display: inline-block;
   cursor: pointer;
   width: 300px;
+  
 }
 
 input {
@@ -577,7 +548,8 @@ input[type=submit] {
 }
 
 .autocomplete-items div {
-  padding: 10px;
+  /* padding: 10px; */
+  padding: 0.8rem 1.5rem;
   cursor: pointer;
   background-color: #fff;
   border-bottom: 1px solid #d4d4d4;
@@ -618,14 +590,32 @@ input[type=submit] {
   border-radius: 10px;
 }
 
-.search-adresse-banner {
-  width: 100%;
-  font-size: 13px;
-  font-family: "BasisGrotesque";
-  padding: 0.8rem 0.4rem;
-  outline: #fdcd3b;
-  border-radius: 4px;
-  border: 1px solid rgb(211, 201, 201);
+
+@media only screen and (min-width: 769px) and (max-width: 986px) {
+  .content-input
+  .autocomplete,
+  .default__btn
+   {
+    width: 230px;
+  }
+}
+
+@media only screen and (min-width: 620px) and (max-width: 769px) {
+  .content-input
+  .autocomplete,
+  .default__btn
+   {
+    width: 180px;
+  }
+}
+
+@media only screen and (min-width: 541px) and (max-width: 620px) {
+  .content-input
+  .autocomplete,
+  .default__btn
+   {
+    width: 150px;
+  }
 }
 
 @media (max-width: 882px) {
@@ -724,6 +714,22 @@ input[type=submit] {
   .title {
     font-size: 1.9rem;
   }
+
+  .element-specialite {
+    width: 100%;
+  }
+
+  .col-4,
+  .autocomplete{
+    width: 100%;
+  }
+
+  .specialite__btn {
+    width: 100%;
+    text-align: start;
+  }
+
+
 }
 
 @media (min-width: 540px) {
@@ -732,17 +738,11 @@ input[type=submit] {
   }
 }
 
-@media (min-width: 654px) {
-  .box-content-business-two {
-    display: none;
-  }
-}
 
 @media (max-width: 480px) {
   .col-6 {
     width: 100%;
   }
-
 }
 
 </style>
