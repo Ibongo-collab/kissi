@@ -11,7 +11,8 @@
             <div class="col-md-8 text-bloc">
               <h2 class="grand-titre"><span style="color: #4f74da">+</span> Que prendre des rendez-vous</h2>
               <p class="description">
-                Kissi vous propose une expérience unique. Prenez rendez-vous avec votre médecin en ligne 7j/7 de 6h à 00h
+                Kissi vous offre une expérience inédite en vous permettant de prendre rendez-vous avec votre
+                médecin en ligne, 7j/7, de 6 heures à minuit.
               </p>
               <div class="content__btn">
                 <button type="button" @click="goToRecherche" class="default__btn">Prendre un rendez-vous</button>
@@ -26,57 +27,78 @@
 
       <!--==================== PATIENT ====================-->
       <div class="content section" id="recette">
-          <h2 class="titre">
-            Je suis un patient, comment ça marche ?<br>
-          </h2>
-          <div class="k__container bd-grid">
-            <div class="element">
-              <div class="rounded-circle banner" style="margin-bottom: 20px; width: 200px; height: 200px; text-align: center;">
-                <img src="../assets/images/computer.png" alt="image" style="margin-top: 25px;">
-              </div>
-                <p class="sous-titre"><b>Je trouve mon medecin et
-                    je prends rendez-vous</b></p>
-                <p>Trouvez votre medecin et prenez un rendez-vous en fonction de sa
-                  ville et de sa spécialité</p>
+        <h2 class="titre">
+          Je suis un patient, comment ça marche ?<br>
+        </h2>
+        <div id="conteneur">
+          <div class="element-patient">
+            <div class="rounded-circle banner"
+              style="margin-bottom: 20px; width: 200px; height: 200px; text-align: center;">
+              <img src="../assets/images/computer.png" alt="image" style="margin-top: 25px;">
             </div>
-            <div class="element">
-              <div class="rounded-circle banner" style="margin-bottom: 20px; width: 200px; height: 200px; text-align: center;">
-                <img src="../assets/images/waiting-room.png" alt="image" style="margin-top: 25px;">
-              </div>
-                <p class="sous-titre"><b>J'effectue ma consultation
-                    le jour venu.</b></p>
-                <p>Effectuez votre consultation au sein du centre
-                  hospitalier</p>
-            </div>
-            <div class="element">
-              <div class="rounded-circle banner" style="margin-bottom: 20px; width: 200px; height: 200px; text-align: center;">
-                <img src="../assets/images/laptop.png" alt="image" style="margin-top: 35px;">
-              </div>
-                <p class="sous-titre"><b>Je retrouve mes documents
-                    médicaux</b></p>
-                <p>Bénéficiez de documents médicaux valables en pharmacie, accessibles en ligne depuis votre espace personnel.</p>
-            </div>
+            <p class="sous-titre"><b>Je trouve mon medecin et
+                je prends rendez-vous</b></p>
+            <p>Trouvez votre medecin et prenez un rendez-vous en fonction de sa
+              ville et de sa spécialité</p>
           </div>
+          <div class="element-patient">
+            <div class="rounded-circle banner"
+              style="margin-bottom: 20px; width: 200px; height: 200px; text-align: center;">
+              <img src="../assets/images/waiting-room.png" alt="image" style="margin-top: 25px;">
+            </div>
+            <p class="sous-titre"><b>J'effectue ma consultation
+                le jour venu.</b></p>
+            <p>Effectuez votre consultation au sein du centre
+              hospitalier</p>
+          </div>
+          <div class="element-patient">
+            <div class="rounded-circle banner"
+              style="margin-bottom: 20px; width: 200px; height: 200px; text-align: center;">
+              <img src="../assets/images/laptop.png" alt="image" style="margin-top: 35px;">
+            </div>
+            <p class="sous-titre"><b>Je retrouve mes documents
+                médicaux</b></p>
+            <p>Bénéficiez de documents médicaux valables en pharmacie, accessibles en ligne depuis votre espace
+              personnel.</p>
+          </div>
+        </div>
       </div>
 
       <!--=============== PRATICIEN ===============-->
       <section class="content mb-5" id="banner" style="padding: 4.5rem 0 2rem;">
         <div class="row">
-          <div class="col-md-5 pt-5">
+          <div class="col-md-5">
             <h2 class="titre">Vous êtes praticien ?</h2>
-
             <p>Rejoignez DabaDoc et gagnez sur tous les plans!
               Un cabinet plus visible
               Davantage de flux grâce à la prise de RDV 24/24
               Des confirmations et rappels de RDV par SMS envoyés à tous vos patients
               Accès illimité à la vidéo consultation</p>
             <div class="content__btn">
-                <button type="button" @click="goToPraticien" class="default__btn">En savoir plus</button>
+              <button type="button" @click="goToPraticien" class="default__btn">En savoir plus</button>
             </div>
           </div>
           <div class="col-md-6">
-            <iframe width="550" height="335" src="https://www.youtube.com/embed/0_gw0hbZpOM" title="YouTube video player" 
-            frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <iframe class="laptop" width="550" height="335" src="https://www.youtube.com/embed/0_gw0hbZpOM"
+              title="YouTube video player" frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen></iframe>
+              <iframe class="tablette" width="495" height="295" src="https://www.youtube.com/embed/0_gw0hbZpOM"
+              title="YouTube video player" frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen></iframe>
+              <iframe class="tablette-small" width="455" height="295" src="https://www.youtube.com/embed/0_gw0hbZpOM"
+              title="YouTube video player" frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen></iframe>
+              <iframe class="tablette-xsmall" width="400" height="295" src="https://www.youtube.com/embed/0_gw0hbZpOM"
+              title="YouTube video player" frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen></iframe>
+              <iframe class="device" width="100%" height="300" src="https://www.youtube.com/embed/0_gw0hbZpOM"
+              title="YouTube video player" frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen></iframe>
           </div>
         </div>
       </section>
@@ -169,9 +191,7 @@
   // @ is an alias to /src
   import Navbar from '@/components/Navbar.vue'
   import Footer from '@/components/Footer.vue'
-  import {
-    gsap
-  } from "gsap";
+  import {gsap} from "gsap";
   // import { mapGetters } from "vuex";
 
   export default {
@@ -193,10 +213,8 @@
         this.$router.push("/rejoignez-kissi");
       }
     },
-    computed: {
-    },
-    created() {
-    },
+    computed: {},
+    created() {},
     mounted() {
       gsap.from('.product-image', {
         opacity: 0,
@@ -234,8 +252,14 @@
   #conteneur {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: flex-start;
+    margin-bottom: 0px;
+  }
+
+  .element-patient {
+    width: 300px;
+    height: auto;
   }
 
   .k__container,
@@ -252,11 +276,6 @@
     font-size: 20px;
     font-weight: 900;
     color: rgb(104, 103, 103);
-  }
-
-  .element {
-    width: auto;
-    height: auto;
   }
 
   .element-partenaire-right {
@@ -314,10 +333,6 @@
     font-size: 14px;
   }
 
-  /* .accordion-label:hover {
-    background: #EFEFEF;
-  } */
-
   .accordion-label::after {
     content: "\276F";
     width: 16px;
@@ -350,122 +365,110 @@
     padding: 16px;
   }
 
-  /*========== NAZO'S BUSINESS ==========*/
-
-  .image-business {
-    width: 100%;
-  }
-
-  .titre-business {
-    font-size: 30px;
-    color: #fff;
-  }
-
-  .text-business {
-    text-align: justify;
-    font-size: 13px;
-    color: #fff;
-  }
-
-  .top-left {
-    position: relative;
-    top: -268px;
-    left: 16px;
-  }
-
-  .box-business {
-    text-align: initial;
-    width: 48%;
-    padding: 2rem;
-  }
-
-  .box-business-two {
-    text-align: center;
-    width: 100%;
-  }
-
-  .sub-box-business-two {
-    background-color: rgb(46, 46, 46);
-    padding: 1rem;
-  }
-
-  .titre-business-two,
-  .text-business-two {
-    color: white;
-    font-weight: 600;
-  }
-
-  .box-content-business {
-    margin: 0;
-    padding: 0;
-    height: 300px;
-  }
-
-  .button-business-two {
-    font-family: "BasisGrotesque";
-    color: #f7b655;
-    padding: 0.8rem 1.3rem;
-    background-color: #fff;
-    border: rgb(46, 46, 46);
-    margin-right: 0px;
-    transition: 0.5s;
-    font-size: 14px;
-  }
-
-  @media screen and (max-width: 767px) {
-    .titre-profil {
-      margin-bottom: 100px;
-    }
-
-    #monfaq {
-      margin-top: 50px;
-      margin-bottom: 100px;
+  /* Media query */
+  @media (min-width: 769px) {
+    .device {
+      display: none;
     }
   }
 
-
-  /* lorsque l'écran est inférieur à 992px */
-  @media (max-width: 992px) {
-    .titre-business {
-      font-size: 35px;
-    }
-
-    .text-business {
-      font-size: 13px;
+  @media (min-width: 977px) {
+    .tablette, .tablette-small, .tablette-xsmall, .device {
+      display: none;
     }
   }
 
-  @media (max-width: 840px) {
-    .titre-business {
-      font-size: 28px;
+  @media (max-width: 976px) {
+    .laptop, .tablette-small, .tablette-xsmall {
+      display: none;
+    }
+
+    .element-patient {
+      width: 275px;
     }
   }
 
-  @media (max-width: 767px) {
-    .text-business {
-      font-size: 12px;
+  @media (max-width: 899px) {
+    .element-patient {
+      width: 255px;
     }
-  }
 
-  @media (max-width: 672px) {
-    .titre-business {
+    .tablette-small {
+      display: block;
+    }
+
+    .tablette {
+      display: none;
+    }
+
+    .grand-titre {
+      font-size: 45px;
+    }
+
+    .titre {
       font-size: 25px;
     }
 
-    .text-business {
-      font-size: 12px;
+    .sous-titre {
+      font-size: 20px;
     }
   }
 
-  @media (max-width: 654px) {
-    .box-content-business {
+  @media (max-width: 815px) {
+    .element-patient {
+      width: 230px;
+    }
+
+    .tablette-small {
+      display: none;
+    }
+
+    .tablette-xsmall {
+      display: block;
+    }
+
+    .grand-titre {
+      font-size: 40px;
+    }
+
+    .description {
+      font-size: 14px;
+    }
+
+    .titre {
+      font-size: 22px;
+    }
+
+    .sous-titre {
+      font-size: 18px;
+    }
+  }
+
+  @media (max-width: 769px) {
+    .col-md-4 {
+      display: none;
+    }
+
+    .content__btn {
+      width: 100%;
+      margin-bottom: 25px;
+    }
+
+    .tablette-xsmall {
       display: none;
     }
   }
 
-  @media (min-width: 654px) {
-    .box-content-business-two {
-      display: none;
+  @media (max-width: 722px) {
+    .element-patient {
+      width: 100%;
+      margin-bottom: 20px;
     }
+
+    .description {
+      margin: 2%;
+    }
+
   }
+
 </style>

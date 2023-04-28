@@ -397,7 +397,6 @@
   margin-right: 10px;
 }
 
-
 .bloc-horaire {
   width: 100%;
   height: 50px;
@@ -424,10 +423,6 @@
 .bloc-medecin-2,
 .bloc-medecin-3 {
   padding: 1%
-}
-
-.info-banner {
-  margin-bottom: 30px;
 }
 
 
@@ -484,7 +479,6 @@
   display: inline-block;
   cursor: pointer;
   width: 300px;
-  
 }
 
 input {
@@ -539,25 +533,13 @@ input[type=submit] {
 
 /* bannière */
 
-.boutton-rechercher-banner {
-  font-family: 'BasisGrotesque', sans-serif;
-  background-color: #f7b655;
-  color: #fff;
-  padding: 0.7rem 0.6rem;
-  border: 1px solid #f7b655;
-  border-radius: 10px;
-  width: 100%;
-  outline: none;
-  font-weight: 600;
-  font-size: 15px;
-}
-
 .info-banner {
   color: black;
   padding: 1.3rem;
   padding-bottom: 30px;
   background-color: #fff;
   border-radius: 10px;
+  margin-bottom: 30px;
 }
 
 

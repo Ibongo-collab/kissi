@@ -24,7 +24,11 @@
             </li>
           </ul>
         </div>
-        <router-link to="/tableau-de-bord" class="nopc">Mon compte</router-link>
+        <li class="nav__item">
+          <router-link to="/tableau-de-bord" class="nav__link nopc">
+            <span class="nav__name">Mon compte</span>
+          </router-link>
+        </li>
       </nav>
     </header>
   </div>
@@ -80,7 +84,7 @@
     }
   }
 
-    @media (min-width: 768px) {
+    @media (min-width: 767px) {
     .nopc {
       display: none;
     }
