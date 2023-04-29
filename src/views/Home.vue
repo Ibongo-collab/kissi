@@ -8,12 +8,12 @@
       <div class="banner">
         <div class="content" id="home">
           <div class="row">
-            <div class="col-md-8 text-bloc">
+            <div class="col-md-8">
               <h2 class="grand-titre"><span style="color: #4f74da">+</span> Que prendre des rendez-vous</h2>
-              <p class="description">
-                Kissi vous offre une expérience inédite en vous permettant de prendre rendez-vous avec votre
-                médecin en ligne, 7j/7, de 6 heures à minuit.
-              </p>
+                <p class="description">
+                  Kissi vous offre une expérience inédite en vous permettant de prendre rendez-vous avec votre
+                  médecin en ligne, 7j/7, de 6 heures à minuit.
+                </p>
               <div class="content__btn">
                 <button type="button" @click="goToRecherche" class="default__btn">Prendre un rendez-vous</button>
               </div>
@@ -36,20 +36,17 @@
               style="margin-bottom: 20px; width: 200px; height: 200px; text-align: center;">
               <img src="../assets/images/computer.png" alt="image" style="margin-top: 25px;">
             </div>
-            <p class="sous-titre"><b>Je trouve mon medecin et
+            <p class="sous-titre"><b>Je trouve mon médecin et
                 je prends rendez-vous</b></p>
-            <p>Trouvez votre medecin et prenez un rendez-vous en fonction de sa
-              ville et de sa spécialité</p>
+            <p>Trouvez votre médecin et prenez rendez-vous en choisissant sa ville et sa spécialité</p>
           </div>
           <div class="element-patient">
             <div class="rounded-circle banner"
               style="margin-bottom: 20px; width: 200px; height: 200px; text-align: center;">
               <img src="../assets/images/waiting-room.png" alt="image" style="margin-top: 25px;">
             </div>
-            <p class="sous-titre"><b>J'effectue ma consultation
-                le jour venu.</b></p>
-            <p>Effectuez votre consultation au sein du centre
-              hospitalier</p>
+            <p class="sous-titre"><b>Je réalise ma consultation le jour du rendez-vous</b></p>
+            <p>Réalisez votre consultation au sein du centre hospitalier</p>
           </div>
           <div class="element-patient">
             <div class="rounded-circle banner"
@@ -58,8 +55,7 @@
             </div>
             <p class="sous-titre"><b>Je retrouve mes documents
                 médicaux</b></p>
-            <p>Bénéficiez de documents médicaux valables en pharmacie, accessibles en ligne depuis votre espace
-              personnel.</p>
+            <p>Bénéficiez de documents médicaux valides en pharmacie, disponibles en ligne depuis votre espace personnel</p>
           </div>
         </div>
       </div>
@@ -69,11 +65,8 @@
         <div class="row">
           <div class="col-md-5">
             <h2 class="titre">Vous êtes praticien ?</h2>
-            <p>Rejoignez DabaDoc et gagnez sur tous les plans!
-              Un cabinet plus visible
-              Davantage de flux grâce à la prise de RDV 24/24
-              Des confirmations et rappels de RDV par SMS envoyés à tous vos patients
-              Accès illimité à la vidéo consultation</p>
+            <p>Rejoignez Kissi et profitez de nombreux avantages : votre cabinet sera plus visible, vous bénéficierez de 
+              rendez-vous 24/24 et de confirmations ainsi que de rappels de rendez-vous par SMS pour tous vos patients</p>
             <div class="content__btn">
               <button type="button" @click="goToPraticien" class="default__btn">En savoir plus</button>
             </div>
@@ -232,11 +225,10 @@
     padding-top: 70px;
   }
 
-  .description {
-    margin-bottom: 25px;
-    text-align: justify;
-    width: 400px;
+  .col-md-8 {
+    margin-top: 100px;
   }
+
 
   .titre-mission,
   .titre-partenaires,
@@ -260,6 +252,7 @@
   .element-patient {
     width: 300px;
     height: auto;
+    border-radius: 10px;
   }
 
   .k__container,
@@ -457,6 +450,10 @@
     .tablette-xsmall {
       display: none;
     }
+
+    .col-md-8 {
+      margin-top: 10px;
+    }
   }
 
   @media (max-width: 722px) {
@@ -464,9 +461,21 @@
       width: 100%;
       margin-bottom: 20px;
     }
+  }
+
+  @media (max-width: 550px) {
 
     .description {
-      margin: 2%;
+      font-size: 13px;
+    }
+
+    .col-md-8 {
+      overflow: scroll;
+    }
+
+    .element-patient {
+      border: 1px solid #8b8b90;
+      padding: 2%;
     }
 
   }

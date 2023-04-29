@@ -78,13 +78,35 @@
     list-style: none;
   }
 
+  .nav__menu {
+    margin-left: 600px;
+  }
+
+  @media (max-width: 973px) {
+    .nav__menu {
+      margin-left: 500px;
+    }
+  }
+
+  @media (max-width: 873px) {
+    .nav__menu {
+      margin-left: 400px;
+    }
+  }
+
+  @media only screen and (min-width: 769px) and (max-width: 773px) {
+    .nav__menu {
+      margin-left: 390px;
+    }
+  }
+
   @media (max-width: 768px) {
     .nomobile {
       display: none;
     }
   }
 
-    @media (min-width: 767px) {
+  @media (min-width: 767px) {
     .nopc {
       display: none;
     }

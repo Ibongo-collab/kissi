@@ -121,8 +121,10 @@
   import Navbar from '@/components/Navbar.vue'
   import Footer from '@/components/Footer.vue'
   import Loading from "vue-loading-overlay";
-  import "vue-loading-overlay/dist/vue-loading.css";
-  import { mapGetters } from "vuex";
+  import "vue-loading-overlay/dist/vue-loading.css"
+  import { mapGetters } from "vuex"
+  import CryptoJS from 'crypto-js'
+  import constant from "../../constant"
   export default {
     name: "Recherche",
     components: {
@@ -197,12 +199,18 @@
         });
       },
 
+      // Fonction pour crypter les données
+      encryptData(data, key) {
+        const encrypted = CryptoJS.AES.encrypt(data, key).toString()
+        return encrypted
+      },
+
       // Aller à la page du médecin choisi
       goToPraticien(id) {
         console.log(id)
-        // let encryptedData = AES.encrypt(id, constant.secretKey).toString()
-        // console.log(encryptedData);
-        this.$router.push("/praticien/"+ id);
+        const encryptedData = this.encryptData(id, constant.secretKey)
+        console.log(encryptedData);
+        // this.$router.push("/praticien/"+ id);
       }
     },
     computed: {
@@ -700,8 +708,5 @@ input[type=submit] {
   }
 }
 
-@media (max-width: 480px) {
-
-}
 
 </style>
