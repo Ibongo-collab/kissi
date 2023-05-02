@@ -8,27 +8,40 @@
             <div class="row">
                 <!-- Informations sur le médecin -->
                 <div class="col-md-6">
-                    <div class="row">
-                        <div class="col-md-2" style="text-align: center; ">
-                            <img src="../assets/images/user.png" class="rounded-circle border" alt="image medecin"
-                                width="50px" height="50px">
+                    <div class="content-indication">
+                        <div class="row">
+                            <div class="col-md-2" style="text-align: center; ">
+                                <img src="../assets/images/user.png" class="rounded-circle border" alt="image medecin"
+                                    width="50px" height="50px">
+                            </div>
+                            <div class="col-md-10">
+                                <p class="nom-praticien">Dr {{user.nom}} {{user.prenom}}</p>
+                                <p class="specialite-praticien">{{user.categorieMedecin.nom}}</p>
+                            </div>
                         </div>
-                        <div class="col-md-10">
-                            <p class="nom-praticien">Dr {{nom}}</p>
-                            <p class="specialite-praticien">Médecin Généraliste</p>
-                        </div>
-                    </div>
-                    <div class="info-medecin">
-                        <h3 class="sous-titre">Indications</h3>
-                        <div class="content-indication border">
-                            <h3 class="titre-indication">Ville</h3>
-                            <p class="description-indication">Pointe-noire</p>
-                            <h3 class="titre-indication">Téléphone</h3>
-                            <p class="description-indication">+242 06 846 0206</p>
+                        <div class="info-medecin">
+                            <h3 class="sous-titre">Informations de contact</h3>
+                            <h3 class="titre-indication mb-2">Téléphone</h3>
+                            <div class="content__btn">
+                                <button class="horaire__btn mb-3" @click="getTel">{{message}}</button>
+                            </div>
+
+                            <h3 class="titre-indication">Adresse</h3>
+                            <p class="">{{user.hopital.adresse}} - {{user.hopital.ville}}</p>
+
                             <h3 class="titre-indication">Tarif</h3>
-                            <p class="description-indication">10.000 Fcfa</p>
+                            <p class="description-indication">{{user.tarif}} Fcfa</p>
+                        </div>
+                        <div class="info-medecin">
+                            <h3 class="sous-titre">Présentation</h3>
+                            <h3 class="titre-indication">Spécialité</h3>
+                            <p class="description-indication">{{user.categorieMedecin.nom}}</p>
+                            <h3 class="titre-indication">Qualification professionnelle</h3>
+                            <p class="">{{user.description}}</p>
                         </div>
                     </div>
+
+
                 </div>
                 <!-- Affichage des horaires -->
                 <div class="col-md-6">
@@ -42,57 +55,18 @@
                             </div>
                         </div>
                         <div id="container-date">
-                            <div class="element">
-                                <p class="titre-date-praticien">Lundi</p>
-                                <span class="date-praticien">10/04</span>
-                                <button class="horaire__btn">09:00</button>
-                                <button class="horaire__btn">09:30</button>
-                                <button class="horaire__btn">10:00</button>
-                                <button class="horaire__btn">10:30</button>
-                                <button class="horaire__btn">11:00</button>
-                                <button class="horaire__btn">11:30</button>
-                                <button class="horaire__btn">12:00</button>
-                                <button class="horaire__btn">12:30</button>
-                                <button class="horaire__btn">13:00</button>
-                            </div>
-                            <div class="element">
-                                <p class="titre-date-praticien">Mardi</p>
-                                <span class="date-praticien">11/04</span>
-                                <button class="horaire__btn">09:00</button>
-                                <button class="horaire__btn">09:30</button>
-                                <button class="horaire__btn">10:00</button>
-                                <button class="horaire__btn">10:30</button>
-                                <button class="horaire__btn">11:00</button>
-                                <button class="horaire__btn">11:30</button>
-                            </div>
-                            <div class="element">
-                                <p class="titre-date-praticien">Mercredi</p>
-                                <span class="date-praticien">11/04</span>
-                                <button class="horaire__btn">09:00</button>
-                                <button class="horaire__btn">09:30</button>
-                                <button class="horaire__btn">10:00</button>
-                                <button class="horaire__btn">10:30</button>
-                                <button class="horaire__btn">11:00</button>
-                                <button class="horaire__btn">11:30</button>
-                            </div>
-                            <div class="element">
-                                <p class="titre-date-praticien">Jeudi</p>
-                                <span class="date-praticien">11/04</span>
-                                <button class="horaire__btn">09:00</button>
-                                <button class="horaire__btn">09:30</button>
-                                <button class="horaire__btn">10:00</button>
-                                <button class="horaire__btn">10:30</button>
-                                <button class="horaire__btn">11:00</button>
-                                <button class="horaire__btn">11:30</button>
+                            <div class="element" v-for="date in medecinDate" :key="date.id">
+                                <p class="titre-date-praticien">{{date.date | moment('dddd')}}</p>
+                                <span class="date-praticien">{{date.date | moment('D MMM')}}</span>
+                                <div class="button" v-for="item in date.heureMedecins" :key="item.id">
+                                    <button class="horaire__btn">{{item.heure}}</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    
                 </div>
             </div>
         </div>
-
         <Footer />
     </div>
 
@@ -101,6 +75,9 @@
 <script>
     import Navbar from '@/components/Navbar.vue'
     import Footer from '@/components/Footer.vue'
+    import CryptoJS from 'crypto-js'
+    import constant from "../../constant"
+    import { mapGetters } from "vuex"
 
     export default {
         name: "Praticien",
@@ -110,19 +87,45 @@
         },
         data() {
             return {
-                nom:"Dervan TATI",
+                id: 0,
+                message: "Afficher le numéro",
+                test: true,
+                // hourList: [],
             }
         },
         computed: {
+            user () {
+                return this.$store.getters.getMedecinById(this.id)
+            },
+            ...mapGetters(["medecinDate"]),
         },
         methods: {
-
             goToRecherche() {
                 this.$router.push("/recherche");
-            }
+            },
+            getTel() {
+                if (this.test === true) {
+                    this.message = this.user.telephone;
+                    this.test = false
+                } else {
+                    this.message = "Afficher le numéro";
+                    this.test = true
+                }
+            },
+            // Fonction pour décrypter les données
+            decryptData(data, key) {
+                const decrypted = CryptoJS.AES.decrypt(data, key).toString(CryptoJS.enc.Utf8)
+                return decrypted
+            },
         },
-        mounted() {
-
+        created() {
+            const IdStorage = localStorage.getItem('medecinId');
+            // console.log(IdStorage);
+            this.id = parseInt(this.decryptData(IdStorage, constant.secretKey));
+            // console.log(this.id);
+            this.$store.dispatch('getDateMedecin', this.id);
+            // this.hourList = this.medecinDate.heureMedecins;
+            // console.log(this.hourList)
         },
     }
 </script>
@@ -148,7 +151,7 @@
     #container-date {
         display: flex;
         flex-wrap: wrap;
-        justify-content: center;
+        justify-content: flex-start;
         height: auto;
         width: auto;
     }
@@ -175,5 +178,12 @@
 
     .col-md-6 {
         height: auto;
+    }
+
+    .titre-date-praticien {
+        width: 3ch;
+        font-family: monospace;
+        text-transform: uppercase;
+        margin-left: 1.2rem;
     }
 </style>

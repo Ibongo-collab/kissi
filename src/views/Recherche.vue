@@ -69,7 +69,7 @@
                 <div class="content-photo">
                   <div v-if="nom">
                     <label class="label rounded-circle">
-                      <p class="char">{{medecin.nom}}</p>
+                      <p class="">{{medecin.nom}}</p>
                     </label>
                   </div>
                   <img src="../assets/images/user.png" class="rounded-circle border" alt="image medecin" width="50px"
@@ -92,9 +92,9 @@
               <!-- troisième bloc -->
               <div class="col-6 bloc-medecin bloc-medecin-3">
                 <p class="titre-adresse-praticien">Adresse</p>
-                <p class="adresse-praticien">{{medecin.hopital.adresse}}</p>
+                <p class="">{{medecin.hopital.adresse}}</p>
                 <div class="bloc-horaire">
-                  <button class="default__vide__btn" @click="goToPraticien(1)">Prendre rendez-vous</button>
+                  <button class="default__vide__btn" @click="goToPraticien(medecin.id)">Prendre rendez-vous</button>
                 </div>
               </div>
             </div>
@@ -206,11 +206,12 @@
       },
 
       // Aller à la page du médecin choisi
-      goToPraticien(id) {
-        console.log(id)
-        const encryptedData = this.encryptData(id, constant.secretKey)
-        console.log(encryptedData);
-        // this.$router.push("/praticien/"+ id);
+      goToPraticien(param) {
+        // console.log(param, "avant cryptage")
+        let myIdString = param.toString();
+        localStorage.setItem('medecinId',this.encryptData(myIdString, constant.secretKey))
+        // console.log(encryptedData);
+        this.$router.push("/praticien");
       }
     },
     computed: {

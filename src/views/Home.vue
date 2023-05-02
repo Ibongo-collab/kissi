@@ -229,7 +229,6 @@
     margin-top: 100px;
   }
 
-
   .titre-mission,
   .titre-partenaires,
   .titre-faq {
@@ -474,7 +473,8 @@
     }
 
     .element-patient {
-      border: 1px solid #8b8b90;
+      border: 1px solid #b3b3b6;
+      box-shadow: rgba(0, 0, 0, 0.1) 10px 10px 30px;
       padding: 2%;
     }
 

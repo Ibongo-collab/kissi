@@ -17,7 +17,8 @@ export default new Vuex.Store({
     token: null,
     patient: null,
     medecin: null,
-    medecinList: []
+    medecinList: [],
+    medecinDate: []
 
   },
   getters: {
@@ -30,11 +31,17 @@ export default new Vuex.Store({
     patient(state) {
       return state.patient;
     },
+    getMedecinById: (state) => (id) => {
+      return state.medecinList.filter(user => user.id === id)[0]
+    },
     medecin(state) {
       return state.medecin;
     },
     medecinList(state) {
       return state.medecinList;
+    },
+    medecinDate(state) {
+      return state.medecinDate;
     }
   },
   actions: {
@@ -125,7 +132,7 @@ export default new Vuex.Store({
       .then(response => {
         // traiter la réponse
         const medecinList = response.data.content;
-        console.log(medecinList, "liste depuis store généraliste")
+        // console.log(medecinList, "liste depuis store généraliste")
         commit('SET_MEDECINLIST', medecinList);
       })
       .catch(error => {
@@ -154,8 +161,23 @@ export default new Vuex.Store({
       .then(response => {
         // traiter la réponse
         const medecinList = response.data.content;
-        console.log(medecinList, "resultat de la recherche")
+        // console.log(medecinList, "resultat de la recherche")
         commit('SET_MEDECINLIST', medecinList);
+      })
+      .catch(error => {
+        // traiter l'erreur
+        console.log(error)
+      });
+    },
+    // Récupération des dates du médecin
+    getDateMedecin({ commit }, id) {
+      console.log(id)
+      axios.get(constant.apiURL + 'medecins/'+ id +'?date=true&hour=true')
+      .then(response => {
+        // traiter la réponse
+        const medecinDate = response.data.dateMedecin;
+        console.log(medecinDate, "resultat")
+        commit('SET_MEDECINDATE', medecinDate);
       })
       .catch(error => {
         // traiter l'erreur
@@ -178,6 +200,9 @@ export default new Vuex.Store({
     },
     SET_MEDECINLIST(state, medecinList) {
       state.medecinList = medecinList
+    },
+    SET_MEDECINDATE(state, medecinDate) {
+      state.medecinDate = medecinDate
     }
   },
 });

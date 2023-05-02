@@ -2,9 +2,12 @@
     <div class="tableau-de-bord">
         <!--========== SPINNER ==========-->
         <loading :active.sync="isLoading" :can-cancel="false" :is-full-page="fullPage"></loading>
-        <Navbar />
-            Hello {{patient.nom}}
-        <Footer />
+        <Patientnav />
+        <div class="content section">
+            
+        </div>
+          
+        <!-- <Footer /> -->
     </div>
 
 </template>
@@ -12,13 +15,13 @@
 <script>
     import { mapGetters } from "vuex";
     import Loading from "vue-loading-overlay";
-    import Navbar from "@/components/Navbar.vue";
-    import Footer from "@/components/Footer.vue";
+    import Patientnav from "@/components/Patientnav.vue";
+    // import Footer from "@/components/Footer.vue";
     export default {
         name: "Tableau-de-bord",
         components: {
-            Navbar,
-            Footer,
+            Patientnav,
+            // Footer,
             Loading,
         },
         data() {
@@ -42,7 +45,7 @@
         },
         mounted() {
             if (this.$store.getters.isAuthenticated === false) {
-                this.$router.push("/authentification"); // l'utilisateur est authentifié, continuez vers la page d'accueil
+                this.$router.push("/authentification"); // l'utilisateur n'est pas authentifié, allez vers la page d'authentification
             }
         },
     }
