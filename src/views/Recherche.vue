@@ -542,15 +542,6 @@ input[type=submit] {
 
 /* bannière */
 
-.info-banner {
-  color: black;
-  padding: 1.3rem;
-  padding-bottom: 30px;
-  background-color: #fff;
-  border-radius: 10px;
-  margin-bottom: 30px;
-}
-
 
 @media only screen and (min-width: 769px) and (max-width: 986px) {
   .content-input

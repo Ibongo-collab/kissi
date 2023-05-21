@@ -44,9 +44,9 @@
             },
         },
         mounted() {
-            if (this.$store.getters.isAuthenticated === false) {
-                this.$router.push("/authentification"); // l'utilisateur n'est pas authentifié, allez vers la page d'authentification
-            }
+            // if (this.$store.getters.isAuthenticated === false) {
+            //     this.$router.push("/authentification"); // l'utilisateur n'est pas authentifié, allez vers la page d'authentification
+            // }
         },
     }
 </script>

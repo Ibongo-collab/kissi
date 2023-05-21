@@ -206,6 +206,10 @@ export default {
 
 <style scoped>
 
+  .text-bloc {
+    margin-top: 100px;
+  }
+
 .aide {
     font-weight: bold;
     font-size: 18px;

@@ -50,14 +50,16 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         axios.post(constant.apiURL + 'login', credentials)
           .then(response => {
-            console.log(response, "authenticated")
-            const token = response.data.accessToken;
-            const email = response.data.email;
-            localStorage.setItem('token', token);
-            localStorage.setItem('emailUser', email);
-            commit('SET_AUTHENTICATED', true);
-            commit('SET_TOKEN', token);
-            resolve(response);
+            // console.log(response, "authenticated")
+            if (response.data.profile == "PATIENT") {
+              const token = response.data.accessToken;
+              const email = response.data.email;
+              localStorage.setItem('token', token);
+              localStorage.setItem('emailUser', email);
+              commit('SET_AUTHENTICATED', true);
+              commit('SET_TOKEN', token);
+              resolve(response);
+            }
           })
           .catch(error => {
             reject(error);
@@ -100,7 +102,7 @@ export default new Vuex.Store({
         .catch(error => {
           // traiter l'erreur
           reject(error);
-          console.log(error)
+          // console.log(error)
         });
       });
     },

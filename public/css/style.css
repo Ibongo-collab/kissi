@@ -442,6 +442,15 @@ img {
   color: #343343;
 }
 
+.info-banner {
+  color: black;
+  padding: 1.3rem;
+  padding-bottom: 30px;
+  background-color: #fff;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
 .default__disable__btn {
   background-color: rgb(72, 72, 72);
   color: #fff;

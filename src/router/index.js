@@ -30,7 +30,11 @@ const routes = [
   {
     path: '/rdv',
     name: 'Rendez-vous',
-    component: () => import(/* webpackChunkName: "Login" */ '../views/Login.vue')
+    meta: {
+      requiresAuth: true // indique que cette route nécessite une authentification
+    },
+    beforeEnter: Middleware, // utilise le middleware pour vérifier l'authentification
+    component: () => import(/* webpackChunkName: "Rdv" */ '../views/Rdv.vue'),
   },
   {
     path: '/authentification',

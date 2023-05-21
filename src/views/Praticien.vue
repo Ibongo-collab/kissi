@@ -2,9 +2,9 @@
     <div class="praticien banner">
         <Navbar />
         <div class="content section">
-            <div class="arrow" @click="goToRecherche">
+            <button class="arrow" @click="goToRecherche">
                 <i class='bx bx-left-arrow-alt icon'></i>
-            </div>
+            </button>
             <div class="row">
                 <!-- Informations sur le médecin -->
                 <div class="col-md-6">
@@ -41,26 +41,46 @@
                         </div>
                     </div>
 
-
                 </div>
                 <!-- Affichage des horaires -->
                 <div class="col-md-6">
                     <div class="carte-horaire">
                         <div class="row content-arrow">
-                            <div class="col-md-6 arrow">
+                            <button class="arrow" @click="prevPage">
                                 <i class='bx bx-left-arrow-alt icon'></i>
-                            </div>
-                            <div class="col-2 arrow">
+                            </button>
+                            <span class="space"></span>
+                            <button class="arrow" @click="nextPage">
                                 <i class='bx bx-right-arrow-alt icon'></i>
-                            </div>
+                            </button>
                         </div>
                         <div id="container-date">
-                            <div class="element" v-for="date in medecinDate" :key="date.id">
-                                <p class="titre-date-praticien">{{date.date | moment('dddd')}}</p>
-                                <span class="date-praticien">{{date.date | moment('D MMM')}}</span>
-                                <div class="button" v-for="item in date.heureMedecins" :key="item.id">
-                                    <button class="horaire__btn">{{item.heure}}</button>
+                            <div class="element" v-for="date in currentItems" :key="date.id">
+                                <div class="content-items">
+                                    <!-- EX LUN  -->
+                                    <p class="titre-date-praticien">{{date.date | moment('dddd')}}</p>
+                                    <!-- EX 13 avr.  -->
+                                    <span class="date-praticien">{{date.date | moment('D MMM')}}</span>
+                                    
+                                    <div class="button" v-for="item in date.heureMedecins" :key="item.id">
+                                        <!-- Verification de l'authentification -->
+                                        <div v-if="isAuthenticated == false">
+                                            <!-- EX 08:00  -->
+                                            <button class="horaire__btn" v-if="date.heureMedecins.length > 0"
+                                                data-bs-toggle="modal" data-bs-target="#alert">{{item.heure}}</button>
+                                            <button class="horaire__btn" v-else-if="date.heureMedecins.length == 0">-</button>
+                                        </div>
+                                        <div v-else>
+                                            <!-- EX 08:00  -->
+                                            <button class="horaire__btn" v-if="date.heureMedecins.length > 0"
+                                                @click="goToRdv(date.date, item.heure)">{{item.heure}}</button>
+                                            <button class="horaire__btn" v-else-if="date.heureMedecins.length == 0">-</button>
+                                        </div>  
+                                    </div>
                                 </div>
+                            </div>
+                            <div class="content-explain" v-if="currentItems.length == 0">
+                                <p>Aucune disponibilité à venir</p>
                             </div>
                         </div>
                     </div>
@@ -68,6 +88,23 @@
             </div>
         </div>
         <Footer />
+
+        <div class="modal fade" id="alert" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-white">
+                        <h5 class="modal-title titre-commande text-center" id="exampleModalLabel">
+                            Authentification requise
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        Veuillez vous <span class="link" @click="goToAuth" data-bs-dismiss="modal"><b>authentifier</b></span> avant de continuer
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </template>
@@ -90,18 +127,41 @@
                 id: 0,
                 message: "Afficher le numéro",
                 test: true,
-                // hourList: [],
+                hourList: [],
+                pageSize: 4, // Nombre d'éléments par page
+                currentPage: 1, // Page courante
+                isValidList: true,
             }
         },
         computed: {
-            user () {
+            ...mapGetters(["medecinDate"]),
+            user() {
                 return this.$store.getters.getMedecinById(this.id)
             },
-            ...mapGetters(["medecinDate"]),
+            currentItems() {
+                const startIndex = (this.currentPage - 1) * this.pageSize;
+                const endIndex = startIndex + this.pageSize;
+                return this.medecinDate.slice(startIndex, endIndex);
+            },
+            /** accéder à la valeur du getters **/
+            isAuthenticated() {
+                return this.$store.getters.isAuthenticated; 
+            },
         },
         methods: {
             goToRecherche() {
                 this.$router.push("/recherche");
+            },
+            goToAuth() {
+                localStorage.setItem('rdvContinue', true);
+                localStorage.setItem('currentMedecinId', this.id);
+                this.$router.push("/authentification");
+            },
+            goToRdv(date, heure) {
+                // console.log(date, heure)
+                localStorage.setItem('dateRdv', date)
+                localStorage.setItem('heureRdv', heure)
+                this.$router.push("/rdv");
             },
             getTel() {
                 if (this.test === true) {
@@ -117,20 +177,44 @@
                 const decrypted = CryptoJS.AES.decrypt(data, key).toString(CryptoJS.enc.Utf8)
                 return decrypted
             },
+            prevPage() {
+                if (this.currentPage > 1) {
+                    this.currentPage--;
+                }
+            },
+            nextPage() {
+                const maxPage = Math.ceil(this.medecinDate.length / this.pageSize);
+                if (this.currentPage < maxPage) {
+                    this.currentPage++;
+                }
+            }
         },
         created() {
+            // Récupération d'un médecin à partir de son Id
             const IdStorage = localStorage.getItem('medecinId');
-            // console.log(IdStorage);
             this.id = parseInt(this.decryptData(IdStorage, constant.secretKey));
-            // console.log(this.id);
+
+            // Récupération de la liste des dates du médecin
             this.$store.dispatch('getDateMedecin', this.id);
-            // this.hourList = this.medecinDate.heureMedecins;
-            // console.log(this.hourList)
         },
     }
 </script>
 
 <style scoped>
+
+    .link {
+        text-decoration: underline;
+        color: #4f74da;
+        cursor: pointer;
+    }
+
+    .space {
+        width: 10px;
+    }
+
+    .arrow-direction {
+        margin: 2.5%;
+    }
 
     .content-arrow {
         width: 100%;
@@ -178,6 +262,13 @@
 
     .col-md-6 {
         height: auto;
+    }
+
+    .content-explain {
+        padding: 5%;
+        width: 100%;
+        text-align: center;
+        background-color: rgb(201, 201, 201);
     }
 
     .titre-date-praticien {

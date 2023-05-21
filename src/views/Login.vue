@@ -6,51 +6,45 @@
     <main class="">
       <section class="content">
         <div class="bloc-login">
-          <div class="arrow" @click="goBack">
+          <button class="arrow" @click="goBack">
             <i class='bx bx-left-arrow-alt icon'></i>
-          </div>
+          </button>
           <div class="logo-center text-center">
             <img src="../assets/images/kissi.png" alt="logo kissi" width="70px">
           </div>
-          <!--  Formulaire de test sur le téléphone -->
-          <!-- <form v-on:submit.prevent="getTel" class="mx-auto col-md-5"
-            v-if="testTel == false && inscriptionDisplay == false">
-            <p class="login__title mt-3">{{ titre }}</p>
-            <input type="tel" id="tel" name="tel" placeholder="numéro de téléphone" class="contact__input border"
-              @change="onChangeTel($event)" @input="onChangeTel($event)"
-              pattern="^0[1456][ ]?[0-9]{3}([ ]?[0-9]{2}){2}$" required v-model="telephone" />
-            <p class="text-danger" style="font-size: 12px" v-if="!isValidTel">
-              Le numéro est invalide
-            </p>
-            <input type="submit" value="Continuer" name="submit" class="default__btn d-block"
-              :disabled="isDisabled" />
-          </form> -->
 
           <!--  Formulaire de connexion -->
           <form v-on:submit.prevent="authentification" class="mx-auto col-md-5 form-connexion"
             v-if="inscriptionDisplay == false">
             <p class="titre mt-3">{{ titre }}</p>
-            <p class="">Renseignez votre email et votre mot de passe</p>
-            <input type="email" id="email" class="contact__input border" @input="onChangeEmail($event)"
-              @change="onChangeEmail($event)" placeholder="Email" v-model="email" />
-            <p class="text-danger" style="font-size: 12px" v-if="!isEmailValid">
+            <p class="text-muted">Renseignez votre email et votre mot de passe</p>
+
+            <!-- Email -->
+            <input type="email" id="email" name="email" placeholder="Email" class="contact__input border"
+              @change="onChangeEmail($event)" @input="onChangeEmail($event)"
+              pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required v-model="email" />
+            <p class="text-danger" style="font-size: 12px" v-if="!isValidEmail">
               L'email est invalide
             </p>
-            <p class="text-danger" style="font-size: 12px" v-if="error">
-              {{ error }}
-            </p>
-            <p class="text-danger" style="font-size: 12px">{{ error }}</p>
+            <!-- Password -->
             <input type="password" id="password" name="password" placeholder="Mot de passe"
-              class="contact__input border" v-model="password" />
+              class="contact__input border" @input="onChangePassword($event)" @change="onChangePassword($event)"
+              required v-model="password" />
+            <p class="text-danger" style="font-size: 12px" v-if="!isValidPassword">
+              Le mot de passe est invalide
+            </p>
+
+            <p class="text-danger" style="font-size: 12px">
+              {{errorMessage}}
+            </p>
+
             <input type="submit" value="Continuer" name="submit" class="default__btn d-block"
               :disabled="isDisabled" /><br />
             <router-link to="password-reset" style="color: #4f74da">Mot de passe oublié ?</router-link>
-            
           </form>
-          <!--  Formulaire de connexion -->
 
           <!--  Formulaire d'inscription -->
-          <form v-on:submit.prevent="inscription" class="mx-auto col-md-5" v-if="inscriptionDisplay == true">
+          <!-- <form v-on:submit.prevent="inscription" class="mx-auto col-md-5" v-if="inscriptionDisplay == true">
             <p class="login__title mt-3">{{ titre }}</p>
             <input type="text" id="prenom" name="prenom" placeholder="Prénom" class="contact__input border"
               v-model="prenom" />
@@ -72,10 +66,6 @@
               Votre mot de passe doit contenir au moins 6 caractères minimum
               avec une lettre majuscule, une minuscule et des chiffres
             </p>
-            <!-- <p class="text-muted" style="font-size: 12px">
-                Nous allons vous envoyer un code à 6 chiffres par mail
-                pour la sécurité de votre compte.
-              </p> -->
             <input type="submit" value="Inscription" name="submit" class="default__btn d-block"
               :disabled="isDisabledtwo" /><br />
             <p class="text-muted">
@@ -86,8 +76,7 @@
               expérience personnalisée, ainsi que pour mieux comprendre et
               améliorer notre service.
             </p>
-          </form>
-          <!--  Formulaire d'inscription -->
+          </form> -->
         </div>
       </section>
     </main>
@@ -102,6 +91,7 @@ import axios from "axios";
 import constant from "../../constant";
 import Loading from "vue-loading-overlay";
 import "vue-loading-overlay/dist/vue-loading.css";
+import CryptoJS from 'crypto-js'
 import md5 from "js-md5";
 
 export default {
@@ -131,11 +121,18 @@ export default {
       regexTelephone: /^0[1456][ ]?[0-9]{3}([ ]?[0-9]{2}){2}$/,
       titre: "Connexion",
       error: "",
+      errorMessage: "",
       isLoading: false,
       fullPage: true,
+      testForm: true
     };
   },
   methods: {
+    // Fonction pour crypter les données
+    encryptData(data, key) {
+      const encrypted = CryptoJS.AES.encrypt(data, key).toString()
+      return encrypted
+    },
     // Méthode d'authentification
     authentification() {
       this.isLoading = true;
@@ -150,6 +147,7 @@ export default {
         })
         .catch(() => {
           // une erreur s'est produite lors de l'authentification, affichez un message d'erreur
+          this.isLoading = false;
           this.errorMessage = 'Identifiants invalides';
         });
     },
@@ -159,11 +157,22 @@ export default {
       this.$store.dispatch('getPatientByEmail', email)
         .then(() => {
           this.isLoading = false;
-          // l'email de l'utilisateur est correcte, naviguez vers la page tableau de bord
-          this.$router.push('/tableau-de-bord');
+          /** 
+          Si l'email de l'utilisateur est correcte alors naviguer vers la page précédente,
+          s'il est en train de prendre un Rendez-vous sinon
+          naviguer vers le tableau de bord
+          **/
+          if (localStorage.getItem('rdvContinue')) {
+            let myIdString = localStorage.getItem('currentMedecinId')
+            localStorage.setItem('medecinId',this.encryptData(myIdString, constant.secretKey))
+            this.$router.push('/praticien');
+          } else {
+            this.$router.push('/tableau-de-bord');
+          }
         })
         .catch(() => {
           // une erreur s'est produite lors de l'authentification, affichez un message d'erreur
+          this.isLoading = false;
           this.errorMessage = 'email invalide';
         });
     },
@@ -287,6 +296,9 @@ export default {
     },
     isPasswordValid: function(inputPassword) {
       this.isValidPassword = this.regexPassword.test(inputPassword);
+      if (this.isValidPassword) {
+        this.testForm = false;
+      }
     },
     onChangeTel(e) {
       const numero = e.target.value;
@@ -311,7 +323,7 @@ export default {
   computed: {
     isDisabled() {
       // contrôle sur l'activation du bouton
-      return !this.email && !this.password;
+      return this.testForm;
     },
     isDisabledtwo() {
       return !this.prenom && !this.email && !this.password;
