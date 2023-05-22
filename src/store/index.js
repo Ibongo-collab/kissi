@@ -18,8 +18,8 @@ export default new Vuex.Store({
     patient: null,
     medecin: null,
     medecinList: [],
-    medecinDate: []
-
+    medecinDate: [],
+    medecinMotif: []
   },
   getters: {
     isAuthenticated(state) {
@@ -42,6 +42,9 @@ export default new Vuex.Store({
     },
     medecinDate(state) {
       return state.medecinDate;
+    },
+    medecinMotif(state) {
+      return state.medecinMotif;
     }
   },
   actions: {
@@ -186,6 +189,26 @@ export default new Vuex.Store({
         console.log(error)
       });
     },
+    // Récupération des motifs d'un médecin
+    getMotifMedecin({ commit }, id) {
+      // console.log(id)
+      const token = this.state.token;
+      axios.get(constant.apiURL + 'medecins/'+ id +'/motifs', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(response => {
+        // traiter la réponse
+        const medecinMotifs = response.data.content;
+        console.log(medecinMotifs, "motifs")
+        commit('SET_MEDECINMOTIF', medecinMotifs);
+      })
+      .catch(error => {
+        // traiter l'erreur
+        console.log(error)
+      });
+    },
   },
   mutations: {
     SET_AUTHENTICATED(state, authenticated) {
@@ -205,6 +228,9 @@ export default new Vuex.Store({
     },
     SET_MEDECINDATE(state, medecinDate) {
       state.medecinDate = medecinDate
+    },
+    SET_MEDECINMOTIF(state, medecinMotif) {
+      state.medecinMotif = medecinMotif
     }
   },
 });
