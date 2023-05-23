@@ -181,7 +181,7 @@ export default new Vuex.Store({
       .then(response => {
         // traiter la réponse
         const medecinDate = response.data.dateMedecin;
-        console.log(medecinDate, "resultat")
+        // console.log(medecinDate, "resultat")
         commit('SET_MEDECINDATE', medecinDate);
       })
       .catch(error => {
@@ -201,7 +201,7 @@ export default new Vuex.Store({
       .then(response => {
         // traiter la réponse
         const medecinMotifs = response.data.content;
-        console.log(medecinMotifs, "motifs")
+        // console.log(medecinMotifs, "motifs")
         commit('SET_MEDECINMOTIF', medecinMotifs);
       })
       .catch(error => {

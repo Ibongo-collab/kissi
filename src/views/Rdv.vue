@@ -1,5 +1,7 @@
 <template>
     <div class="rdv">
+        <!--========== SPINNER ==========-->
+        <loading :active.sync="isLoading" :can-cancel="false" :is-full-page="fullPage"></loading>
         <div class="banner">
             <div class="content section">
                 <button class="arrow" @click="goBack">
@@ -7,7 +9,6 @@
                 </button>
                 <!-- Disponibilités sur Brazzaville et Pointe-noire -->
                 <div class="info-banner">
-
                     <form v-on:submit.prevent="prendreRdv">
                         <div class="form-rdv mx-auto">
                             <div class="row">
@@ -17,12 +18,12 @@
                                 </div>
                                 <div class="col-auto">
                                     <p class="nom-praticien sous-titre" style="color: #4f74da; line-height: 20px">Dr
-                                        {{user.nom}}
-                                        {{user.prenom}}</p>
+                                        {{user.nom}} {{user.prenom}}</p>
                                     <p class="specialite-praticien">{{user.categorieMedecin.nom}}</p>
                                 </div>
                             </div>
-                            <p class="mt-2">Votre rendez-vous le : {{date | moment('dddd')}} {{date | moment('D MMMM')}}
+                            <p class="mt-2">Votre rendez-vous le : {{date | moment('dddd')}} <span
+                                    class="mois">{{date | moment('D MMMM')}}</span>
                                 à {{heure}}</p>
                             <select v-model="selected" name="ville" placeholder="Ville" class="contact__input border">
                                 <option disabled value="">Veuillez choisir un motif de consultation</option>
@@ -58,8 +59,12 @@
 <script>
     // import Navbar from '@/components/Navbar.vue'
     // import Footer from '@/components/Footer.vue'
+    import axios from "axios";
+    import Swal from "sweetalert2";
     import CryptoJS from 'crypto-js'
     import constant from "../../constant"
+    import Loading from "vue-loading-overlay";
+    import "vue-loading-overlay/dist/vue-loading.css";
     import {
         mapGetters
     } from "vuex"
@@ -67,7 +72,8 @@
         name: "Rendez-vous",
         components: {
             // Navbar,
-            // Footer
+            // Footer,
+            Loading,
         },
         data() {
             return {
@@ -75,11 +81,14 @@
                 selected: "",
                 date: "",
                 heure: "",
+                isLoading: false,
+                fullPage: true,
             }
         },
         computed: {
             ...mapGetters(["patient"]),
             ...mapGetters(["medecinMotif"]),
+            ...mapGetters(['token']),
             user() {
                 return this.$store.getters.getMedecinById(this.id)
             },
@@ -97,6 +106,53 @@
             decryptData(data, key) {
                 const decrypted = CryptoJS.AES.decrypt(data, key).toString(CryptoJS.enc.Utf8)
                 return decrypted
+            },
+            prendreRdv() {
+                const token = localStorage.getItem("token");
+                this.isLoading = true;
+                axios
+                    .post(constant.apiURL + "rendezvous", {
+                        date: this.date,
+                        heure: this.heure,
+                        motif: this.selected,
+                        finrdv: false,
+                        statut: "EN_ATTENTE",
+                        medecin: {
+                            id: this.id
+                        },
+                        patient: {
+                            id: this.patient.id
+                        },
+                        lupatient: false,
+                        lumedecin: false,
+                    }, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        }
+                    })
+                    .then((response) => {
+                        // console.log(response);
+                        this.isLoading = false;
+                        if (response.data.code === 201) {
+                            Swal.fire({
+                            icon: "success",
+                                title: "Votre demande de rendez-vous a été transférée."
+                                + " Vous recevrez un sms du medecin pour la validation de vorte RDV.",
+                                showConfirmButton: true,
+                            });
+                        } else {
+                            Swal.fire({
+                            icon: "warning",
+                                title: response.data.message,
+                                showConfirmButton: true,
+                            });
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        this.isLoading = false;
+                    });
+
             },
         },
         created() {
@@ -117,5 +173,9 @@
 <style scoped>
     .form-rdv {
         width: 400px;
+    }
+
+    .mois {
+        text-transform: uppercase;
     }
 </style>
