@@ -137,13 +137,15 @@
                             Swal.fire({
                             icon: "success",
                                 title: "Votre demande de rendez-vous a été transférée."
-                                + " Vous recevrez un sms du medecin pour la validation de vorte RDV.",
+                                + " Vous recevrez un SMS du médecin pour confirmer votre rendez-vous.",
                                 showConfirmButton: true,
                             });
-                        } else {
+                        } else if (response.data.code === 400) {
                             Swal.fire({
                             icon: "warning",
-                                title: response.data.message,
+                                title: "Veuillez noter qu'il semble que vous ayez déjà un rendez-vous en cours" +
+                                " avec ce médecin. Nous vous prions de bien vouloir honorer votre rendez-vous actuel"+
+                                " avant d'en planifier un autre.",
                                 showConfirmButton: true,
                             });
                         }
