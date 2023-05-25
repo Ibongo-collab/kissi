@@ -36,7 +36,6 @@
 
             <input type="submit" value="Réinitialiser" name="submit" class="default__btn d-block"
               :disabled="isDisabled" /><br />
-            <router-link to="/password-reset" style="color: #4f74da">Mot de passe oublié ?</router-link>
           </form>
           <!-- Message de confirmation -->
           <div class="form-confirmation mx-auto text-center col-md-5" v-else>
