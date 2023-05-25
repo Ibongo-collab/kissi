@@ -55,16 +55,16 @@ const routes = [
   //   name: 'Verification-email',
   //   component: () => import(/* webpackChunkName: "Verification-email" */ '../views/Verification-email.vue')
   // },
-  // {
-  //   path: '/password-reset',
-  //   name: 'Password-reset',
-  //   component: () => import(/* webpackChunkName: "password-reset" */ '../views/Password-reset.vue')
-  // },
-  // {
-  //   path: '/change-password',
-  //   name: 'Change-password',
-  //   component: () => import(/* webpackChunkName: "change-password" */ '../views/Change-password.vue')
-  // },
+  {
+    path: '/password-forgot',
+    name: 'Password-forgot',
+    component: () => import(/* webpackChunkName: "Password-forgot" */ '../views/Password-forgot.vue')
+  },
+  {
+    path: '/reset-password',
+    name: 'ResetPassword',
+    component: () => import(/* webpackChunkName: "Reset-password" */ '../views/Reset-password.vue')
+  },
   // {
   //   path: '/checkout',
   //   name: 'Checkout',

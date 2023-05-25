@@ -40,7 +40,7 @@
 
             <input type="submit" value="Continuer" name="submit" class="default__btn d-block"
               :disabled="isDisabled" /><br />
-            <router-link to="password-reset" style="color: #4f74da">Mot de passe oublié ?</router-link>
+            <router-link to="/password-forgot" style="color: #4f74da">Mot de passe oublié ?</router-link>
           </form>
 
           <!--  Formulaire d'inscription -->

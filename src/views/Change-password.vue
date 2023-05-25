@@ -24,7 +24,7 @@
                             </p>
                         </div>
                         <div>
-                            <input type="submit" value="Enregistrer" name="Enregistrer"
+                            <input type="submit" value="Confirmer" name="confirmer"
                                 class="change-password-btn d-block" :disabled="isDisabled" v-if="test === false" />
                             <input type="button" value="Me connecter" name="Meconnecter"
                                 class="change-password-btn d-block" :disabled="isDisabled" v-if="test === true"
