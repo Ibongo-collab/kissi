@@ -69,7 +69,7 @@
                 <div class="content-photo">
                   <div v-if="nom">
                     <label class="label rounded-circle">
-                      <p class="">{{medecin.nom}}</p>
+                      <p>{{medecin.nom}}</p>
                     </label>
                   </div>
                   <img src="../assets/images/user.png" class="rounded-circle border" alt="image medecin" width="50px"

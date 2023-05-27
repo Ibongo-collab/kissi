@@ -42,6 +42,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "Login" */ '../views/Login.vue')
   },
   {
+    path: '/inscription',
+    name: 'Inscription',
+    component: () => import(/* webpackChunkName: "Inscription" */ '../views/Inscription.vue')
+  },
+  {
     path: '/tableau-de-bord',
     name: 'Tableau-de-bord',
     meta: {
@@ -50,11 +55,6 @@ const routes = [
     beforeEnter: Middleware, // utilise le middleware pour vérifier l'authentification
     component: () => import(/* webpackChunkName: "Login" */ '../views/Tableau-de-bord.vue')
   },
-  // {
-  //   path: '/verification-email',
-  //   name: 'Verification-email',
-  //   component: () => import(/* webpackChunkName: "Verification-email" */ '../views/Verification-email.vue')
-  // },
   {
     path: '/password-forgot',
     name: 'Password-forgot',
@@ -65,12 +65,6 @@ const routes = [
     name: 'ResetPassword',
     component: () => import(/* webpackChunkName: "Reset-password" */ '../views/Reset-password.vue')
   },
-  // {
-  //   path: '/checkout',
-  //   name: 'Checkout',
-  //   component: () => import(/* webpackChunkName: "checkout" */ '../views/Checkout.vue')
-  // },
-
   {
     path: '*',
     component: Home
