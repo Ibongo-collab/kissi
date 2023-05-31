@@ -116,274 +116,229 @@
 </template>
 
 <script>
-  import Navbar from '@/components/Navbar.vue'
-  import Footer from '@/components/Footer.vue'
-  import Loading from "vue-loading-overlay";
-  import "vue-loading-overlay/dist/vue-loading.css"
-  import { mapGetters } from "vuex"
-  import CryptoJS from 'crypto-js'
-  import constant from "../../constant"
-  export default {
-    name: "Recherche",
-    components: {
-      Navbar,
-      Footer,
-      Loading
-    },
-    data() {
-      return {
-        cityList: [{
-            value: '1',
-            viewValue: 'Brazzaville'
-          },
-          {
-            value: '2',
-            viewValue: 'Pointe-noire'
-          },
-          {
-            value: '3',
-            viewValue: 'Dolisie'
-          },
-        ],
-        specialite:"",
-        selected:"",
-        nom: "",
-        prenom:"",
-        titre:"",
-        isLoading: false,
-        fullPage: true,
-      };
-    },
-    methods: {
-      rechercher() {
-        this.isLoading = true;
-        this.$store.dispatch('getMedecinByCatAndCity', {'specialite': this.specialite, 'ville': this.selected})
-          .then(() => {
-            this.isLoading = false;
-            // La liste des médecin est mise à jour
-            // console.log('Médecins par spécialité');
-          })
-          .catch(() => {
-            // une erreur s'est produite, affichez un message d'erreur
-            this.errorMessage = 'Identifiants invalides';
-        });
-      },
-      // Méthode de récupération de la liste de médecin par spécialité
-      getMedecinByCat(spe) {
-        // this.isLoading = true;
-        const credential = {
-          specialite: spe
-        };
-        this.$store.dispatch('getMedecinByCat', credential)
-          .then(() => {
-            // this.isLoading = false;
-            // La liste des médecin est mise à jour
-            // console.log('Médecins par spécialité');
-          })
-          .catch(() => {
-            // une erreur s'est produite, affichez un message d'erreur
-            this.errorMessage = 'Identifiants invalides';
-          });
-      },
+import Navbar from '@/components/Navbar.vue'
+import Footer from '@/components/Footer.vue'
+import Loading from "vue-loading-overlay"
+// import "vue-loading-overlay/dist/vue-loading.css"
+import { mapGetters } from "vuex"
+import CryptoJS from 'crypto-js'
+import constant from "../../constant"
 
-      // Méthode de récupération de la liste des médecins généralistes
-      getMedecinList() {
-        this.$store.dispatch('getMedecinGeneraliste')
+export default {
+  name: "Recherche",
+  components: {
+    Navbar,
+    Footer,
+    Loading
+  },
+  data() {
+    return {
+      cityList: [
+        {
+          value: '1',
+          viewValue: 'Brazzaville'
+        },
+        {
+          value: '2',
+          viewValue: 'Pointe-noire'
+        },
+        {
+          value: '3',
+          viewValue: 'Dolisie'
+        },
+      ],
+      specialite: "",
+      selected: "",
+      nom: "",
+      prenom: "",
+      titre: "",
+      isLoading: false,
+      fullPage: true,
+    };
+  },
+  methods: {
+    rechercher() {
+      this.isLoading = true;
+      this.$store.dispatch('getMedecinByCatAndCity', { 'specialite': this.specialite, 'ville': this.selected })
+        .then(() => {
+          this.isLoading = false;
+          // La liste des médecins est mise à jour
+          // console.log('Médecins par spécialité');
+        })
+        .catch(() => {
+          // Une erreur s'est produite, affichez un message d'erreur
+          this.errorMessage = 'Identifiants invalides';
+        });
+    },
+    getMedecinByCat(spe) {
+      const credential = {
+        specialite: spe
+      };
+      this.$store.dispatch('getMedecinByCat', credential)
+        .then(() => {
+          // La liste des médecins est mise à jour
+          // console.log('Médecins par spécialité');
+        })
+        .catch(() => {
+          // Une erreur s'est produite, affichez un message d'erreur
+          this.errorMessage = 'Identifiants invalides';
+        });
+    },
+    getMedecinList() {
+      this.$store.dispatch('getMedecinGeneraliste')
         .then(() => {
           // console.log('Medecins généralistes OK');
         })
         .catch(error => {
           console.log(error);
         });
-      },
-
-      // Fonction pour crypter les données
-      encryptData(data, key) {
-        const encrypted = CryptoJS.AES.encrypt(data, key).toString()
-        return encrypted
-      },
-
-      // Aller à la page du médecin choisi
-      goToPraticien(param) {
-        // console.log(param, "avant cryptage")
-        let myIdString = param.toString();
-        localStorage.setItem('medecinId',this.encryptData(myIdString, constant.secretKey))
-        // console.log(encryptedData);
-        this.$router.push("/praticien");
-      }
     },
-    computed: {
-      isDisabled() {
-        // contrôle sur l'activation du bouton
-        return !this.specialite && !this.selected;
-      },
-      ...mapGetters(["medecinList"]),
+    encryptData(data, key) {
+      const encrypted = CryptoJS.AES.encrypt(data, key).toString();
+      return encrypted;
     },
-    mounted() {
-      // console.log(this.medecinList)
-
-      function autocomplete(inp, arr) {
-        /*the autocomplete function takes two arguments,
-        the text field element and an array of possible autocompleted values:*/
-        var currentFocus;
-        /*execute a function when someone writes in the text field:*/
-        inp.addEventListener("input", function () {
-          var a, b, i, val = this.value;
-          /*close any already open lists of autocompleted values*/
-          closeAllLists();
-          if (!val) {
-            return false;
-          }
-          currentFocus = -1;
-          /*create a DIV element that will contain the items (values):*/
-          a = document.createElement("DIV");
-          a.setAttribute("id", this.id + "autocomplete-list");
-          a.setAttribute("class", "autocomplete-items");
-          /*append the DIV element as a child of the autocomplete container:*/
-          this.parentNode.appendChild(a);
-          /*for each item in the array...*/
-          for (i = 0; i < arr.length; i++) {
-            /*check if the item starts with the same letters as the text field value:*/
-            if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-              /*create a DIV element for each matching element:*/
-              b = document.createElement("DIV");
-              /*make the matching letters bold:*/
-              b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-              b.innerHTML += arr[i].substr(val.length);
-              /*insert a input field that will hold the current array item's value:*/
-              b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-              /*execute a function when someone clicks on the item value (DIV element):*/
-              b.addEventListener("click", function () {
-                /*insert the value for the autocomplete text field:*/
-                inp.value = this.getElementsByTagName("input")[0].value;
-                /*close the list of autocompleted values,
-                (or any other open lists of autocompleted values:*/
-                closeAllLists();
-              });
-              a.appendChild(b);
-            }
-          }
-        });
-        /*execute a function presses a key on the keyboard:*/
-        inp.addEventListener("keydown", function (e) {
-          var x = document.getElementById(this.id + "autocomplete-list");
-          if (x) x = x.getElementsByTagName("div");
-          if (e.keyCode == 40) {
-            /*If the arrow DOWN key is pressed,
-            increase the currentFocus variable:*/
-            currentFocus++;
-            /*and and make the current item more visible:*/
-            addActive(x);
-          } else if (e.keyCode == 38) { //up
-            /*If the arrow UP key is pressed,
-            decrease the currentFocus variable:*/
-            currentFocus--;
-            /*and and make the current item more visible:*/
-            addActive(x);
-          } else if (e.keyCode == 13) {
-            /*If the ENTER key is pressed, prevent the form from being submitted,*/
-            e.preventDefault();
-            if (currentFocus > -1) {
-              /*and simulate a click on the "active" item:*/
-              if (x) x[currentFocus].click();
-            }
-          }
-        });
-
-        function addActive(x) {
-          /*a function to classify an item as "active":*/
-          if (!x) return false;
-          /*start by removing the "active" class on all items:*/
-          removeActive(x);
-          if (currentFocus >= x.length) currentFocus = 0;
-          if (currentFocus < 0) currentFocus = (x.length - 1);
-          /*add class "autocomplete-active":*/
-          x[currentFocus].classList.add("autocomplete-active");
+    goToPraticien(param) {
+      let myIdString = param.toString();
+      localStorage.setItem('medecinId', this.encryptData(myIdString, constant.secretKey));
+      this.$router.push("/praticien");
+    }
+  },
+  computed: {
+    isDisabled() {
+      return !this.specialite && !this.selected;
+    },
+    ...mapGetters(["medecinList"]),
+  },
+  mounted() {
+    function autocomplete(inp, arr) {
+      var currentFocus;
+      inp.addEventListener("input", function () {
+        var a, b, i, val = this.value;
+        closeAllLists();
+        if (!val) {
+          return false;
         }
-
-        function removeActive(x) {
-          /*a function to remove the "active" class from all autocomplete items:*/
-          for (var i = 0; i < x.length; i++) {
-            x[i].classList.remove("autocomplete-active");
+        currentFocus = -1;
+        a = document.createElement("DIV");
+        a.setAttribute("id", this.id + "autocomplete-list");
+        a.setAttribute("class", "autocomplete-items");
+        this.parentNode.appendChild(a);
+        for (i = 0; i < arr.length; i++) {
+          if (arr[i].substr(0, val.length).toUpperCase() === val.toUpperCase()) {
+            b = document.createElement("DIV");
+            b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+            b.innerHTML += arr[i].substr(val.length);
+            b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+            b.addEventListener("click", function () {
+              inp.value = this.getElementsByTagName("input")[0].value;
+              closeAllLists();
+            });
+            a.appendChild(b);
           }
         }
-
-        function closeAllLists(elmnt) {
-          /*close all autocomplete lists in the document,
-          except the one passed as an argument:*/
-          var x = document.getElementsByClassName("autocomplete-items");
-          for (var i = 0; i < x.length; i++) {
-            if (elmnt != x[i] && elmnt != inp) {
-              x[i].parentNode.removeChild(x[i]);
-            }
+      });
+      inp.addEventListener("keydown", function (e) {
+        var x = document.getElementById(this.id + "autocomplete-list");
+        if (x) x = x.getElementsByTagName("div");
+        if (e.keyCode === 40) {
+          currentFocus++;
+          addActive(x);
+        } else if (e.keyCode === 38) {
+          currentFocus--;
+          addActive(x);
+        } else if (e.keyCode === 13) {
+          e.preventDefault();
+          if (currentFocus > -1) {
+            if (x) x[currentFocus].click();
           }
         }
-        /*execute a function when someone clicks in the document:*/
-        document.addEventListener("click", function (e) {
-          closeAllLists(e.target);
-        });
+      });
+
+      function addActive(x) {
+        if (!x) return false;
+        removeActive(x);
+        if (currentFocus >= x.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = (x.length - 1);
+        x[currentFocus].classList.add("autocomplete-active");
       }
 
-      /*An array containing all the country names in the world:*/
-      var specialite = [
-        "Audioprothésiste",
-        "Anatomopathologiste",
-        "Anesthesiste-Réanimateur", 
-        "Andrologue",
-        "Biologiste",
-        "Cardiologue",
-        "Cardiologue Rythmologue", 
-        "Chirurgien Générale",
-        "Chirurgien Orthopédiste",
-        "Chirurgien Pédiatrique",
-        "Chirurgien Urologue",
-        "Coach Sportif",
-        "Dentiste",
-        "Dermatologue",
-        "Diabétologue",
-        "Diététicien",
-        "Généticien",
-        "Gynécologue",
-        "Hépatologue",
-        "Kinésithérapeute",
-        "Kinésithérapeute Du Sport",
-        "Médecin généraliste",
-        "Medecin Urgentiste",
-        "Pédiatre",
-        "Pédodontiste",
-        "Ophtalmologue",
-        "Orthophoniste",
-        "Neurochirurgien",
-        "Neurologue",
-        "Neuropédiatre",
-        "Neurophysiologiste",
-        "Sage-femme",
-        "Stomatologue",
-        "Tabacologue",
-        "Traumatologue-orthopédiste",
-        "Traumato-orthopédiste pédiatrique",
-      ];
+      function removeActive(x) {
+        for (var i = 0; i < x.length; i++) {
+          x[i].classList.remove("autocomplete-active");
+        }
+      }
 
-      /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-      autocomplete(document.getElementById("myInput"), specialite);
+      function closeAllLists(elmnt) {
+        var x = document.getElementsByClassName("autocomplete-items");
+        for (var i = 0; i < x.length; i++) {
+          if (elmnt != x[i] && elmnt != inp) {
+            x[i].parentNode.removeChild(x[i]);
+          }
+        }
+      }
 
-      // active link
-      var header = document.getElementById("content-specialite");
-      var btns = header.getElementsByClassName("specialite__btn");
-      for (var i = 0; i < btns.length; i++) {
-        btns[i].addEventListener("click", function() {
+      document.addEventListener("click", function (e) {
+        closeAllLists(e.target);
+      });
+    }
+
+    var specialite = [
+      "Audioprothésiste",
+      "Anatomopathologiste",
+      "Anesthesiste-Réanimateur",
+      "Andrologue",
+      "Biologiste",
+      "Cardiologue",
+      "Cardiologue Rythmologue",
+      "Chirurgien Générale",
+      "Chirurgien Orthopédiste",
+      "Chirurgien Pédiatrique",
+      "Chirurgien Urologue",
+      "Coach Sportif",
+      "Dentiste",
+      "Dermatologue",
+      "Diabétologue",
+      "Diététicien",
+      "Généticien",
+      "Gynécologue",
+      "Hépatologue",
+      "Kinésithérapeute",
+      "Kinésithérapeute Du Sport",
+      "Médecin généraliste",
+      "Medecin Urgentiste",
+      "Pédiatre",
+      "Pédodontiste",
+      "Ophtalmologue",
+      "Orthophoniste",
+      "Neurochirurgien",
+      "Neurologue",
+      "Neuropédiatre",
+      "Neurophysiologiste",
+      "Sage-femme",
+      "Stomatologue",
+      "Tabacologue",
+      "Traumatologue-orthopédiste",
+      "Traumato-orthopédiste pédiatrique",
+    ];
+
+    autocomplete(document.getElementById("myInput"), specialite);
+
+    var header = document.getElementById("content-specialite");
+    var btns = header.getElementsByClassName("specialite__btn");
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener("click", function () {
         var current = document.getElementsByClassName("active");
         current[0].className = current[0].className.replace(" active", "");
         this.className += " active";
-        });
-      }
-    },
-    created() {
-      // this.$store.dispatch('getMedecinGeneraliste');  
-      this.getMedecinList();
+      });
     }
-  }
-  </script>
+  },
+  created() {
+    this.getMedecinList();
+  },
+};
+</script>
+
 
 <style scoped>
 

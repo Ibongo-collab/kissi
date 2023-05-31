@@ -2,7 +2,6 @@
   <div class="Password-forgot">
     <!--========== SPINNER ==========-->
     <loading :active.sync="isLoading" :can-cancel="false" :is-full-page="fullPage"></loading>
-    <!-- <Navbar /> -->
     <main class="">
       <section class="content">
         <div class="bloc-login">
@@ -12,11 +11,10 @@
           <div class="logo-center text-center">
             <img src="../assets/images/kissi.png" alt="logo kissi" width="70px">
           </div>
-
           <!--  Formulaire de réinitialisation de mot de passe -->
           <form v-on:submit.prevent="sendEmail" class="mx-auto col-md-5 form-password-forgot" v-if="testForm">
             <p class="titre mt-3">{{ titre }}</p>
-            <p class="text-muted">Nous vous enverrons un mail avec les instructions nécessaires pour 
+            <p class="text-muted">Nous vous enverrons un mail avec les instructions nécessaires pour
               réinitialiser votre mot de passe</p>
 
             <!-- Email -->
@@ -48,112 +46,106 @@
         </div>
       </section>
     </main>
-    <!-- <Footer /> -->
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-import Loading from "vue-loading-overlay";
-import "vue-loading-overlay/dist/vue-loading.css";
-import constant from '../../constant';
+  import axios from 'axios';
+  import Loading from "vue-loading-overlay";
+  // import "vue-loading-overlay/dist/vue-loading.css";
+  import constant from '../../constant';
 
-export default {
-  name: "Password-forgot",
-  components: {
-    // Navbar,
-    // Footer,
-    Loading,
-  },
-  data() {
-    return {
-      emailTest: false,
-      isValidEmail: true,
-      testEmail: true,
-      email: "",
-      regexEmail: /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
-      titre: "Réinitialiser le mot de passe",
-      errorMessage: "",
-      message: "",
-      isLoading: false,
-      fullPage: true,
-      testForm: true
-    };
-  },
-  methods: {
-    // Méthode d'authentification
-    sendEmail() {
-      this.isLoading = true;
-      axios.post(constant.apiURL + "auth/resetPassword", {
-        email: this.email,
-        route: constant.URL,
-      })
-        .then((response) => {
-          // console.log(response)
-          if (response.data.code === 200) {
+  export default {
+    name: "Password-forgot",
+    components: {
+      Loading,
+    },
+    data() {
+      return {
+        isValidEmail: true,
+        testEmail: true,
+        email: "",
+        regexEmail: /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
+        titre: "Réinitialiser le mot de passe",
+        errorMessage: "",
+        message: "",
+        isLoading: false,
+        fullPage: true,
+        testForm: true
+      };
+    },
+    methods: {
+      // Méthode d'authentification
+      sendEmail() {
+        this.isLoading = true;
+        axios.post(constant.apiURL + "auth/resetPassword", {
+            email: this.email,
+            route: constant.URL,
+          })
+          .then((response) => {
+            // console.log(response)
+            if (response.data.code === 200) {
+              this.isLoading = false;
+              this.testForm = false;
+              this.titre = "Confirmation";
+              this.message = "Votre demande a été prise en compte.\nUn mail a été envoyé à l'adresse : " + this.email;
+            } else {
+              this.errorMessage = "Cette adresse e-mail n'existe pas";
+            }
+          })
+          .catch(() => {
+            // une erreur s'est produite lors de l'authentification, affichez un message d'erreur
             this.isLoading = false;
-            this.testForm = false;
-            this.titre = "Confirmation";
-            this.message = "Votre demande a été prise en compte.\nUn mail a été envoyé à l'adresse : " + this.email;
-          } else {
-            this.errorMessage = "Cette adresse e-mail n'existe pas"
-          }
-        })
-        .catch(() => {
-          // une erreur s'est produite lors de l'authentification, affichez un message d'erreur
-          this.isLoading = false;
-          this.errorMessage = 'Un probmlème est surevenu. Veuillez réessayer';
-        });
-    },
+            this.errorMessage = 'Un probmlème est surevenu. Veuillez réessayer';
+          });
+      },
 
-    /** retourne à la route précédente */ 
-    goBack() {
-      this.$router.go(-1); 
+      // retourne à la route précédente
+      goBack() {
+        this.$router.go(-1);
+      },
+      goToHome() {
+        this.$router.push("/");
+      },
+      onChangeEmail(e) {
+        const textemail = e.target.value;
+        this.isEmailValid(textemail);
+      },
+      isEmailValid: function (inputEmail) {
+        this.isValidEmail = this.regexEmail.test(inputEmail);
+        if (this.isValidEmail) {
+          this.testEmail = false;
+        }
+      },
     },
-    goToHome() {
-      this.$router.push("/"); 
+    computed: {
+      isDisabled() {
+        // contrôle sur l'activation du bouton
+        return this.testEmail;
+      },
     },
-    onChangeEmail(e) {
-      const textemail = e.target.value;
-      this.isEmailValid(textemail);
-    },
-    isEmailValid: function(inputEmail) {
-      this.isValidEmail = this.regexEmail.test(inputEmail);
-      if (this.isValidEmail) {
-        this.testEmail = false;
+    mounted() {
+      if (this.$store.getters.isAuthenticated === true) {
+        this.$router.push('/tableau-de-bord');
       }
     },
-  },
-  computed: {
-    isDisabled() {
-      // contrôle sur l'activation du bouton
-      return this.testEmail;
-    },
-  },
-  mounted() {
-    if (this.$store.getters.isAuthenticated === true) {
-      this.$router.push("/tableau-de-bord");
-    }
-  },
-};
+  };
 </script>
 
 <style>
+  .titre {
+    line-height: 40px;
+  }
 
-.titre {
-  line-height: 40px;
-}
+  .bloc-login {
+    margin-top: 30px;
+  }
 
-.bloc-login {
-  margin-top: 30px;
-}
-
-.form-password-forgot{
-  box-shadow: rgba(0, 0, 0, 0.1) 10px 10px 30px;
-  transition: box-shadow 0.2s ease 0s;
-  background-color: rgb(255, 255, 255);
-  padding: 32px;
-  border-radius: 20px;
-}
-
+  .form-password-forgot {
+    box-shadow: rgba(0, 0, 0, 0.1) 10px 10px 30px;
+    transition: box-shadow 0.2s ease 0s;
+    background-color: rgb(255, 255, 255);
+    padding: 32px;
+    border-radius: 20px;
+  }
 </style>

@@ -2,14 +2,14 @@
     <div class="rdv">
         <!--========== SPINNER ==========-->
         <loading :active.sync="isLoading" :can-cancel="false" :is-full-page="fullPage"></loading>
-        <div class="banner">
-            <div class="content section">
-                <button class="arrow" @click="goBack">
+        <main class="">
+            <div class="content">
+                <button class="arrow" style="margin-top: 30px;" @click="goBack">
                     <i class='bx bx-left-arrow-alt icon'></i>
                 </button>
                 <!-- Disponibilités sur Brazzaville et Pointe-noire -->
                 <div class="info-banner">
-                    <form v-on:submit.prevent="prendreRdv">
+                    <form v-on:submit.prevent="prendreRdv" v-if="testForm">
                         <div class="form-rdv mx-auto">
                             <div class="row">
                                 <div class="col-auto">
@@ -43,36 +43,38 @@
                                 <router-link to="/">Politique de Confidentialité</router-link>
                             </p>
                             <div class="col-auto content-input">
-                                <button class="default__btn" :disabled="isDisabled" @click="prendreRdv()">
+                                <button type="submit" class="default__btn" :disabled="isDisabled">
                                     Suivant
                                 </button>
                             </div>
                         </div>
                     </form>
+                    <!-- Message de confirmation -->
+                    <div class="form-confirmation mx-auto text-center col-md-5" v-if="!testForm">
+                        <p class="titre mt-3">{{title}}</p>
+                        <p class="text-muted">{{subtitle}}</p>
+                        <div class="content__btn mx-auto">
+                            <button class="default__btn" @click="goToRecherche">Continuer</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
 </template>
 
 <script>
-    // import Navbar from '@/components/Navbar.vue'
-    // import Footer from '@/components/Footer.vue'
-    import axios from "axios";
-    import Swal from "sweetalert2";
+    import axios from "axios"
     import CryptoJS from 'crypto-js'
     import constant from "../../constant"
-    import Loading from "vue-loading-overlay";
-    import "vue-loading-overlay/dist/vue-loading.css";
-    import {
-        mapGetters
-    } from "vuex"
+    import Loading from "vue-loading-overlay"
+    // import "vue-loading-overlay/dist/vue-loading.css"
+    import { mapGetters } from "vuex"
+
     export default {
         name: "Rendez-vous",
         components: {
-            // Navbar,
-            // Footer,
             Loading,
         },
         data() {
@@ -81,8 +83,11 @@
                 selected: "",
                 date: "",
                 heure: "",
+                title: "Confirmation",
+                subtitle: "Votre demande de rendez-vous a été transférée.\n Vous recevrez un SMS du médecin pour confirmer votre rendez-vous.",
                 isLoading: false,
                 fullPage: true,
+                testForm: true
             }
         },
         computed: {
@@ -90,7 +95,7 @@
             ...mapGetters(["medecinMotif"]),
             ...mapGetters(['token']),
             user() {
-                return this.$store.getters.getMedecinById(this.id)
+                return this.$store.getters.getMedecinById(this.id);
             },
             isDisabled() {
                 // contrôle sur l'activation du bouton
@@ -98,14 +103,17 @@
             },
         },
         methods: {
-            // Retour vers la page précédente
+            //  Retour vers la page précédente
             goBack() {
-                this.$router.go(-1); // retourne à la route précédente
+                this.$router.go(-1);
+            },
+            goToRecherche() {
+                this.$router.push("/recherche");
             },
             // Fonction pour décrypter les données
             decryptData(data, key) {
-                const decrypted = CryptoJS.AES.decrypt(data, key).toString(CryptoJS.enc.Utf8)
-                return decrypted
+                const decrypted = CryptoJS.AES.decrypt(data, key).toString(CryptoJS.enc.Utf8);
+                return decrypted;
             },
             prendreRdv() {
                 const token = localStorage.getItem("token");
@@ -132,29 +140,20 @@
                     })
                     .then((response) => {
                         // console.log(response);
-                        this.isLoading = false;
                         if (response.data.code === 201) {
-                            Swal.fire({
-                            icon: "success",
-                                title: "Votre demande de rendez-vous a été transférée."
-                                + " Vous recevrez un SMS du médecin pour confirmer votre rendez-vous.",
-                                showConfirmButton: true,
-                            });
-                        } else if (response.data.code === 400) {
-                            Swal.fire({
-                            icon: "warning",
-                                title: "Veuillez noter qu'il semble que vous ayez déjà un rendez-vous en cours" +
-                                " avec ce médecin. Nous vous prions de bien vouloir honorer votre rendez-vous actuel"+
-                                " avant d'en planifier un autre.",
-                                showConfirmButton: true,
-                            });
+                            this.testForm = false;
+                            this.isLoading = false;
+                        } else {
+                            this.isLoading = false;
+                            alert('Veuillez noter qu\'il semble que vous ayez déjà un rendez-vous en cours' +
+                                ' avec ce médecin. Nous vous prions de bien vouloir honorer votre rendez-vous actuel' +
+                                ' avant d\'en planifier un autre.');
                         }
                     })
                     .catch((error) => {
                         console.log(error);
                         this.isLoading = false;
                     });
-
             },
         },
         created() {

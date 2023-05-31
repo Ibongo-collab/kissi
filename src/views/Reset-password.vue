@@ -2,8 +2,7 @@
   <div class="Password-forgot">
     <!--========== SPINNER ==========-->
     <loading :active.sync="isLoading" :can-cancel="false" :is-full-page="fullPage"></loading>
-    <!-- <Navbar /> -->
-    <main class="">
+    <main>
       <section class="content">
         <div class="bloc-login">
           <div class="logo-center text-center">
@@ -39,16 +38,15 @@
         </div>
       </section>
     </main>
-    <!-- <Footer /> -->
   </div>
 </template>
 
 <script>
-  import axios from 'axios';
-  import Loading from "vue-loading-overlay";
-  import "vue-loading-overlay/dist/vue-loading.css";
-  import constant from '../../constant';
-  import md5 from "js-md5";
+  import axios from 'axios'
+  import Loading from "vue-loading-overlay"
+  // import "vue-loading-overlay/dist/vue-loading.css"
+  import constant from '../../constant'
+  import md5 from "js-md5"
 
   export default {
     name: "ResetPassword",
@@ -86,7 +84,7 @@
             if (response.data.code === 200) {
               this.isLoading = false;
               this.test = true;
-              this.titre = "Confirmation"
+              this.titre = "Confirmation";
               this.subtitle = response.data.message;
             } else {
               this.isLoading = false;
@@ -114,7 +112,6 @@
         }
       },
       transformMD5: function (pwd) {
-        // pwd = pwd.toUpperCase();
         let newpwd = md5(pwd);
         return newpwd;
       },

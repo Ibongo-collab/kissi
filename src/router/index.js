@@ -14,7 +14,7 @@ const routes = [
   },
   {
     path: '/rejoignez-kissi',
-    name: 'Rejoignez-kissi',
+    name: 'Rejoingnez-kissi',
     component: () => import(/* webpackChunkName: "rejoignez-kissi" */ '../views/Rejoignez-kissi.vue')
   },
   {

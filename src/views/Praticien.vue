@@ -61,21 +61,19 @@
                                     <p class="titre-date-praticien">{{date.date | moment('dddd')}}</p>
                                     <!-- EX 13 avr.  -->
                                     <span class="date-praticien">{{date.date | moment('D MMM')}}</span>
-                                    
+
                                     <div class="button" v-for="item in date.heureMedecins" :key="item.id">
                                         <!-- Verification de l'authentification -->
                                         <div v-if="isAuthenticated == false">
                                             <!-- EX 08:00  -->
-                                            <button class="horaire__btn" v-if="date.heureMedecins.length > 0"
-                                                data-bs-toggle="modal" data-bs-target="#alert">{{item.heure}}</button>
-                                            <button class="horaire__btn" v-else-if="date.heureMedecins.length == 0">-</button>
+                                            <button class="horaire__btn" data-bs-toggle="modal"
+                                                data-bs-target="#alert">{{item.heure}}</button>
                                         </div>
                                         <div v-else>
                                             <!-- EX 08:00  -->
-                                            <button class="horaire__btn" v-if="date.heureMedecins.length > 0"
+                                            <button class="horaire__btn"
                                                 @click="goToRdv(date.date, item.heure)">{{item.heure}}</button>
-                                            <button class="horaire__btn" v-else-if="date.heureMedecins.length == 0">-</button>
-                                        </div>  
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -100,7 +98,8 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-center">
-                        Veuillez vous <span class="link" @click="goToAuth" data-bs-dismiss="modal"><b>authentifier</b></span> avant de continuer
+                        Veuillez vous <span class="link" @click="goToAuth"
+                            data-bs-dismiss="modal"><b>authentifier</b></span> avant de continuer
                     </div>
                 </div>
             </div>
@@ -115,6 +114,7 @@
     import CryptoJS from 'crypto-js'
     import constant from "../../constant"
     import { mapGetters } from "vuex"
+    import axios from 'axios'
 
     export default {
         name: "Praticien",
@@ -128,24 +128,24 @@
                 message: "Afficher le numéro",
                 test: true,
                 hourList: [],
+                rdvList: [],
                 pageSize: 4, // Nombre d'éléments par page
                 currentPage: 1, // Page courante
-                isValidList: true,
             }
         },
         computed: {
             ...mapGetters(["medecinDate"]),
             user() {
-                return this.$store.getters.getMedecinById(this.id)
+                return this.$store.getters.getMedecinById(this.id);
             },
             currentItems() {
                 const startIndex = (this.currentPage - 1) * this.pageSize;
                 const endIndex = startIndex + this.pageSize;
                 return this.medecinDate.slice(startIndex, endIndex);
             },
-            /** accéder à la valeur du getters **/
+            // accéder à la valeur du getters
             isAuthenticated() {
-                return this.$store.getters.isAuthenticated; 
+                return this.$store.getters.isAuthenticated;
             },
         },
         methods: {
@@ -155,27 +155,58 @@
             goToAuth() {
                 localStorage.setItem('rdvContinue', true);
                 localStorage.setItem('currentMedecinId', this.id);
-                this.$router.push("/authentification");
+                this.$router.push('/authentification');
             },
             goToRdv(date, heure) {
                 // console.log(date, heure)
-                localStorage.setItem('dateRdv', date)
-                localStorage.setItem('heureRdv', heure)
-                this.$router.push("/rdv");
+                const token = localStorage.getItem('token');
+                /* Je suis en train de vérifier si la date et l'heure 
+                sélectionnées sont déjà réservées pour un rendez-vous. */
+                axios.post(constant.apiURL + 'medecins/' + this.id + '/rendezvous', {}, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    })
+                    .then((response) => {
+                        // console.log(response);
+                        this.rdvList = response.data.content;
+                        let rdvFound = false; // Variable pour vérifier si un rdv a été trouvé
+
+                        this.rdvList.forEach((element) => {
+                        if (element.date == date) {
+                            // console.log(element.date + "=" + date);
+                            if (element.heure == heure) {
+                            // console.log(element.heure + "=" + heure);
+                            /* Si la date et l'heure sélectionnées correspondent à un rdv, alors j'affiche une alerte */
+                            alert("L'heure que vous avez sélectionnée a déjà été réservée pour un rendez-vous");
+                            rdvFound = true;
+                            }
+                        }
+                        });
+
+                        if (!rdvFound) {
+                            localStorage.setItem('dateRdv', date);
+                            localStorage.setItem('heureRdv', heure);
+                            this.$router.push('/rdv');
+                        }
+
+                    }).catch((error) => {
+                        console.log(error);
+                    });
             },
             getTel() {
                 if (this.test === true) {
                     this.message = this.user.telephone;
-                    this.test = false
+                    this.test = false;
                 } else {
                     this.message = "Afficher le numéro";
-                    this.test = true
+                    this.test = true;
                 }
             },
             // Fonction pour décrypter les données
             decryptData(data, key) {
-                const decrypted = CryptoJS.AES.decrypt(data, key).toString(CryptoJS.enc.Utf8)
-                return decrypted
+                const decrypted = CryptoJS.AES.decrypt(data, key).toString(CryptoJS.enc.Utf8);
+                return decrypted;
             },
             prevPage() {
                 if (this.currentPage > 1) {
@@ -196,12 +227,15 @@
 
             // Récupération de la liste des dates du médecin
             this.$store.dispatch('getDateMedecin', this.id);
+
+            if (IdStorage == '') {
+                this.$router.push('/recherche');
+            }
         },
     }
 </script>
 
 <style scoped>
-
     .link {
         text-decoration: underline;
         color: #4f74da;

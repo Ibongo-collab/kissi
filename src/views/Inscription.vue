@@ -80,7 +80,7 @@
     import axios from "axios";
     import constant from "../../constant";
     import Loading from "vue-loading-overlay";
-    import "vue-loading-overlay/dist/vue-loading.css";
+    // import "vue-loading-overlay/dist/vue-loading.css";
     import md5 from "js-md5";
 
     export default {
@@ -118,6 +118,9 @@
             goBack() {
                 this.$router.go(-1); // retourne à la route précédente
             },
+            goToHome() {
+                this.$router.push('/');
+            },
             inscription() {
                 this.isLoading = true;
                 const encryptPassword = this.transformMD5(this.password);
@@ -135,7 +138,7 @@
                         profile: 'PATIENT'
                     })
                     .then((response) => {
-                        console.log(response);
+                        // console.log(response);
                         if (response.data.code == 201) {
                             this.testForm = false;
                             this.subtitle = "Votre inscription est finalisée avec succès.\n" + 

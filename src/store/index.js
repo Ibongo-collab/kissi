@@ -48,27 +48,6 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    // Authentification
-    login({ commit }, credentials) {
-      return new Promise((resolve, reject) => {
-        axios.post(constant.apiURL + 'login', credentials)
-          .then(response => {
-            // console.log(response, "authenticated")
-            if (response.data.profile == "PATIENT") {
-              const token = response.data.accessToken;
-              const email = response.data.email;
-              localStorage.setItem('token', token);
-              localStorage.setItem('emailUser', email);
-              commit('SET_AUTHENTICATED', true);
-              commit('SET_TOKEN', token);
-              resolve(response);
-            }
-          })
-          .catch(error => {
-            reject(error);
-          });
-      });
-    },
     // Déconnexion
     logout({ commit }) {
       return new Promise((resolve, reject) => {
@@ -89,7 +68,8 @@ export default new Vuex.Store({
     },
     // Récupération d'un patient par email
     getPatientByEmail({ commit }, email) {
-      const token = this.state.token;
+      // const token = this.state.token;
+      const token = localStorage.getItem('token');
       return new Promise((resolve, reject) => {
         axios.get(constant.apiURL + 'patients/email/' + email, {
           headers: {
@@ -98,8 +78,9 @@ export default new Vuex.Store({
         })
         .then(response => {
           // traiter la réponse
-          const patient = response.data;
-          commit('SET_PATIENT', patient);
+          commit('SET_AUTHENTICATED', true);
+          commit('SET_TOKEN', token);
+          commit('SET_PATIENT', response.data);
           resolve(response.data);
         })
         .catch(error => {
@@ -176,12 +157,12 @@ export default new Vuex.Store({
     },
     // Récupération des dates du médecin
     getDateMedecin({ commit }, id) {
-      console.log(id)
+      // console.log(id)
       axios.get(constant.apiURL + 'medecins/'+ id +'?date=true&hour=true')
       .then(response => {
         // traiter la réponse
         const medecinDate = response.data.dateMedecin;
-        // console.log(medecinDate, "resultat")
+        
         commit('SET_MEDECINDATE', medecinDate);
       })
       .catch(error => {

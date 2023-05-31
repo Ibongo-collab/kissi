@@ -181,11 +181,9 @@
 
 
 <script>
-  // @ is an alias to /src
   import Navbar from '@/components/Navbar.vue'
   import Footer from '@/components/Footer.vue'
   import {gsap} from "gsap";
-  // import { mapGetters } from "vuex";
 
   export default {
     name: 'Home',
@@ -206,8 +204,6 @@
         this.$router.push("/rejoignez-kissi");
       }
     },
-    computed: {},
-    created() {},
     mounted() {
       gsap.from('.product-image', {
         opacity: 0,
