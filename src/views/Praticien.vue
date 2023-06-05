@@ -10,7 +10,7 @@
                 <div class="col-md-6">
                     <div class="content-indication">
                         <div class="row">
-                            <div class="col-md-2" style="text-align: center; ">
+                            <div class="col-md-2" style="text-align: center;">
                                 <img src="../assets/images/user.png" class="rounded-circle border" alt="image medecin"
                                     width="50px" height="50px">
                             </div>
@@ -68,6 +68,8 @@
                                             <!-- EX 08:00  -->
                                             <button class="horaire__btn" data-bs-toggle="modal"
                                                 data-bs-target="#alert">{{item.heure}}</button>
+                                                <button class="horaire__btn" data-bs-toggle="modal"
+                                                data-bs-target="#alert" v-if="item === '' ">-</button>
                                         </div>
                                         <div v-else>
                                             <!-- EX 08:00  -->
@@ -113,7 +115,9 @@
     import Footer from '@/components/Footer.vue'
     import CryptoJS from 'crypto-js'
     import constant from "../../constant"
-    import { mapGetters } from "vuex"
+    import {
+        mapGetters
+    } from "vuex"
     import axios from 'axios'
 
     export default {
@@ -129,8 +133,10 @@
                 test: true,
                 hourList: [],
                 rdvList: [],
+                medecinDateFiltered: [],
                 pageSize: 4, // Nombre d'éléments par page
                 currentPage: 1, // Page courante
+                currentDate: null
             }
         },
         computed: {
@@ -141,7 +147,7 @@
             currentItems() {
                 const startIndex = (this.currentPage - 1) * this.pageSize;
                 const endIndex = startIndex + this.pageSize;
-                return this.medecinDate.slice(startIndex, endIndex);
+                return this.medecinDateFiltered.slice(startIndex, endIndex);
             },
             // accéder à la valeur du getters
             isAuthenticated() {
@@ -173,15 +179,15 @@
                         let rdvFound = false; // Variable pour vérifier si un rdv a été trouvé
 
                         this.rdvList.forEach((element) => {
-                        if (element.date == date) {
-                            // console.log(element.date + "=" + date);
-                            if (element.heure == heure) {
-                            // console.log(element.heure + "=" + heure);
-                            /* Si la date et l'heure sélectionnées correspondent à un rdv, alors j'affiche une alerte */
-                            alert("L'heure que vous avez sélectionnée a déjà été réservée pour un rendez-vous");
-                            rdvFound = true;
+                            if (element.date == date) {
+                                // console.log(element.date + "=" + date);
+                                if (element.heure == heure) {
+                                    // console.log(element.heure + "=" + heure);
+                                    /* Si la date et l'heure sélectionnées correspondent à un rdv, alors j'affiche une alerte */
+                                    alert("L'heure que vous avez sélectionnée a déjà été réservée pour un rendez-vous");
+                                    rdvFound = true;
+                                }
                             }
-                        }
                         });
 
                         if (!rdvFound) {
@@ -232,6 +238,39 @@
                 this.$router.push('/recherche');
             }
         },
+        mounted() {
+            // Récuprération de la date courante
+            const currentDate = new Date();
+            const year = currentDate.getFullYear();
+            const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+            const day = currentDate.getDate().toString().padStart(2, '0');
+            this.currentDate = `${year}-${month}-${day}`; //2023-06-4
+
+            // Récupération de l'heure courante
+            function getCurrentTime() {
+                const date = new Date();
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                const currentTime = `${hours}:${minutes}`; // 11:00
+
+                return currentTime;
+            }
+            const currentTime = getCurrentTime();
+
+            // console.log(currentTime);
+            // console.log(this.currentDate);
+            // console.log(this.medecinDate);
+
+            // Créer une nouvelle liste filtrée
+            this.medecinDateFiltered = this.medecinDate.filter(item => {
+                if (item.date === this.currentDate) {
+                    return item.heureMedecins = item.heureMedecins.filter(item => item.heure >= currentTime);
+                } else {
+                    // Garder les éléments qui ne correspondent pas à la date actuelle
+                    return true;
+                }
+            });
+        }
     }
 </script>
 

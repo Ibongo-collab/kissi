@@ -85,7 +85,6 @@
           .then((response) => {
             // console.log(response)
             if (response.data.code === 200) {
-              this.isLoading = false;
               this.testForm = false;
               this.titre = "Confirmation";
               this.message = "Votre demande a été prise en compte.\nUn mail a été envoyé à l'adresse : " + this.email;
@@ -93,10 +92,12 @@
               this.errorMessage = "Cette adresse e-mail n'existe pas";
             }
           })
-          .catch(() => {
-            // une erreur s'est produite lors de l'authentification, affichez un message d'erreur
+          .catch((error) => {
+            console.log(error);
+            this.errorMessage = 'Un problème est survenu. Veuillez réessayer';
+          })
+          .finally(() => {
             this.isLoading = false;
-            this.errorMessage = 'Un probmlème est surevenu. Veuillez réessayer';
           });
       },
 

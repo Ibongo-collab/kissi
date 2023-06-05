@@ -17,11 +17,11 @@
                     <form v-on:submit.prevent="inscription" class="mx-auto col-md-5 form-connexion" v-if="testForm">
                         <p class="titre mt-3">{{ titre }}</p>
                         <!-- Nom -->
-                        <input type="text" id="nom" name="nom" placeholder="Nom" class="contact__input border"
-                           required v-model="nom" />
+                        <input type="text" id="nom" name="nom" placeholder="Nom" class="contact__input border" required
+                            v-model="nom" />
                         <!-- Prenom -->
                         <input type="text" id="prenom" name="prenom" placeholder="Pénom" class="contact__input border"
-                           required v-model="prenom" />
+                            required v-model="prenom" />
                         <!-- Email -->
                         <input type="email" id="email" name="email" placeholder="Email" class="contact__input border"
                             @change="onChangeEmail($event)" @input="onChangeEmail($event)"
@@ -124,34 +124,35 @@
             inscription() {
                 this.isLoading = true;
                 const encryptPassword = this.transformMD5(this.password);
-                const dataUsername = this.prenom.charAt(0) + '.' + this.nom;
-                // console.log(dataUsername);
-                axios
-                    .post(constant.apiURL + "auth/patient", {
-                        nom: this.nom,
-                        prenom: this.prenom,
-                        email: this.email,
-                        password: encryptPassword,
-                        telephone: this.telephone,
-                        gender: this.genre,
-                        username: dataUsername,
-                        profile: 'PATIENT'
-                    })
+                const dataUsername = `${this.prenom.charAt(0)}.${this.nom}`;
+
+                const requestData = {
+                    nom: this.nom,
+                    prenom: this.prenom,
+                    email: this.email,
+                    password: encryptPassword,
+                    telephone: this.telephone,
+                    gender: this.genre,
+                    username: dataUsername,
+                    profile: 'PATIENT'
+                };
+
+                axios.post(constant.apiURL + "auth/patient", requestData)
                     .then((response) => {
                         // console.log(response);
-                        if (response.data.code == 201) {
+                        if (response.data.code === 201) {
                             this.testForm = false;
-                            this.subtitle = "Votre inscription est finalisée avec succès.\n" + 
-                            "Un lien pour activer votre compte a été envoyé à l'adresse : " + this.email;
-                            this.isLoading = false;
+                            this.subtitle = "Votre inscription est finalisée avec succès.\n" +
+                                "Un lien pour activer votre compte a été envoyé à l'adresse : " + this.email;
                         } else {
-                            this.error = "Une erreur est survenue, veuillez réessayer plutard";
-                            this.isLoading = false;
+                            this.error = "Une erreur est survenue, veuillez réessayer ultérieurement";
                         }
                     })
                     .catch((error) => {
                         console.log(error);
-                        this.error = "Une erreur est survenue, veuillez réessayer plutard";
+                        this.error = "Une erreur est survenue, veuillez réessayer ultérieurement";
+                    })
+                    .finally(() => {
                         this.isLoading = false;
                     });
             },

@@ -70,7 +70,9 @@
     import constant from "../../constant"
     import Loading from "vue-loading-overlay"
     // import "vue-loading-overlay/dist/vue-loading.css"
-    import { mapGetters } from "vuex"
+    import {
+        mapGetters
+    } from "vuex"
 
     export default {
         name: "Rendez-vous",
@@ -118,33 +120,35 @@
             prendreRdv() {
                 const token = localStorage.getItem("token");
                 this.isLoading = true;
-                axios
-                    .post(constant.apiURL + "rendezvous", {
-                        date: this.date,
-                        heure: this.heure,
-                        motif: this.selected,
-                        finrdv: false,
-                        statut: "EN_ATTENTE",
-                        medecin: {
-                            id: this.id
-                        },
-                        patient: {
-                            id: this.patient.id
-                        },
-                        lupatient: false,
-                        lumedecin: false,
-                    }, {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        }
-                    })
+
+                const requestData = {
+                    date: this.date,
+                    heure: this.heure,
+                    motif: this.selected,
+                    finrdv: false,
+                    statut: "EN_ATTENTE",
+                    medecin: {
+                        id: this.id
+                    },
+                    patient: {
+                        id: this.patient.id
+                    },
+                    lupatient: false,
+                    lumedecin: false,
+                };
+
+                const requestConfig = {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                };
+
+                axios.post(constant.apiURL + "rendezvous", requestData, requestConfig)
                     .then((response) => {
                         // console.log(response);
                         if (response.data.code === 201) {
                             this.testForm = false;
-                            this.isLoading = false;
                         } else {
-                            this.isLoading = false;
                             alert('Veuillez noter qu\'il semble que vous ayez déjà un rendez-vous en cours' +
                                 ' avec ce médecin. Nous vous prions de bien vouloir honorer votre rendez-vous actuel' +
                                 ' avant d\'en planifier un autre.');
@@ -152,10 +156,13 @@
                     })
                     .catch((error) => {
                         console.log(error);
+                    })
+                    .finally(() => {
                         this.isLoading = false;
                     });
-            },
+            }
         },
+
         created() {
             // Récupération d'un médecin à partir de son Id
             const IdStorage = localStorage.getItem('medecinId');

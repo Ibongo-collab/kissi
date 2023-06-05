@@ -73,27 +73,30 @@
       // Méthode d'authentification
       resetpassword() {
         this.isLoading = true;
-        let encryptpassword = this.transformMD5(this.password);
-        axios.post(constant.apiURL + "auth/updatePassword", {
-            email: this.email,
-            token: this.token,
-            password: encryptpassword,
-          })
+        const encryptpassword = this.transformMD5(this.password);
+        const requestData = {
+          email: this.email,
+          token: this.token,
+          password: encryptpassword,
+        };
+
+        axios.post(constant.apiURL + "auth/updatePassword", requestData)
           .then((response) => {
-            console.log(response)
+            console.log(response);
             if (response.data.code === 200) {
-              this.isLoading = false;
               this.test = true;
               this.titre = "Confirmation";
               this.subtitle = response.data.message;
             } else {
-              this.isLoading = false;
               this.errorMessage = "Une erreur est survenue. Veuillez réessayer.";
             }
           })
-          .catch(() => {
-            this.isLoading = false;
+          .catch((error) => {
+            console.log(error);
             this.errorMessage = 'Une erreur est survenue. Veuillez réessayer.';
+          })
+          .finally(() => {
+            this.isLoading = false;
           });
       },
 
