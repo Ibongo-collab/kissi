@@ -50,21 +50,9 @@ export default new Vuex.Store({
   actions: {
     // Déconnexion
     logout({ commit }) {
-      return new Promise((resolve, reject) => {
-        axios.post(constant.apiURL + 'logout')
-          .then(response => {
-            console.log(response)
-            localStorage.removeItem('token');
-            localStorage.removeItem('emailUser');
-            commit("SET_TOKEN", null);
-            commit("SET_USER", null);
-            commit("SET_AUTHENTICATED", false);
-            resolve(response);
-          })
-          .catch(error => {
-            reject(error);
-          });
-      });
+      commit("SET_TOKEN", null);
+      commit("SET_PATIENT", null);
+      commit("SET_AUTHENTICATED", false);
     },
     // Récupération d'un patient par email
     getPatientByEmail({ commit }, email) {

@@ -166,14 +166,22 @@
         created() {
             // Récupération d'un médecin à partir de son Id
             const IdStorage = localStorage.getItem('medecinId');
-            this.id = parseInt(this.decryptData(IdStorage, constant.secretKey));
 
-            // Récupération de la date et de l'heure du rendez-vous
-            this.date = localStorage.getItem('dateRdv');
-            this.heure = localStorage.getItem('heureRdv');
+            if (IdStorage !== null) {
+                this.id = parseInt(this.decryptData(IdStorage, constant.secretKey));
+                // Récupération de la liste des motifs
+                this.$store.dispatch('getMotifMedecin', this.id);
 
-            // Récupération de la liste des motifs
-            this.$store.dispatch('getMotifMedecin', this.id);
+                // Récupération de la date et de l'heure du rendez-vous
+                const dateRdv = localStorage.getItem('dateRdv');
+                const heureRdv = localStorage.getItem('heureRdv');
+
+                this.date = this.decryptData(dateRdv, constant.secretKey);
+                this.heure = this.decryptData(heureRdv, constant.secretKey);
+            } else {
+                // Gérer le cas où 'medecinId' n'existe pas dans le localStorage
+                this.$router.push('/recherche');
+            }
         }
     }
 </script>

@@ -160,7 +160,6 @@
             },
             goToAuth() {
                 localStorage.setItem('rdvContinue', true);
-                localStorage.setItem('currentMedecinId', this.id);
                 this.$router.push('/authentification');
             },
             goToRdv(date, heure) {
@@ -191,8 +190,12 @@
                         });
 
                         if (!rdvFound) {
-                            localStorage.setItem('dateRdv', date);
-                            localStorage.setItem('heureRdv', heure);
+                            const dateRdv = this.encryptData(date, constant.secretKey);
+                            const heureRdv = this.encryptData(heure, constant.secretKey);
+
+                            localStorage.setItem('dateRdv', dateRdv);
+                            localStorage.setItem('heureRdv', heureRdv);
+                            
                             this.$router.push('/rdv');
                         }
 
@@ -208,6 +211,11 @@
                     this.message = "Afficher le numéro";
                     this.test = true;
                 }
+            },
+            // Fonction pour crypter les données
+            encryptData(data, key) {
+                const encrypted = CryptoJS.AES.encrypt(data, key).toString()
+                return encrypted
             },
             // Fonction pour décrypter les données
             decryptData(data, key) {
@@ -229,12 +237,13 @@
         created() {
             // Récupération d'un médecin à partir de son Id
             const IdStorage = localStorage.getItem('medecinId');
-            this.id = parseInt(this.decryptData(IdStorage, constant.secretKey));
 
-            // Récupération de la liste des dates du médecin
-            this.$store.dispatch('getDateMedecin', this.id);
-
-            if (IdStorage == '') {
+            if (IdStorage !== null) {
+                this.id = parseInt(this.decryptData(IdStorage, constant.secretKey));
+                // Récupération de la liste des dates du médecin
+                this.$store.dispatch('getDateMedecin', this.id);
+            } else {
+                // Gérer le cas où 'medecinId' n'existe pas dans le localStorage
                 this.$router.push('/recherche');
             }
         },

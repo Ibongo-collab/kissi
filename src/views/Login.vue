@@ -94,13 +94,21 @@
 
           if (response.status === 200 || response.status === 201) {
             if (response.data.profile === "PATIENT") {
-              localStorage.setItem('token', response.data.accessToken);
-              localStorage.setItem('emailUser', response.data.email);
+
+              const token = response.data.accessToken;
+              const refreshToken = this.encryptData(response.data.refreshToken, constant.secretKey);
+              const email = this.encryptData(response.data.email, constant.secretKey);
+
+              localStorage.setItem('token', token);
+              localStorage.setItem('rKey', refreshToken);
+              localStorage.setItem('eKey', email);
+              
+              // Récupérer le patient correspondant à cet email
               await this.getPatientByEmail(response.data.email);
             } else {
               this.errorMessage = "Identifiants invalides";
             }
-          } else if (response.status === 403) {
+          } else {
             this.errorMessage = "Ce compte n'est pas activé. Veuillez activer votre compte pour vous connecter";
           }
         } catch (error) {
@@ -121,8 +129,6 @@
             naviguer vers le tableau de bord
             */
             if (localStorage.getItem('rdvContinue')) {
-              let myIdString = localStorage.getItem('currentMedecinId')
-              localStorage.setItem('medecinId', this.encryptData(myIdString, constant.secretKey))
               this.$router.push('/praticien');
             } else {
               this.$router.push('/tableau-de-bord');

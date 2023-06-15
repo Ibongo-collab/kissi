@@ -24,8 +24,7 @@
                             required v-model="prenom" />
                         <!-- Email -->
                         <input type="email" id="email" name="email" placeholder="Email" class="contact__input border"
-                            @change="onChangeEmail($event)" @input="onChangeEmail($event)"
-                            pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required v-model="email" />
+                            @change="onChangeEmail($event)" @input="onChangeEmail($event)" required v-model="email" />
                         <p class="text-danger" style="font-size: 12px" v-if="!isValidEmail">
                             L'email est invalide
                         </p>
@@ -125,9 +124,10 @@
                 this.isLoading = true;
                 const encryptPassword = this.transformMD5(this.password);
                 const dataUsername = `${this.prenom.charAt(0)}.${this.nom}`;
+                let nomMaj = this.nom.toUpperCase();
 
                 const requestData = {
-                    nom: this.nom,
+                    nom: nomMaj,
                     prenom: this.prenom,
                     email: this.email,
                     password: encryptPassword,
