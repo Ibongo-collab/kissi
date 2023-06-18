@@ -52,8 +52,8 @@
                         <input type="radio" id="feminin" value="FEMININ" v-model="genre" />
                         <label for="feminin" style="margin-left: 5px"> Féminin</label>
 
-                        <p class="text-danger" style="font-size: 12px">
-                            {{errorMessage}}
+                        <p class="text-danger mt-3" style="font-size: 12px">
+                            {{error}}
                         </p>
 
                         <input type="submit" value="Confirmer" name="submit" class="default__btn d-block"
@@ -105,7 +105,6 @@
                 regexTelephone: /^0[1456][ ]?[0-9]{3}([ ]?[0-9]{2}){2}$/,
                 titre: "Incription",
                 error: "",
-                errorMessage: "",
                 subtitle: "",
                 isLoading: false,
                 fullPage: true,
@@ -150,7 +149,7 @@
                     })
                     .catch((error) => {
                         console.log(error);
-                        this.error = "Une erreur est survenue, veuillez réessayer ultérieurement";
+                        this.error = "Il semblerait que ce compte existe déjà";
                     })
                     .finally(() => {
                         this.isLoading = false;

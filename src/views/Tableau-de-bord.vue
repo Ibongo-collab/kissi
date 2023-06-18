@@ -6,13 +6,49 @@
         <div class="banner">
             <div class="content section">
                 <!-- Disponibilités sur Brazzaville et Pointe-noire -->
-                <div class="info-profil">
+                <div class="info-profil pb-4">
                     <div class="banniere-profil" style="height: 60px;">
                         <Avatar />
                     </div>
                     <div class="text-center">
                         <h1 class="name">{{patient.prenom}} <span class="uppercase">{{patient.nom}}</span> </h1>
                         <a class="supprimer">Supprimer mon compte</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="info-indicateur border">
+
+                        </div>
+                    </div>
+                    <!-- Indicateur du rendez-vous en cours -->
+                    <div class="col-md-4">
+                        <div class="info-indicateur border">
+                            <p class="titre-indicateur">Rendez-vous en cours</p>
+                        </div>
+                    </div>
+                    <!-- Indicateur du pourcentage de remplissage du dossier médical -->
+                    <div class="col-md-4">
+                        <div class="info-indicateur border">
+                            <p class="titre-indicateur">Completer votre dossier médical</p>
+                            <div class="row pt-3">
+                                <div class="col-md-4">
+                                    <div class="progress-circle">
+                                        <svg class="progress-circle__svg" viewBox="0 0 100 100">
+                                            <circle class="progress-circle__background" cx="50" cy="50" r="45">
+                                            </circle>
+                                            <circle class="progress-circle__fill" cx="50" cy="50" r="45"
+                                                :style="circleStyle"></circle>
+                                        </svg>
+                                        <div class="progress-circle__percentage">{{ progressPercentage }}%</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="texte-indicateur">Complétez votre dossier médical pour faciliter le
+                                        diagnostic du praticien</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
@@ -284,7 +320,7 @@
                                             </span>
                                             <div class="simple">
                                                 <input type="date" id="date" name="date" class="form-input"
-                                                    v-model="patient.birthday" />
+                                                    v-model="formattedBirthday" />
                                             </div>
                                         </div>
                                     </div> <br>
@@ -366,6 +402,7 @@
         },
         data() {
             return {
+                progressPercentage: 0,
                 isLoading: false,
                 fullPage: true,
                 isconnected: false,
@@ -466,6 +503,7 @@
                         viewValue: 'O -'
                     }
                 ],
+                formattedBirthday: "",
                 gender: "",
                 // Fiche
                 problemeMedical: "Aucun",
@@ -518,6 +556,7 @@
                         if (response.data.code === 200 || response.data.code === 201) {
                             this.$store.dispatch('getPatientById', this.patient.id);
                             this.message = "Votre modification a bien été prise en compte";
+                            this.messagePatient = "";
                             this.isLoading = false;
                         }
                     } catch (error) {
@@ -552,6 +591,7 @@
                     if (response.data.code === 200 || response.data.code === 201) {
                         this.$store.dispatch('getPatientById', this.patient.id);
                         this.message = "Votre modification a bien été prise en compte";
+                        this.messagePatient = "";
                         this.isLoading = false;
                     }
                 } catch (error) {
@@ -571,7 +611,7 @@
                         username: this.patient.username,
                         nom: nomMaj,
                         prenom: this.patient.prenom,
-                        birthday: this.patient.birthday,
+                        birthday: this.formattedBirthday,
                         description: this.patient.description,
                         telephone: this.patient.telephone,
                         city: this.patient.city,
@@ -589,12 +629,20 @@
                     if (response.data.code === 200 || response.data.code === 201) {
                         this.$store.dispatch('getPatientById', this.patient.id);
                         this.messagePatient = "Votre modification a bien été prise en compte";
+                        this.message = "";
                         this.isLoading = false;
                     }
                 } catch (error) {
                     console.log(error);
                     this.isLoading = false;
                 }
+            },
+            formatBirthday() {
+                const dateObj = new Date(this.patient.birthday);
+                const year = dateObj.getFullYear();
+                const month = `${dateObj.getMonth() + 1}`.padStart(2, "0");
+                const day = `${dateObj.getDate()}`.padStart(2, "0");
+                this.formattedBirthday = `${year}-${month}-${day}`;
             },
             onChangeTel(e) {
                 const numero = e.target.value;
@@ -618,9 +666,19 @@
             },
             calculimc() {
                 return Math.round(this.poids / Math.pow(this.taille / 100, 2));
-            }
+            },
+            circleStyle() {
+                const circumference = 2 * Math.PI * 45; // Calcul de la circonférence du cercle
+                const progressOffset = circumference * (1 - this.progressPercentage /
+                    100); // Calcul du décalage de progression
+                return `stroke-dasharray: ${circumference}; stroke-dashoffset: ${progressOffset};`;
+            },
         },
         mounted() {
+            setInterval(() => {
+                this.progressPercentage = (this.progressPercentage + 1) % 101;
+            }, 1000);
+            this.formatBirthday();
 
             if (this.patient.fiche !== null) {
                 this.problemeMedical = this.patient.fiche.problemeMedical;
@@ -635,6 +693,61 @@
 </script>
 
 <style scoped>
+    .titre-indicateur {
+        font-family: 'BasisGrotesque', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        font-size: 18px;
+        line-height: 24px;
+        font-weight: 900;
+        color: rgb(52, 52, 67);
+        margin: 0px;
+    }
+
+    .texte-indicateur {
+        font-family: 'BasisGrotesque', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        font-size: 14px;
+        line-height: 18px;
+        font-weight: 500;
+        color: rgb(52, 52, 67);
+        margin: 0px;
+        align-self: center;
+        padding-top: 10px;
+    }
+
+    .progress-circle {
+        position: relative;
+        width: 85px;
+        height: 85px;
+    }
+
+    .progress-circle__svg {
+        transform: rotate(-90deg);
+    }
+
+    .progress-circle__background {
+        fill: none;
+        stroke: #ddd;
+        stroke-width: 6;
+    }
+
+    .progress-circle__fill {
+        fill: none;
+        stroke: #c4d3ff;
+        stroke-width: 6;
+        stroke-linecap: round;
+        transition: stroke-dashoffset 0.3s ease;
+    }
+
+    .progress-circle__percentage {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 14px;
+        font-weight: bold;
+    }
+
     .form-label-fiche {
         transition: all 0.2s ease 0s;
         color: rgb(173, 173, 179);
@@ -766,18 +879,20 @@
         text-decoration: underline;
     }
 
-    .info-profil {
+    .info-profil,
+    .info-dossier {
         color: black;
         background-color: #fff;
         border-radius: 10px;
         margin-bottom: 30px;
     }
 
-    .info-dossier {
-        color: black;
+    .info-indicateur {
         background-color: #fff;
         border-radius: 10px;
         margin-bottom: 30px;
+        padding: 15px;
+        height: 180px;
     }
 
     .banniere-profil {

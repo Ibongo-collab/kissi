@@ -26,8 +26,7 @@
 
                                 <input type="tel" id="tel" name="tel" placeholder="numéro de téléphone*"
                                     class="contact__input border" @change="onChangeTel($event)"
-                                    @input="onChangeTel($event)" pattern="^0[1456][ ]?[0-9]{3}([ ]?[0-9]{2}){2}$"
-                                    required v-model="telephone" />
+                                    @input="onChangeTel($event)" required v-model="telephone" />
                                 <p class="text-danger" style="font-size: 12px" v-if="!isValidTel">
                                     Le numéro de téléphone est invalide
                                 </p>
@@ -159,8 +158,32 @@
         },
         data() {
             return {
+                nom: "",
+                email: "",
+                telephone: "",
+                specialite: "",
+                isValidTel: true,
+                isValidEmail: true,
+                regexEmail: /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
+                regexTelephone: /^0[1456][ ]?[0-9]{3}([ ]?[0-9]{2}){2}$/,
             }
         },
+        methods: {
+            onChangeTel(e) {
+                const numero = e.target.value;
+                this.isTelephoneValid(numero);
+            },
+            isTelephoneValid: function (inputTel) {
+                this.isValidTel = this.regexTelephone.test(inputTel);
+            },
+            onChangeEmail(e) {
+                const textemail = e.target.value;
+                this.isEmailValid(textemail);
+            },
+            isEmailValid: function (inputEmail) {
+                this.isValidEmail = this.regexEmail.test(inputEmail);
+            },
+        }
     }
 </script>
 
