@@ -11,9 +11,15 @@
         <div class="nav__menu" id="nav-menu">
           <ul class="nav__list">
 
+            <!-- <li class="nav__item">
+              <div class="nav__link">
+                <span class="nav__name">Mes documents</span>
+              </div>
+            </li> -->
+
             <li class="nav__item">
               <div class="nav__link">
-                <span class="nav__name">Bonjour {{patient.username}}</span>
+                <span class="nav__name">Mes rendez-vous</span>
               </div>
             </li>
 

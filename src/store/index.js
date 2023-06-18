@@ -54,6 +54,30 @@ export default new Vuex.Store({
       commit("SET_PATIENT", null);
       commit("SET_AUTHENTICATED", false);
     },
+    // Récupération d'un patient par Id
+    getPatientById({ commit }, id) {
+      // const token = this.state.token;
+      const token = localStorage.getItem('token');
+      return new Promise((resolve, reject) => {
+        axios.get(constant.apiURL + 'patients/' + id, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then(response => {
+          // traiter la réponse
+          // commit('SET_AUTHENTICATED', true);
+          // commit('SET_TOKEN', token);
+          commit('SET_PATIENT', response.data);
+          resolve(response.data);
+        })
+        .catch(error => {
+          // traiter l'erreur
+          reject(error);
+          // console.log(error)
+        });
+      });
+    },
     // Récupération d'un patient par email
     getPatientByEmail({ commit }, email) {
       // const token = this.state.token;

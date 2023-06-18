@@ -16,140 +16,6 @@
                     </div>
                 </div>
                 <div class="row">
-                    <!-- Mes informations -->
-                    <div class="col-md-6">
-                        <div class="info-profil">
-                            <div class="banniere-standard" style="height: 60px;">
-                                <span class="titre-information">Mes informations</span>
-                            </div>
-                            <div class="content-information">
-                                <form v-on:submit.prevent="updatePatient">
-                                    <!-- Nom -->
-                                    <div class="form-inline">
-                                        <div class="form-content-label">
-                                            <p class="form-label">
-                                                <span>Nom</span>
-                                            </p>
-                                        </div>
-                                        <div class="form-content-input">
-                                            <div class="simple">
-                                                <input type="text" id="nom" name="nom" placeholder="Nom"
-                                                    class="form-input" required v-model="patient.nom" />
-                                            </div>
-                                        </div>
-                                    </div> <br>
-                                    <!-- Prénom -->
-                                    <div class="form-inline">
-                                        <div class="form-content-label">
-                                            <p class="form-label">
-                                                <span>Prénom</span>
-                                            </p>
-                                        </div>
-                                        <div class="form-content-input">
-                                            <div class="simple">
-                                                <input type="text" id="nom" name="nom" placeholder="Prénom"
-                                                    class="form-input" required v-model="patient.prenom" />
-                                            </div>
-                                        </div>
-                                    </div> <br>
-                                    <!-- Adresse e-mail -->
-                                    <div class="form-inline">
-                                        <div class="form-content-label">
-                                            <p class="form-label">
-                                                <span>Adresse e-mail</span>
-                                            </p>
-                                        </div>
-                                        <div class="form-content-input">
-                                            <div class="simple">
-                                                <input type="email" id="email" name="email" placeholder="Adresse e-mail"
-                                                    @change="onChangeEmail($event)" @input="onChangeEmail($event)"
-                                                    class="form-input" required v-model="patient.email" />
-                                            </div>
-                                            <p class="text-danger" style="font-size: 12px" v-if="!isValidEmail">
-                                                L'email est invalide
-                                            </p>
-                                        </div>
-                                    </div> <br>
-                                    <!-- Téléphone -->
-                                    <div class="form-inline">
-                                        <div class="form-content-label">
-                                            <p class="form-label">
-                                                <span>Téléphone</span>
-                                            </p>
-                                        </div>
-                                        <div class="form-content-input">
-                                            <div class="simple">
-                                                <input type="tel" id="tel" name="tel" placeholder="Téléphone"
-                                                    @change="onChangeTel($event)" @input="onChangeTel($event)"
-                                                    pattern="^0[1456][ ]?[0-9]{3}([ ]?[0-9]{2}){2}$" class="form-input"
-                                                    required v-model="patient.telephone" />
-                                            </div>
-                                            <p class="text-danger" style="font-size: 12px" v-if="!isValidTel">
-                                                Le numéro de téléphone est invalide
-                                            </p>
-                                        </div>
-                                    </div> <br>
-                                    <!-- Adresse -->
-                                    <div class="form-inline">
-                                        <div class="form-content-label">
-                                            <p class="form-label">
-                                                <span>Adresse</span>
-                                            </p>
-                                        </div>
-                                        <div class="form-content-input">
-                                            <div class="simple">
-                                                <input type="text" id="tel" name="tel" placeholder="Adresse"
-                                                    class="form-input" required v-model="patient.address" />
-                                            </div>
-                                            <div class="simple">
-                                                <input type="text" id="tel" name="tel" placeholder="Ville"
-                                                    class="form-input" required v-model="patient.city" />
-                                            </div>
-                                        </div>
-                                    </div> <br>
-                                    <!-- Date de naissance -->
-                                    <div class="form-inline">
-                                        <div class="form-content-label">
-                                            <p class="form-label">
-                                                <span>Date de naissance</span>
-                                            </p>
-                                        </div>
-                                        <div class="form-content-input">
-                                            <span class="icon-label">
-                                                <i class='bx bx-calendar'></i>
-                                            </span>
-                                            <div class="simple">
-                                                <input type="date" id="date" name="date" class="form-input" required
-                                                    v-model="patient.birthday" />
-                                            </div>
-                                        </div>
-                                    </div> <br>
-                                    <!-- Profession -->
-                                    <div class="form-inline">
-                                        <div class="form-content-label">
-                                            <p class="form-label">
-                                                <span>Profession</span>
-                                            </p>
-                                        </div>
-                                        <div class="form-content-input">
-                                            <div class="simple">
-                                                <select v-model="patient.profession" name="profession"
-                                                    placeholder="Profession" class="form-input">
-                                                    <option v-for="(item, index) in professionList" :key="index"
-                                                        :value="item.viewvalue">
-                                                        {{item.viewValue}}
-                                                    </option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div> <br>
-                                    <div class="content__btn mt-5">
-                                        <input type="submit" value="Sauvegarder" name="submit" class="default__btn" />
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
                     <!-- Dossier Médical -->
                     <div class="col-md-6">
                         <div class="info-dossier">
@@ -276,10 +142,10 @@
                                                 </div>
                                                 <div class="form-content-input-fiche">
                                                     <div class="simple">
-                                                        <select v-model="groupeSanguin" name="groupeSanguin"
+                                                        <select v-model="groupeSanguin" required name="groupeSanguin"
                                                             placeholder="Groupe sanguin" class="form-input">
                                                             <option v-for="(item, index) in groupesanguinList"
-                                                                :key="index" :value="item.viewvalue">
+                                                                :key="index" :value="item.viewValue">
                                                                 {{item.viewValue}}
                                                             </option>
                                                         </select>
@@ -298,17 +164,178 @@
                                                 <div class="form-content-input-fiche">
                                                     <div class="simple">
                                                         <input type="number" readonly name="poids"
-                                                            class="form-input-fiche" required v-model="calculimc" />
+                                                            class="form-input-fiche" v-model="calculimc" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="content__btn mt-5">
+                                <p class="text-success mt-3" style="font-size: 12px">
+                                    {{message}}
+                                </p>
+                                <div class="content__btn mt-3">
                                     <input type="submit" value="Sauvegarder" name="submit" class="default__btn" />
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                    <!-- Mes informations -->
+                    <div class="col-md-6">
+                        <div class="info-profil">
+                            <div class="banniere-standard" style="height: 60px;">
+                                <span class="titre-information">Mes informations</span>
+                            </div>
+                            <div class="content-information">
+                                <form v-on:submit.prevent="updatePatient">
+                                    <!-- Nom -->
+                                    <div class="form-inline">
+                                        <div class="form-content-label">
+                                            <p class="form-label">
+                                                <span>Nom</span>
+                                            </p>
+                                        </div>
+                                        <div class="form-content-input">
+                                            <div class="simple">
+                                                <input type="text" id="nom" name="nom" placeholder="Nom"
+                                                    class="form-input" required v-model="patient.nom" />
+                                            </div>
+                                        </div>
+                                    </div> <br>
+                                    <!-- Prénom -->
+                                    <div class="form-inline">
+                                        <div class="form-content-label">
+                                            <p class="form-label">
+                                                <span>Prénom</span>
+                                            </p>
+                                        </div>
+                                        <div class="form-content-input">
+                                            <div class="simple">
+                                                <input type="text" id="nom" name="nom" placeholder="Prénom"
+                                                    class="form-input" required v-model="patient.prenom" />
+                                            </div>
+                                        </div>
+                                    </div> <br>
+                                    <!-- Adresse e-mail -->
+                                    <div class="form-inline">
+                                        <div class="form-content-label">
+                                            <p class="form-label">
+                                                <span>Adresse e-mail</span>
+                                            </p>
+                                        </div>
+                                        <div class="form-content-input">
+                                            <div class="simple">
+                                                <input type="email" id="email" name="email" placeholder="Adresse e-mail"
+                                                    @change="onChangeEmail($event)" @input="onChangeEmail($event)"
+                                                    class="form-input" required v-model="patient.email" />
+                                            </div>
+                                            <p class="text-danger" style="font-size: 12px" v-if="!isValidEmail">
+                                                L'email est invalide
+                                            </p>
+                                        </div>
+                                    </div> <br>
+                                    <!-- Téléphone -->
+                                    <div class="form-inline">
+                                        <div class="form-content-label">
+                                            <p class="form-label">
+                                                <span>Téléphone</span>
+                                            </p>
+                                        </div>
+                                        <div class="form-content-input">
+                                            <div class="simple">
+                                                <input type="tel" id="tel" name="tel" placeholder="Téléphone"
+                                                    @change="onChangeTel($event)" @input="onChangeTel($event)"
+                                                    pattern="^0[1456][ ]?[0-9]{3}([ ]?[0-9]{2}){2}$" class="form-input"
+                                                    required v-model="patient.telephone" />
+                                            </div>
+                                            <p class="text-danger" style="font-size: 12px" v-if="!isValidTel">
+                                                Le numéro de téléphone est invalide
+                                            </p>
+                                        </div>
+                                    </div> <br>
+                                    <!-- Adresse -->
+                                    <div class="form-inline">
+                                        <div class="form-content-label">
+                                            <p class="form-label">
+                                                <span>Adresse</span>
+                                            </p>
+                                        </div>
+                                        <div class="form-content-input">
+                                            <div class="simple">
+                                                <input type="text" id="tel" name="tel" placeholder="Adresse"
+                                                    class="form-input" v-model="patient.address" />
+                                            </div>
+                                            <div class="simple">
+                                                <input type="text" id="tel" name="tel" placeholder="Ville"
+                                                    class="form-input" v-model="patient.city" />
+                                            </div>
+                                        </div>
+                                    </div> <br>
+                                    <!-- Date de naissance -->
+                                    <div class="form-inline">
+                                        <div class="form-content-label">
+                                            <p class="form-label">
+                                                <span>Date de naissance</span>
+                                            </p>
+                                        </div>
+                                        <div class="form-content-input">
+                                            <span class="icon-label">
+                                                <i class='bx bx-calendar'></i>
+                                            </span>
+                                            <div class="simple">
+                                                <input type="date" id="date" name="date" class="form-input"
+                                                    v-model="patient.birthday" />
+                                            </div>
+                                        </div>
+                                    </div> <br>
+                                    <!-- Genre -->
+                                    <div class="form-inline">
+                                        <div class="form-content-label">
+                                            <p class="form-label">
+                                                <span>Sexe</span>
+                                            </p>
+                                        </div>
+                                        <div class="form-content-input">
+                                            <div class="simple">
+                                                <select v-model="patient.gender" name="gender" placeholder="Sexe"
+                                                    class="form-input">
+                                                    <option disabled value="">Choisissez un genre</option>
+                                                    <option v-for="(item, index) in genderList" :key="index"
+                                                        :value="item.viewValue">
+                                                        {{item.viewValue}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div> <br>
+                                    <!-- Profession -->
+                                    <div class="form-inline">
+                                        <div class="form-content-label">
+                                            <p class="form-label">
+                                                <span>Profession</span>
+                                            </p>
+                                        </div>
+                                        <div class="form-content-input">
+                                            <div class="simple">
+                                                <select v-model="patient.profession" name="profession"
+                                                    placeholder="Profession" class="form-input">
+                                                    <option disabled value="">Choisissez une profession</option>
+                                                    <option v-for="(item, index) in professionList" :key="index"
+                                                        :value="item.viewValue">
+                                                        {{item.viewValue}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="text-success mt-3" style="font-size: 12px">
+                                        {{messagePatient}}
+                                    </p>
+                                    <div class="content__btn mt-3">
+                                        <input type="submit" value="Sauvegarder" name="submit" class="default__btn" />
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -344,6 +371,15 @@
                 isconnected: false,
                 isValidEmail: true,
                 isValidTel: true,
+                genderList: [{
+                        value: '1',
+                        viewValue: 'MASCULIN'
+                    },
+                    {
+                        value: '2',
+                        viewValue: 'FEMININ'
+                    }
+                ],
                 professionList: [{
                         value: '1',
                         viewValue: 'Agriculteur'
@@ -430,18 +466,18 @@
                         viewValue: 'O -'
                     }
                 ],
-                imc: 0,
                 gender: "",
-                problemeMedical: "",
-                noteMedical: "",
-                allergieReaction: "",
-                traitement: "",
+                // Fiche
+                problemeMedical: "Aucun",
+                noteMedical: "Aucun",
+                allergieReaction: "Aucune",
+                traitement: "Aucun",
                 poids: 0,
                 taille: 0,
                 groupeSanguin: "",
-                status: "",
-                etat: "",
+                imc: 0,
                 message: "",
+                messagePatient: "",
                 regexEmail: /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
                 regexTelephone: /^0[1456][ ]?[0-9]{3}([ ]?[0-9]{2}){2}$/,
             }
@@ -452,10 +488,49 @@
                 // redirect to the login page
             },
             async AjouterFiche() {
+                this.isLoading = true;
+                if (this.patient.fiche !== null) {
+                    // Si la fiche existe déjà on la modifie
+                    this.updateFiche();
+                } else {
+                    try {
+                        const token = localStorage.getItem("token");
+
+                        const response = await axios.post(constant.apiURL + 'fiches', {
+                            problemeMedical: this.problemeMedical,
+                            noteMedical: this.noteMedical,
+                            allergieReaction: this.allergieReaction,
+                            traitement: this.traitement,
+                            poids: this.poids,
+                            taille: this.taille,
+                            groupeSanguin: this.groupeSanguin,
+                            status: "status",
+                            etat: "etat",
+                            patient: this.patient
+                        }, {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        });
+
+                        console.log(response);
+
+                        if (response.data.code === 200 || response.data.code === 201) {
+                            this.$store.dispatch('getPatientById', this.patient.id);
+                            this.message = "Votre modification a bien été prise en compte";
+                            this.isLoading = false;
+                        }
+                    } catch (error) {
+                        console.log(error);
+                        this.isLoading = false;
+                    }
+                }
+            },
+            async updateFiche() {
                 try {
                     const token = localStorage.getItem("token");
 
-                    const response = await axios.post(constant.apiURL + 'fiches', {
+                    const response = await axios.post(constant.apiURL + 'fiches/' + this.patient.fiche.id, {
                         problemeMedical: this.problemeMedical,
                         noteMedical: this.noteMedical,
                         allergieReaction: this.allergieReaction,
@@ -463,9 +538,9 @@
                         poids: this.poids,
                         taille: this.taille,
                         groupeSanguin: this.groupeSanguin,
-                        status: this.status,
-                        etat: this.etat,
-                        patient: this.patient.id
+                        status: "status",
+                        etat: "etat",
+                        patient: this.patient
                     }, {
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -475,15 +550,51 @@
                     console.log(response);
 
                     if (response.data.code === 200 || response.data.code === 201) {
+                        this.$store.dispatch('getPatientById', this.patient.id);
                         this.message = "Votre modification a bien été prise en compte";
+                        this.isLoading = false;
                     }
                 } catch (error) {
                     console.log(error);
+                    this.isLoading = false;
                 }
             },
-            updatePatient() {
-                let generMaj = this.gender.toUpperCase();
-                console.log(generMaj);
+            async updatePatient() {
+                this.isLoading = true;
+                const genderMaj = this.patient.gender.toUpperCase();
+                const nomMaj = this.patient.nom.toUpperCase();
+                try {
+                    const token = localStorage.getItem("token");
+
+                    const response = await axios.patch(constant.apiURL + 'patients/' + this.patient.id, {
+                        email: this.patient.email,
+                        username: this.patient.username,
+                        nom: nomMaj,
+                        prenom: this.patient.prenom,
+                        birthday: this.patient.birthday,
+                        description: this.patient.description,
+                        telephone: this.patient.telephone,
+                        city: this.patient.city,
+                        address: this.patient.address,
+                        profession: this.patient.profession,
+                        gender: genderMaj
+                    }, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+
+                    console.log(response);
+
+                    if (response.data.code === 200 || response.data.code === 201) {
+                        this.$store.dispatch('getPatientById', this.patient.id);
+                        this.messagePatient = "Votre modification a bien été prise en compte";
+                        this.isLoading = false;
+                    }
+                } catch (error) {
+                    console.log(error);
+                    this.isLoading = false;
+                }
             },
             onChangeTel(e) {
                 const numero = e.target.value;
@@ -501,7 +612,7 @@
             },
         },
         computed: {
-            ...mapGetters(["patient"]),
+            ...mapGetters(['patient']),
             isAuthenticated() {
                 return this.$store.getters.isAuthenticated; // accéder à la valeur du getters
             },
@@ -510,7 +621,15 @@
             }
         },
         mounted() {
-            this.gender = this.patient.gender;
+
+            if (this.patient.fiche !== null) {
+                this.problemeMedical = this.patient.fiche.problemeMedical;
+                this.noteMedical = this.patient.fiche.noteMedical;
+                this.allergieReaction = this.patient.fiche.allergieReaction;
+                this.poids = this.patient.fiche.poids;
+                this.taille = this.patient.fiche.taille;
+                this.groupeSanguin = this.patient.fiche.groupeSanguin;
+            }
         },
     }
 </script>
@@ -635,6 +754,7 @@
     .content-dossier {
         padding: 15px;
         background-color: #fff;
+        margin-bottom: 25px;
     }
 
     .supprimer {
@@ -648,7 +768,6 @@
 
     .info-profil {
         color: black;
-        padding-bottom: 30px;
         background-color: #fff;
         border-radius: 10px;
         margin-bottom: 30px;
