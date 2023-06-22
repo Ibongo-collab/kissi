@@ -131,9 +131,11 @@
                 id: 0,
                 message: "Afficher le numéro",
                 test: true,
+                isReloading: false,
                 hourList: [],
                 rdvList: [],
                 medecinDateFiltered: [],
+                newMedecinDate: [],
                 pageSize: 4, // Nombre d'éléments par page
                 currentPage: 1, // Page courante
                 currentDate: null
@@ -147,7 +149,7 @@
             currentItems() {
                 const startIndex = (this.currentPage - 1) * this.pageSize;
                 const endIndex = startIndex + this.pageSize;
-                return this.medecinDateFiltered.slice(startIndex, endIndex);
+                return this.newMedecinDate.slice(startIndex, endIndex);
             },
             // accéder à la valeur du getters
             isAuthenticated() {
@@ -163,7 +165,6 @@
                 this.$router.push('/authentification');
             },
             goToRdv(date, heure) {
-                // console.log(date, heure)
                 const token = localStorage.getItem('token');
                 /* Je suis en train de vérifier si la date et l'heure 
                 sélectionnées sont déjà réservées pour un rendez-vous. */
@@ -232,7 +233,43 @@
                 if (this.currentPage < maxPage) {
                     this.currentPage++;
                 }
-            }
+            },
+            process() {
+                // Récuprération de la date courante
+                const currentDate = new Date();
+                const year = currentDate.getFullYear();
+                const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+                const day = currentDate.getDate().toString().padStart(2, '0');
+                this.currentDate = `${year}-${month}-${day}`; //2023-06-4
+
+                // Récupération de l'heure courante
+                function getCurrentTime() {
+                    const date = new Date();
+                    const hours = String(date.getHours()).padStart(2, '0');
+                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                    const currentTime = `${hours}:${minutes}`; // 11:00
+
+                    return currentTime;
+                }
+                const currentTime = getCurrentTime();
+
+                // Créer une nouvelle liste filtrée
+                this.medecinDateFiltered = this.medecinDate.filter(item => {
+                    return item.date >= this.currentDate;
+                });
+
+                this.newMedecinDate = this.medecinDateFiltered.filter(item => {
+                    if (item.date === this.currentDate) {
+                        return item.heureMedecins = item.heureMedecins.filter(item => item.heure >= currentTime);
+                    } else {
+                        // Garder les éléments qui ne correspondent pas à la date actuelle
+                        return true;
+                    }
+                });
+            },
+            reloadPage() {
+                location.reload();
+            },
         },
         created() {
             // Récupération d'un médecin à partir de son Id
@@ -242,44 +279,12 @@
                 this.id = parseInt(this.decryptData(IdStorage, constant.secretKey));
                 // Récupération de la liste des dates du médecin
                 this.$store.dispatch('getDateMedecin', this.id);
+                this.process();
             } else {
                 // Gérer le cas où 'medecinId' n'existe pas dans le localStorage
                 this.$router.push('/recherche');
             }
         },
-        mounted() {
-            // Récuprération de la date courante
-            const currentDate = new Date();
-            const year = currentDate.getFullYear();
-            const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-            const day = currentDate.getDate().toString().padStart(2, '0');
-            this.currentDate = `${year}-${month}-${day}`; //2023-06-4
-
-            // Récupération de l'heure courante
-            function getCurrentTime() {
-                const date = new Date();
-                const hours = String(date.getHours()).padStart(2, '0');
-                const minutes = String(date.getMinutes()).padStart(2, '0');
-                const currentTime = `${hours}:${minutes}`; // 11:00
-
-                return currentTime;
-            }
-            const currentTime = getCurrentTime();
-
-            // console.log(currentTime);
-            // console.log(this.currentDate);
-            // console.log(this.medecinDate);
-
-            // Créer une nouvelle liste filtrée
-            this.medecinDateFiltered = this.medecinDate.filter(item => {
-                if (item.date === this.currentDate) {
-                    return item.heureMedecins = item.heureMedecins.filter(item => item.heure >= currentTime);
-                } else {
-                    // Garder les éléments qui ne correspondent pas à la date actuelle
-                    return true;
-                }
-            });
-        }
     }
 </script>
 

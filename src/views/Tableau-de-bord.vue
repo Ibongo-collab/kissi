@@ -24,13 +24,28 @@
                     <!-- Indicateur du rendez-vous en cours -->
                     <div class="col-md-4">
                         <div class="info-indicateur border">
-                            <p class="titre-indicateur">Rendez-vous en cours</p>
+                            <p class="titre-indicateur">Prochain rendez-vous</p>
+                            <!-- <p class="chiffre-indicateur">1</p> -->
+                            <div class="row pt-3">
+                                <div class="col-md-4">
+                                   <div class="content-photo">
+                                        <img src="../assets/images/user.png" class="rounded-circle mt-2 border" alt="image medecin" width="90px"
+                                        height="90px">
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="content-praticien-info">
+                                        <!-- <p class="nom-praticien">{{medecin.titre}} {{medecin.nom}}</p> -->
+                                        <!-- <p class="specialite-praticien">{{medecin.categorieMedecin.nom}}</p> -->
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <!-- Indicateur du pourcentage de remplissage du dossier médical -->
                     <div class="col-md-4">
                         <div class="info-indicateur border">
-                            <p class="titre-indicateur">Completer votre dossier médical</p>
+                            <p class="titre-indicateur">Completer votre dossier</p>
                             <div class="row pt-3">
                                 <div class="col-md-4">
                                     <div class="progress-circle">

@@ -67,13 +67,13 @@
               <!-- premier bloc -->
               <div class="col-3 bloc-medecin bloc-medecin-1">
                 <div class="content-photo">
-                  <div v-if="nom">
+                  <!-- <div v-if="nom">
                     <label class="label rounded-circle">
                       <p>{{medecin.nom}}</p>
                     </label>
-                  </div>
+                  </div> -->
                   <img src="../assets/images/user.png" class="rounded-circle border" alt="image medecin" width="50px"
-                    height="50px" v-else>
+                    height="50px">
                 </div>
                 <div class="content-praticien-info">
                   <p class="nom-praticien">{{medecin.titre}} {{medecin.prenom}}</p>

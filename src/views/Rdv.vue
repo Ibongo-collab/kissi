@@ -145,10 +145,10 @@
 
                 axios.post(constant.apiURL + "rendezvous", requestData, requestConfig)
                     .then((response) => {
-                        // console.log(response);
+                        console.log(response);
                         if (response.data.code === 201) {
                             this.testForm = false;
-                        } else {
+                        } else if (response.data.code === 400) {
                             alert('Veuillez noter qu\'il semble que vous ayez déjà un rendez-vous en cours' +
                                 ' avec ce médecin. Nous vous prions de bien vouloir honorer votre rendez-vous actuel' +
                                 ' avant d\'en planifier un autre.');
