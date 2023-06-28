@@ -192,7 +192,15 @@ img {
   color: rgb(52, 52, 67);
 }
 
+.liste-rdv-patient ,
+.commencer {
+  text-decoration: underline;
+}
+
 .specialite-praticien, 
+.date-praticien,
+.liste-rdv-patient,
+.commencer,
 .titre-tarif-praticien, 
 .titre-ville-praticien,
 .titre-indication,

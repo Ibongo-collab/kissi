@@ -54,35 +54,7 @@
                                 <i class='bx bx-right-arrow-alt icon'></i>
                             </button>
                         </div>
-                        <div id="container-date">
-                            <div class="element" v-for="date in currentItems" :key="date.id">
-                                <div class="content-items">
-                                    <!-- EX LUN  -->
-                                    <p class="titre-date-praticien">{{date.date | moment('dddd')}}</p>
-                                    <!-- EX 13 avr.  -->
-                                    <span class="date-praticien">{{date.date | moment('D MMM')}}</span>
-
-                                    <div class="button" v-for="item in date.heureMedecins" :key="item.id">
-                                        <!-- Verification de l'authentification -->
-                                        <div v-if="isAuthenticated == false">
-                                            <!-- EX 08:00  -->
-                                            <button class="horaire__btn" data-bs-toggle="modal"
-                                                data-bs-target="#alert">{{item.heure}}</button>
-                                                <button class="horaire__btn" data-bs-toggle="modal"
-                                                data-bs-target="#alert" v-if="item === '' ">-</button>
-                                        </div>
-                                        <div v-else>
-                                            <!-- EX 08:00  -->
-                                            <button class="horaire__btn"
-                                                @click="goToRdv(date.date, item.heure)">{{item.heure}}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="content-explain" v-if="currentItems.length == 0">
-                                <p>Aucune disponibilité à venir</p>
-                            </div>
-                        </div>
+                        <Dates />
                     </div>
                 </div>
             </div>
@@ -111,20 +83,18 @@
 </template>
 
 <script>
-    import Navbar from '@/components/Navbar.vue'
-    import Footer from '@/components/Footer.vue'
     import CryptoJS from 'crypto-js'
     import constant from "../../constant"
-    import {
-        mapGetters
-    } from "vuex"
-    import axios from 'axios'
+    import Navbar from '@/components/Navbar.vue'
+    import Footer from '@/components/Footer.vue'
+    import Dates from '@/components/Dates.vue'
 
     export default {
         name: "Praticien",
         components: {
             Navbar,
-            Footer
+            Footer,
+            Dates
         },
         data() {
             return {
@@ -142,14 +112,8 @@
             }
         },
         computed: {
-            ...mapGetters(["medecinDate"]),
             user() {
                 return this.$store.getters.getMedecinById(this.id);
-            },
-            currentItems() {
-                const startIndex = (this.currentPage - 1) * this.pageSize;
-                const endIndex = startIndex + this.pageSize;
-                return this.newMedecinDate.slice(startIndex, endIndex);
             },
             // accéder à la valeur du getters
             isAuthenticated() {
@@ -163,46 +127,6 @@
             goToAuth() {
                 localStorage.setItem('rdvContinue', true);
                 this.$router.push('/authentification');
-            },
-            goToRdv(date, heure) {
-                const token = localStorage.getItem('token');
-                /* Je suis en train de vérifier si la date et l'heure 
-                sélectionnées sont déjà réservées pour un rendez-vous. */
-                axios.post(constant.apiURL + 'medecins/' + this.id + '/rendezvous', {}, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    })
-                    .then((response) => {
-                        // console.log(response);
-                        this.rdvList = response.data.content;
-                        let rdvFound = false; // Variable pour vérifier si un rdv a été trouvé
-
-                        this.rdvList.forEach((element) => {
-                            if (element.date == date) {
-                                // console.log(element.date + "=" + date);
-                                if (element.heure == heure) {
-                                    // console.log(element.heure + "=" + heure);
-                                    /* Si la date et l'heure sélectionnées correspondent à un rdv, alors j'affiche une alerte */
-                                    alert("L'heure que vous avez sélectionnée a déjà été réservée pour un rendez-vous");
-                                    rdvFound = true;
-                                }
-                            }
-                        });
-
-                        if (!rdvFound) {
-                            const dateRdv = this.encryptData(date, constant.secretKey);
-                            const heureRdv = this.encryptData(heure, constant.secretKey);
-
-                            localStorage.setItem('dateRdv', dateRdv);
-                            localStorage.setItem('heureRdv', heureRdv);
-                            
-                            this.$router.push('/rdv');
-                        }
-
-                    }).catch((error) => {
-                        console.log(error);
-                    });
             },
             getTel() {
                 if (this.test === true) {
@@ -234,42 +158,6 @@
                     this.currentPage++;
                 }
             },
-            process() {
-                // Récuprération de la date courante
-                const currentDate = new Date();
-                const year = currentDate.getFullYear();
-                const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-                const day = currentDate.getDate().toString().padStart(2, '0');
-                this.currentDate = `${year}-${month}-${day}`; //2023-06-4
-
-                // Récupération de l'heure courante
-                function getCurrentTime() {
-                    const date = new Date();
-                    const hours = String(date.getHours()).padStart(2, '0');
-                    const minutes = String(date.getMinutes()).padStart(2, '0');
-                    const currentTime = `${hours}:${minutes}`; // 11:00
-
-                    return currentTime;
-                }
-                const currentTime = getCurrentTime();
-
-                // Créer une nouvelle liste filtrée
-                this.medecinDateFiltered = this.medecinDate.filter(item => {
-                    return item.date >= this.currentDate;
-                });
-
-                this.newMedecinDate = this.medecinDateFiltered.filter(item => {
-                    if (item.date === this.currentDate) {
-                        return item.heureMedecins = item.heureMedecins.filter(item => item.heure >= currentTime);
-                    } else {
-                        // Garder les éléments qui ne correspondent pas à la date actuelle
-                        return true;
-                    }
-                });
-            },
-            reloadPage() {
-                location.reload();
-            },
         },
         created() {
             // Récupération d'un médecin à partir de son Id
@@ -277,9 +165,6 @@
 
             if (IdStorage !== null) {
                 this.id = parseInt(this.decryptData(IdStorage, constant.secretKey));
-                // Récupération de la liste des dates du médecin
-                this.$store.dispatch('getDateMedecin', this.id);
-                this.process();
             } else {
                 // Gérer le cas où 'medecinId' n'existe pas dans le localStorage
                 this.$router.push('/recherche');
@@ -288,7 +173,7 @@
     }
 </script>
 
-<style scoped>
+<style>
     .link {
         text-decoration: underline;
         color: #4f74da;

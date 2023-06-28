@@ -19,7 +19,8 @@ export default new Vuex.Store({
     medecin: null,
     medecinList: [],
     medecinDate: [],
-    medecinMotif: []
+    medecinMotif: [],
+    rdvPatientList: []
   },
   getters: {
     isAuthenticated(state) {
@@ -45,7 +46,10 @@ export default new Vuex.Store({
     },
     medecinMotif(state) {
       return state.medecinMotif;
-    }
+    },
+    rdvPatientList(state) {
+      return state.rdvPatientList;
+    },
   },
   actions: {
     // Déconnexion
@@ -169,8 +173,8 @@ export default new Vuex.Store({
       .then(response => {
         // traiter la réponse
         const medecinDate = response.data.dateMedecin;
-        // commit('SET_MEDECINDATE', medecinDate);
-        commit('UPDATE_MEDECINDATE', medecinDate);
+        // console.log(medecinDate);
+        commit('SET_MEDECINDATE', medecinDate);
       })
       .catch(error => {
         // traiter l'erreur
@@ -197,6 +201,26 @@ export default new Vuex.Store({
         console.log(error)
       });
     },
+    // Récupération des dates du médecin
+    getRdvPatientList({ commit }, id) {
+      const token = localStorage.getItem('token');
+      // console.log(id)
+      axios.get(constant.apiURL + 'patients/'+ id +'/rendezvous', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(response => {
+        // traiter la réponse
+        const rdvPatientList = response.data.content;
+        // console.log(rdvPatientList);
+        commit('SET_RDVPATIENT', rdvPatientList);
+      })
+      .catch(error => {
+        // traiter l'erreur
+        console.log(error);
+      });
+    },
   },
   mutations: {
     SET_AUTHENTICATED(state, authenticated) {
@@ -212,16 +236,16 @@ export default new Vuex.Store({
       state.medecin = medecin;
     },
     SET_MEDECINLIST(state, medecinList) {
-      state.medecinList = medecinList
+      state.medecinList = medecinList;
     },
     SET_MEDECINDATE(state, medecinDate) {
-      state.medecinDate = medecinDate
-    },
-    UPDATE_MEDECINDATE(state, medecinDate) {
-      state.medecinDate = medecinDate
+      state.medecinDate = medecinDate;
     },
     SET_MEDECINMOTIF(state, medecinMotif) {
-      state.medecinMotif = medecinMotif
+      state.medecinMotif = medecinMotif;
+    },
+    SET_RDVPATIENT(state, rdvPatientList) {
+      state.rdvPatientList = rdvPatientList;
     }
   },
 });

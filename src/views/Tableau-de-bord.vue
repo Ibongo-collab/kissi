@@ -17,28 +17,62 @@
                 </div>
                 <div class="row">
                     <div class="col-md-4">
-                        <div class="info-indicateur border">
-
+                        <div class="info-indicateur-box" @click="goToRdv">
+                            <div class="box-content-business">
+                                <img src="../assets/images/banner-prendre-rdv.png" alt="banner" class="image-banner">
+                                <div class="top-left box-business">
+                                    <h2 class="titre-indicateur text-white"><b>Prenez rendez-vous</b></h2>
+                                    <div class="pt-3">
+                                        <p class="texte-indicateur text-white">Vous pouvez dès maintenant prendre
+                                            rendez-vous avec
+                                            un professionnel de santé ou
+                                            rechercher directement une spécialité spécifique
+                                        </p>
+                                        <router-link to="/recherche" class="commencer text-white">Commencer
+                                        </router-link>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <!-- Indicateur du rendez-vous en cours -->
                     <div class="col-md-4">
                         <div class="info-indicateur border">
-                            <p class="titre-indicateur">Prochain rendez-vous</p>
-                            <!-- <p class="chiffre-indicateur">1</p> -->
-                            <div class="row pt-3">
+                            <p class="titre-indicateur">Prochaine consultation</p>
+                            <!-- Le patient a un rdv accepté -->
+                            <div class="row pt-3" v-if="rdv === 1">
                                 <div class="col-md-4">
-                                   <div class="content-photo">
+                                    <div class="content-photo">
+                                        <img src="https://cdn-document.qare.fr/documents/5dc156158a7925002a9c94c0/photo/1581418996-MOREAU.JPG"
+                                            class="rounded-circle mt-2 border" alt="image medecin" width="90px"
+                                            height="90px">
+                                    </div>
+                                    <!-- <div class="content-photo">
                                         <img src="../assets/images/user.png" class="rounded-circle mt-2 border" alt="image medecin" width="90px"
                                         height="90px">
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="col-md-8">
                                     <div class="content-praticien-info">
-                                        <!-- <p class="nom-praticien">{{medecin.titre}} {{medecin.nom}}</p> -->
-                                        <!-- <p class="specialite-praticien">{{medecin.categorieMedecin.nom}}</p> -->
+                                        <p class="nom-praticien">Dr {{dernierRdv.medecin.nom}}</p>
+                                        <p class="specialite-praticien">{{dernierRdv.medecin.categorieMedecin.nom}}</p>
+                                        <p class="date-praticien">{{dernierRdv.date | moment('dddd')}}
+                                            {{dernierRdv.date | moment('D MMMM')}} à {{dernierRdv.heure}}</p>
+                                        <p style="font-size: 12px"><a href="http://localhost:8081/tableau-de-bord"
+                                                class="liste-rdv-patient">Voir la liste</a></p>
                                     </div>
                                 </div>
+                            </div>
+                            <!-- Le patient n'a pas de rdv -->
+                            <div class="row pt-3" v-else-if="rdv === 2">
+                                <p class="texte-indicateur">Vous n’avez pas de consultation</p>
+                            </div>
+                            <!-- Le patient n'a jamais pris de rdv chez Kissi -->
+                            <div class="row pt-3" v-else>
+                                <p class="texte-indicateur">Vous n’avez pas encore réalisé de consultation chez Kissi
+                                </p>
+                                <p style="font-size: 12px"><span @click="goToRdv" class="liste-rdv-patient">Prendre
+                                        rendez-vous</span></p>
                             </div>
                         </div>
                     </div>
@@ -317,8 +351,14 @@
                                                     class="form-input" v-model="patient.address" />
                                             </div>
                                             <div class="simple">
-                                                <input type="text" id="tel" name="tel" placeholder="Ville"
-                                                    class="form-input" v-model="patient.city" />
+                                                <select v-model="ville" name="ville" placeholder="Ville"
+                                                    class="form-input">
+                                                    <option disabled value="">Choisissez une ville</option>
+                                                    <option v-for="(item, index) in cityList" :key="index"
+                                                        :value="item.viewValue">
+                                                        {{item.viewValue}}
+                                                    </option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div> <br>
@@ -368,8 +408,8 @@
                                         </div>
                                         <div class="form-content-input">
                                             <div class="simple">
-                                                <select v-model="patient.profession" name="profession"
-                                                    placeholder="Profession" class="form-input">
+                                                <select v-model="profession" name="profession" placeholder="Profession"
+                                                    class="form-input">
                                                     <option disabled value="">Choisissez une profession</option>
                                                     <option v-for="(item, index) in professionList" :key="index"
                                                         :value="item.viewValue">
@@ -417,12 +457,27 @@
         },
         data() {
             return {
+                rdv: 0,
                 progressPercentage: 0,
                 isLoading: false,
                 fullPage: true,
                 isconnected: false,
                 isValidEmail: true,
                 isValidTel: true,
+                ville: "",
+                cityList: [{
+                        value: '1',
+                        viewValue: 'Brazzaville'
+                    },
+                    {
+                        value: '2',
+                        viewValue: 'Pointe-noire'
+                    },
+                    {
+                        value: '3',
+                        viewValue: 'Dolisie'
+                    }
+                ],
                 genderList: [{
                         value: '1',
                         viewValue: 'MASCULIN'
@@ -518,6 +573,10 @@
                         viewValue: 'O -'
                     }
                 ],
+                rdvAccepter: [],
+                userKissi: [],
+                dernierRdv: null,
+                profession: "",
                 formattedBirthday: "",
                 gender: "",
                 // Fiche
@@ -536,6 +595,9 @@
             }
         },
         methods: {
+            goToRdv() {
+                this.$router.push("/recherche");
+            },
             logout() {
                 this.$store.dispatch('logout');
                 // redirect to the login page
@@ -629,7 +691,7 @@
                         birthday: this.formattedBirthday,
                         description: this.patient.description,
                         telephone: this.patient.telephone,
-                        city: this.patient.city,
+                        city: this.ville,
                         address: this.patient.address,
                         profession: this.patient.profession,
                         gender: genderMaj
@@ -652,12 +714,36 @@
                     this.isLoading = false;
                 }
             },
+            // Méthode permettant le formatage de la date de naissance
             formatBirthday() {
                 const dateObj = new Date(this.patient.birthday);
                 const year = dateObj.getFullYear();
                 const month = `${dateObj.getMonth() + 1}`.padStart(2, "0");
                 const day = `${dateObj.getDate()}`.padStart(2, "0");
                 this.formattedBirthday = `${year}-${month}-${day}`;
+            },
+            process() {
+                const rdvAccepter = this.rdvPatientList.filter(item => item.statut === 'ACCEPTER');
+                const userKissi = this.rdvPatientList.filter(item => item.statut !== 'ACCEPTER');
+                /**
+                 * Je teste si la liste globale de rdv du patient est remplie
+                 * Si c'est le cas alors je peux vérifier les autres conditions
+                 * Sinon rdv=0 donc l'utilisateur n'a jamais réalisé de consultations
+                 */
+                if (this.rdvPatientList.length > 0) {
+                    if (rdvAccepter.length > 0) {
+                        this.rdv = 1;
+                        this.dernierRdv = rdvAccepter.slice(-1)[0];
+                        console.log(this.dernierRdv);
+                    } else if (userKissi.length > 0) {
+                        console.log(userKissi);
+                        this.rdv = 2;
+                    } else {
+                        this.rdv = 0;
+                    }
+                } else {
+                    this.rdv = 0;
+                }
             },
             onChangeTel(e) {
                 const numero = e.target.value;
@@ -676,6 +762,7 @@
         },
         computed: {
             ...mapGetters(['patient']),
+            ...mapGetters(['rdvPatientList']),
             isAuthenticated() {
                 return this.$store.getters.isAuthenticated; // accéder à la valeur du getters
             },
@@ -689,7 +776,12 @@
                 return `stroke-dasharray: ${circumference}; stroke-dashoffset: ${progressOffset};`;
             },
         },
+        created() {
+            // Récupération de la liste des rdv du patient
+            this.$store.dispatch('getRdvPatientList', this.patient.id);
+        },
         mounted() {
+            this.process();
             setInterval(() => {
                 this.progressPercentage = (this.progressPercentage + 1) % 101;
             }, 1000);
@@ -703,11 +795,36 @@
                 this.taille = this.patient.fiche.taille;
                 this.groupeSanguin = this.patient.fiche.groupeSanguin;
             }
+
+            this.ville = this.patient.city;
+            this.profession = this.patient.profession;
         },
     }
 </script>
 
 <style scoped>
+    .liste-rdv-patient {
+        margin-top: 5px;
+        cursor: pointer;
+    }
+
+    .commencer {
+        margin-top: 5px;
+    }
+
+    .commencer:hover {
+        color: white;
+    }
+
+    .col-md-8 {
+        flex-wrap: wrap;
+        display: flex;
+    }
+
+    .content-praticien-info {
+        padding-top: 7%;
+    }
+
     .titre-indicateur {
         font-family: 'BasisGrotesque', sans-serif;
         -webkit-font-smoothing: antialiased;
@@ -902,6 +1019,15 @@
         margin-bottom: 30px;
     }
 
+    .info-indicateur-box {
+        background-color: #fff;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        /* padding: 15px; */
+        height: 180px;
+        cursor: pointer;
+    }
+
     .info-indicateur {
         background-color: #fff;
         border-radius: 10px;
@@ -921,5 +1047,45 @@
         background-color: #4f74da;
         border-radius: 10px 10px 0% 0%;
         padding: 15px;
+    }
+
+    /* Banner go rdv */
+
+    .box-content-business {
+        margin: 0;
+        padding: 0;
+        height: 180px;
+    }
+
+    .box-business {
+        text-align: initial;
+        width: 275px;
+        height: auto;
+        /* top: -330px; */
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .image-banner {
+        border-radius: 10px;
+        height: 100%;
+    }
+
+    .top-left {
+        position: relative;
+        top: -165px;
+        left: 16px;
+    }
+
+    @media (max-width: 654px) {
+        .box-content-business {
+            display: none;
+        }
+    }
+
+    @media (min-width: 654px) {
+        .box-content-business-two {
+            display: none;
+        }
     }
 </style>

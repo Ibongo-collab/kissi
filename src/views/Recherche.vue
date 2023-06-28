@@ -94,7 +94,8 @@
                 <p class="titre-adresse-praticien">Adresse</p>
                 <p class="">{{medecin.hopital.adresse}}</p>
                 <div class="bloc-horaire">
-                  <button class="default__vide__btn" @click="goToPraticien(medecin.id)">Prendre rendez-vous</button>
+                  <!-- <button class="default__vide__btn" @click="goToPraticien(medecin.id)">Prendre rendez-vous</button> -->
+                  <a href="http://localhost:8081/praticien" class="default__vide__btn" @click="goToPraticien(medecin.id)">Prendre rendez-vous</a>
                 </div>
               </div>
             </div>
@@ -201,6 +202,7 @@ export default {
       let myIdString = param.toString();
       localStorage.setItem('medecinId', this.encryptData(myIdString, constant.secretKey));
       this.$router.push("/praticien");
+      window.location.reload();
     }
   },
   computed: {

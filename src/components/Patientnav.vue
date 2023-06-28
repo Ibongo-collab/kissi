@@ -19,7 +19,7 @@
 
             <li class="nav__item">
               <div class="nav__link">
-                <span class="nav__name">Mes rendez-vous</span>
+                <span class="nav__name">Mes consultations</span>
               </div>
             </li>
 
