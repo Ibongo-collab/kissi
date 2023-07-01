@@ -96,7 +96,7 @@
                 <div class="bloc-horaire">
                   <!-- <button class="default__vide__btn" @click="goToPraticien(medecin.id)">Prendre rendez-vous</button> -->
                   <!-- <a href="http://localhost:8081/praticien" class="default__vide__btn" @click="goToPraticien(medecin.id)">Prendre rendez-vous</a> -->
-                  <a href="https://kissi.netlify.app/praticien" class="default__vide__btn" @click="goToPraticien(medecin.id)">Prendre rendez-vous</a>
+                  <a href="/praticien" class="default__vide__btn" @click="goToPraticien(medecin.id)">Prendre rendez-vous</a>
                 </div>
               </div>
             </div>
