@@ -56,6 +56,15 @@ const routes = [
     component: () => import(/* webpackChunkName: "Login" */ '../views/Tableau-de-bord.vue')
   },
   {
+    path: '/prochaines-consultations',
+    name: 'Consultations.vue',
+    meta: {
+      requiresAuth: true // indique que cette route nécessite une authentification
+    },
+    beforeEnter: Middleware, // utilise le middleware pour vérifier l'authentification
+    component: () => import(/* webpackChunkName: "Login" */ '../views/Consultations.vue')
+  },
+  {
     path: '/password-forgot',
     name: 'Password-forgot',
     component: () => import(/* webpackChunkName: "Password-forgot" */ '../views/Password-forgot.vue')

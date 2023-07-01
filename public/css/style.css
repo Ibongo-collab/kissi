@@ -201,6 +201,8 @@ img {
 .date-praticien,
 .liste-rdv-patient,
 .commencer,
+.motif,
+.lieu-praticien,
 .titre-tarif-praticien, 
 .titre-ville-praticien,
 .titre-indication,
@@ -500,6 +502,39 @@ img {
 .default__vide__btn:hover {
   transition: 0.3s;
   background-color: #c4d3ff;
+}
+
+.annuler__btn {
+  gap: 16px;
+  transition: all 0.1s ease 0s;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  text-align: center;
+  background-color: #da4f4f;
+  color: rgb(255, 255, 255);
+  fill: rgb(255, 255, 255);
+  padding-left: 24px;
+  padding-right: 24px;
+  font-family: 'BasisGrotesque', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 700;
+  height: 47px;
+  min-width: 54px;
+  border-radius: 10px;
+  border: 1px solid #da4f4f;
+  width: 100%;
+}
+
+.annuler__btn:hover {
+  transition: 0.3s;
+  background-color: rgb(204, 15, 15);
 }
 
 .default__btn {

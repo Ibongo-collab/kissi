@@ -26,6 +26,24 @@
                 <p>Aucune disponibilité à venir</p>
             </div>
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="alert" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-white">
+                        <h5 class="modal-title titre-commande text-center" id="exampleModalLabel">
+                            Authentification requise
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        Veuillez vous <span class="link" @click="goToAuth"
+                            data-bs-dismiss="modal"><b>authentifier</b></span> avant de continuer
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -78,27 +96,12 @@
                 return decrypted;
             },
             process() {
-                // Récuprération de la date courante
-                const currentDate = new Date();
-                const year = currentDate.getFullYear();
-                const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-                const day = currentDate.getDate().toString().padStart(2, '0');
-                this.currentDate = `${year}-${month}-${day}`; //2023-06-4
-
-                // Récupération de l'heure courante
-                function getCurrentTime() {
-                    const date = new Date();
-                    const hours = String(date.getHours()).padStart(2, '0');
-                    const minutes = String(date.getMinutes()).padStart(2, '0');
-                    const currentTime = `${hours}:${minutes}`; // 11:00
-
-                    return currentTime;
-                }
-                const currentTime = getCurrentTime();
+                const currentDate = constant.getCurrentDate();
+                const currentTime = constant.getCurrentTime();
 
                 // Créer une nouvelle liste filtrée
                 this.medecinDateFiltered = this.medecinDate.filter(item => {
-                    return item.date >= this.currentDate || (item.date === this.currentDate && item.heure >= currentTime);
+                    return item.date >= currentDate || (item.date === currentDate && item.heure >= currentTime);
                 });
                 // this.medecinDateFiltered = this.medecinDate.filter(item => {
                 //     return item.date >= this.currentDate;
@@ -137,7 +140,8 @@
                                     // console.log(element.heure + "=" + heure);
                                     /* Si la date et l'heure sélectionnées correspondent à un rdv, alors j'affiche une alerte */
                                     alert(
-                                        "L'heure que vous avez sélectionnée a déjà été réservée pour un rendez-vous");
+                                        "L'heure que vous avez sélectionnée a déjà été réservée pour un rendez-vous"
+                                    );
                                     rdvFound = true;
                                 }
                             }

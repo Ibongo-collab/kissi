@@ -37,7 +37,8 @@
                     </div>
                     <!-- Indicateur du rendez-vous en cours -->
                     <div class="col-md-4">
-                        <div class="info-indicateur border">
+                        <div class="info-indicateur border" data-bs-toggle="modal" data-bs-target="#alert"
+                            style="cursor: pointer;">
                             <p class="titre-indicateur">Prochaine consultation</p>
                             <!-- Le patient a un rdv accepté -->
                             <div class="row pt-3" v-if="rdv === 1">
@@ -58,8 +59,7 @@
                                         <p class="specialite-praticien">{{dernierRdv.medecin.categorieMedecin.nom}}</p>
                                         <p class="date-praticien">{{dernierRdv.date | moment('dddd')}}
                                             {{dernierRdv.date | moment('D MMMM')}} à {{dernierRdv.heure}}</p>
-                                        <p style="font-size: 12px"><a href="http://localhost:8081/tableau-de-bord"
-                                                class="liste-rdv-patient">Voir la liste</a></p>
+                                        <!-- <p style="font-size: 12px"><a href="http://localhost:8081/tableau-de-bord" class="liste-rdv-patient">Voir la liste</a></p> -->
                                     </div>
                                 </div>
                             </div>
@@ -433,6 +433,54 @@
             </div>
         </div>
         <Footer />
+
+        <div class="modal fade" id="alert" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-white">
+                        <h5 class="modal-title titre-commande text-center" id="exampleModalLabel">
+                            Prochaine consultation
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="content-photo pt-3 text-center">
+                            <img src="https://cdn-document.qare.fr/documents/5dc156158a7925002a9c94c0/photo/1581418996-MOREAU.JPG"
+                                class="rounded-circle mt-2 border" alt="image medecin" width="100px" height="100px">
+                            <!-- <img src="../assets/images/user.png" class="rounded-circle mt-2 border" alt="image medecin" width="90px"
+                                height="90px"> -->
+                            <div class="pt-3">
+                                <p class="nom-praticien">Dr {{dernierRdv.medecin.nom}}</p>
+                                <p class="specialite-praticien">{{dernierRdv.medecin.categorieMedecin.nom}}</p>
+                            </div>
+                        </div>
+                        <div class="content-detail pt-3">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="date-praticien">Date :</p>
+                                    <p>{{dernierRdv.date | moment('dddd')}} {{dernierRdv.date | moment('D MMMM')}} à
+                                        {{dernierRdv.heure}}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="lieu-praticien">Lieu :</p>
+                                    <p>{{dernierRdv.medecin.hopital.adresse}}</p>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="motif">Motif :</p>
+                                <p>{{dernierRdv.motif}}</p>
+                            </div>
+                        </div>
+                        <div class="pt-3">
+                            <button class="default__btn" @click="goToConcultation" v-if="rdvAccepter.length > 1">Voir la
+                                liste</button>
+                            <button class="annuler__btn" @click="annulerRdv">Annuler le rendez-vous</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </template>
@@ -574,6 +622,7 @@
                     }
                 ],
                 rdvAccepter: [],
+                rdvDateFiltered: [],
                 userKissi: [],
                 dernierRdv: null,
                 profession: "",
@@ -598,9 +647,11 @@
             goToRdv() {
                 this.$router.push("/recherche");
             },
+            goToConcultation() {
+                this.$router.push("/consultations");
+            },
             logout() {
                 this.$store.dispatch('logout');
-                // redirect to the login page
             },
             async AjouterFiche() {
                 this.isLoading = true;
@@ -714,6 +765,7 @@
                     this.isLoading = false;
                 }
             },
+            annulerRdv() {},
             // Méthode permettant le formatage de la date de naissance
             formatBirthday() {
                 const dateObj = new Date(this.patient.birthday);
@@ -723,7 +775,8 @@
                 this.formattedBirthday = `${year}-${month}-${day}`;
             },
             process() {
-                const rdvAccepter = this.rdvPatientList.filter(item => item.statut === 'ACCEPTER');
+                // console.log(this.rdvPatientList);
+                this.rdvAccepter = this.rdvPatientList.filter(item => item.statut === 'ACCEPTER');
                 const userKissi = this.rdvPatientList.filter(item => item.statut !== 'ACCEPTER');
                 /**
                  * Je teste si la liste globale de rdv du patient est remplie
@@ -731,10 +784,20 @@
                  * Sinon rdv=0 donc l'utilisateur n'a jamais réalisé de consultations
                  */
                 if (this.rdvPatientList.length > 0) {
-                    if (rdvAccepter.length > 0) {
+                    if (this.rdvAccepter.length > 0) {
+                        /**
+                         * Je filtre la liste des RDV 'ACCEPTER' pour ne laisser que
+                         * les RDV dont la date est >= à celle d'aujourd'hui
+                         */
+                        const currentDate = constant.getCurrentDate();
+                        this.rdvDateFiltered = this.rdvAccepter.filter(item => {
+                            return item.date >= currentDate;
+                        });
+                        // console.log(this.rdvDateFiltered, 'filtrée');
+                        this.dernierRdv = this.rdvDateFiltered.slice(-1)[0];
                         this.rdv = 1;
-                        this.dernierRdv = rdvAccepter.slice(-1)[0];
-                        console.log(this.dernierRdv);
+                        // console.log(this.dernierRdv);
+
                     } else if (userKissi.length > 0) {
                         console.log(userKissi);
                         this.rdv = 2;
@@ -782,9 +845,11 @@
         },
         mounted() {
             this.process();
+
             setInterval(() => {
                 this.progressPercentage = (this.progressPercentage + 1) % 101;
             }, 1000);
+
             this.formatBirthday();
 
             if (this.patient.fiche !== null) {

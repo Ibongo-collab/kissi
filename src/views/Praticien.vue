@@ -40,7 +40,6 @@
                             <p class="">{{user.description}}</p>
                         </div>
                     </div>
-
                 </div>
                 <!-- Affichage des horaires -->
                 <div class="col-md-6">
@@ -60,24 +59,6 @@
             </div>
         </div>
         <Footer />
-
-        <div class="modal fade" id="alert" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header bg-white">
-                        <h5 class="modal-title titre-commande text-center" id="exampleModalLabel">
-                            Authentification requise
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body text-center">
-                        Veuillez vous <span class="link" @click="goToAuth"
-                            data-bs-dismiss="modal"><b>authentifier</b></span> avant de continuer
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
 </template>
