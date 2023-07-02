@@ -1,5 +1,5 @@
 <template>
-    <div class="rdv">
+    <div class="consultations">
         <!--========== SPINNER ==========-->
         <loading :active.sync="isLoading" :can-cancel="false" :is-full-page="fullPage"></loading>
         <main class="">
@@ -69,7 +69,6 @@
     import CryptoJS from 'crypto-js'
     import constant from "../../constant"
     import Loading from "vue-loading-overlay"
-    // import "vue-loading-overlay/dist/vue-loading.css"
     import {
         mapGetters
     } from "vuex"

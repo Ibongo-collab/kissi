@@ -774,7 +774,7 @@
                 const day = `${dateObj.getDate()}`.padStart(2, "0");
                 this.formattedBirthday = `${year}-${month}-${day}`;
             },
-            process() {
+            rdvTreatment() {
                 // console.log(this.rdvPatientList);
                 this.rdvAccepter = this.rdvPatientList.filter(item => item.statut === 'ACCEPTER');
                 const userKissi = this.rdvPatientList.filter(item => item.statut !== 'ACCEPTER');
@@ -844,7 +844,7 @@
             this.$store.dispatch('getRdvPatientList', this.patient.id);
         },
         mounted() {
-            this.process();
+            this.rdvTreatment();
 
             setInterval(() => {
                 this.progressPercentage = (this.progressPercentage + 1) % 101;

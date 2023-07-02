@@ -53,7 +53,7 @@ const routes = [
       requiresAuth: true // indique que cette route nécessite une authentification
     },
     beforeEnter: Middleware, // utilise le middleware pour vérifier l'authentification
-    component: () => import(/* webpackChunkName: "Login" */ '../views/Tableau-de-bord.vue')
+    component: () => import(/* webpackChunkName: "Tableau-de-bord" */ '../views/Tableau-de-bord.vue')
   },
   {
     path: '/prochaines-consultations',
@@ -62,7 +62,7 @@ const routes = [
       requiresAuth: true // indique que cette route nécessite une authentification
     },
     beforeEnter: Middleware, // utilise le middleware pour vérifier l'authentification
-    component: () => import(/* webpackChunkName: "Login" */ '../views/Consultations.vue')
+    component: () => import(/* webpackChunkName: "Consultations" */ '../views/Consultations.vue')
   },
   {
     path: '/password-forgot',

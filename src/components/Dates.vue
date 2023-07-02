@@ -95,7 +95,7 @@
                 const decrypted = CryptoJS.AES.decrypt(data, key).toString(CryptoJS.enc.Utf8);
                 return decrypted;
             },
-            process() {
+            dateTreatment() {
                 const currentDate = constant.getCurrentDate();
                 const currentTime = constant.getCurrentTime();
 
@@ -103,19 +103,7 @@
                 this.medecinDateFiltered = this.medecinDate.filter(item => {
                     return item.date >= currentDate || (item.date === currentDate && item.heure >= currentTime);
                 });
-                // this.medecinDateFiltered = this.medecinDate.filter(item => {
-                //     return item.date >= this.currentDate;
-                // });
 
-                // this.newMedecinDate = this.medecinDateFiltered.filter(item => {
-                //     if (item.date === this.currentDate) {
-                //         return item.heureMedecins = item.heureMedecins.filter(item => item.heure >=
-                //         currentTime);
-                //     } else {
-                //         // Garder les éléments qui ne correspondent pas à la date actuelle
-                //         return true;
-                //     }
-                // });
                 // Mettre à jour la liste dans le store Vuex
                 this.$store.commit('SET_MEDECINDATE', this.medecinDateFiltered);
             },
@@ -170,7 +158,7 @@
                 this.id = parseInt(this.decryptData(IdStorage, constant.secretKey));
                 // Récupération de la liste des dates du médecin
                 this.$store.dispatch('getDateMedecin', this.id);
-                this.process();
+                this.dateTreatment();
             } else {
                 // Gérer le cas où 'medecinId' n'existe pas dans le localStorage
                 this.$router.push('/recherche');
