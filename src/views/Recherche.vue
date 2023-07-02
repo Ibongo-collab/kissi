@@ -203,7 +203,7 @@ export default {
       let myIdString = param.toString();
       localStorage.setItem('medecinId', this.encryptData(myIdString, constant.secretKey));
       this.$router.push("/praticien");
-      window.location.reload();
+      // window.location.reload();
     }
   },
   computed: {
